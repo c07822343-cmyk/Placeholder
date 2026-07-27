@@ -101,7 +101,10 @@ Commit and push:
 ```bash
 git add assets/config.js
 git commit -m "Connect request form to Google Form"
-git push origin arena/019fa143-placeholder
+git push origin <your-hosting-branch>
+
+# In Arena right now:
+# git push origin arena/019fa46a-placeholder
 ```
 
 Your host redeploys automatically within about a minute.

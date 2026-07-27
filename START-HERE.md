@@ -7,8 +7,8 @@
 ## Option A — Drag and drop (start here)
 
 1. Download **`dto-website.zip`** from this repo
-   ([direct link](https://github.com/c07822343-cmyk/Placeholder/raw/arena/019fa143-placeholder/dto-website.zip)
-   — click the download icon)
+   *(open the file in GitHub and click **Download**, or download it directly from your Arena
+   workspace)*
 2. Go to **<https://app.netlify.com/drop>**
 3. **Drag the zip file onto the page**
 
@@ -42,7 +42,8 @@ Recommended host: **Cloudflare Pages** (unlimited bandwidth, works with your pri
 1. <https://dash.cloudflare.com> → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**
 2. Authorize GitHub, give it access to `c07822343-cmyk/Placeholder`
 3. Settings:
-   - **Production branch:** `arena/019fa143-placeholder`
+   - **Production branch:** the branch you're hosting from
+     *(in Arena right now: `arena/019fa46a-placeholder`)*
    - **Framework preset:** `None`
    - **Build command:** *leave empty*
    - **Build output directory:** `/`

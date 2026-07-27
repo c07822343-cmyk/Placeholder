@@ -51,7 +51,8 @@ Do this once and you never touch a zip again — every push publishes itself.
 
 1. Your site → **Site configuration → Build & deploy → Continuous deployment** → **Link repository**
 2. Choose GitHub, authorize, pick `c07822343-cmyk/Placeholder` (private repos are fine)
-3. Set **Branch to deploy:** `arena/019fa143-placeholder`
+3. Set **Branch to deploy:** the branch you're hosting from
+   *(in Arena right now: `arena/019fa46a-placeholder`)*
 4. Build command: *empty* · Publish directory: `.`
 5. Save
 
@@ -60,7 +61,10 @@ Now updating is just:
 ```bash
 git add -A
 git commit -m "Update listings"
-git push origin arena/019fa143-placeholder
+git push origin <your-hosting-branch>
+
+# In Arena right now:
+# git push origin arena/019fa46a-placeholder
 ```
 
 The site rebuilds automatically in ~30 seconds. Same URL, always.
