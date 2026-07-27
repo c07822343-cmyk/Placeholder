@@ -175,41 +175,42 @@
           or trade history before approving you as a verified buyer.</div>
         </div>
 
-        <!-- STEP 4 : stats (sellers) -->
-        <div class="step" data-title="Doc stats" data-only="seller" hidden>
-          <h3>Self-reported stats</h3>
-          <p class="step-sub">Give your honest estimate for each. Staff verify everything and set the
-          official score — inflated numbers only slow your review down.</p>
+        <!-- STEP 4 : background (sellers) -->
+        <div class="step" data-title="Doc background" data-only="seller" hidden>
+          <h3>Background for valuation</h3>
+          <p class="step-sub">DTO staff set your doc's value by hand — there's no formula and nothing is
+          auto-calculated. The more context you give here, the more accurate your score will be.</p>
 
-          <div class="slide-row">
-            <label for="s_inf">Influence <b data-out="influence">5</b></label>
-            <input type="range" id="s_inf" name="influence" min="1" max="10" step="1" value="5">
-            <div class="scale"><span>1 · unknown</span><span>5 · average</span><span>10 · central</span></div>
+          <div class="field-wrap">
+            <label class="form-label" for="s_inf">Community influence <span style="color:var(--red)">*</span></label>
+            <textarea id="s_inf" name="influence" data-required style="min-height:80px"
+              placeholder="How well-known is your doc? Who references or links to it? What role does it play in the community?"></textarea>
           </div>
-          <div class="slide-row">
-            <label for="s_par">Partners <b data-out="partners">0</b></label>
-            <input type="range" id="s_par" name="partners" min="0" max="20" step="1" value="0">
-            <div class="scale"><span>0</span><span>10</span><span>20+</span></div>
+          <div class="field-wrap">
+            <label class="form-label" for="s_par">Partnerships</label>
+            <textarea id="s_par" name="partners" style="min-height:80px"
+              placeholder="Which docs do you partner with, and how active are those partnerships? Write 'none' if you have none yet."></textarea>
           </div>
-          <div class="slide-row">
-            <label for="s_rep">Reputation <b data-out="reputation">5</b></label>
-            <input type="range" id="s_rep" name="reputation" min="0" max="10" step="1" value="5">
-            <div class="scale"><span>0 · untrusted</span><span>5</span><span>10 · flawless</span></div>
+          <div class="field-wrap">
+            <label class="form-label" for="s_rep">Reputation &amp; history</label>
+            <textarea id="s_rep" name="reputation" style="min-height:80px"
+              placeholder="How long has the doc been running? Any past trades, disputes or notable history staff should know about?"></textarea>
           </div>
-          <div class="slide-row">
-            <label for="s_gro">Growth <b data-out="growth">5</b></label>
-            <input type="range" id="s_gro" name="growth" min="0" max="10" step="1" value="5">
-            <div class="scale"><span>0 · flat</span><span>5</span><span>10 · surging</span></div>
+          <div class="field-wrap">
+            <label class="form-label" for="s_gro">Recent growth</label>
+            <textarea id="s_gro" name="growth" style="min-height:80px"
+              placeholder="How has activity changed over the last few weeks? Any new partners or momentum worth mentioning?"></textarea>
           </div>
 
-          <div class="est-panel" id="reqEstimate"></div>
+          <div class="notice">Be honest — staff verify everything against what they can confirm
+          independently. Overstated claims slow your review down and can get a submission rejected.</div>
         </div>
 
         <!-- STEP 5 : review -->
         <div class="step" data-title="Review &amp; submit" hidden>
           <h3>Review your request</h3>
           <p class="step-sub">Check everything below, then submit. You'll get a ticket ID to quote in any
-          follow-up email.</p>
+          follow-up email, and staff will send you your DoxStox valuation after review.</p>
           <div class="field-wrap">
             <label class="form-label" for="f_notes">Anything else staff should know <span style="color:var(--muted);font-weight:500">(optional)</span></label>
             <textarea id="f_notes" name="notes" style="min-height:80px"
@@ -260,7 +261,7 @@
     <div class="timeline">
       <div class="tl"><h4>1 · Request received</h4><p>Your submission lands in DTO's private review queue with its ticket ID attached.</p></div>
       <div class="tl"><h4>2 · Staff review</h4><p>Staff open your doc, check your stats against what they can verify, and flag anything inconsistent.</p></div>
-      <div class="tl"><h4>3 · DoxStox evaluation</h4><p>Your official score is calculated with DS = 200I + 100P + 150R + 75G, then adjusted for anything the formula can't measure.</p></div>
+      <div class="tl"><h4>3 · DoxStox evaluation</h4><p>Staff weigh your doc's influence, partnerships, reputation and growth against comparable listings, then agree a score.</p></div>
       <div class="tl"><h4>4 · You're contacted</h4><p>Staff email you the verdict — approved with a score and share price, or declined with a reason.</p></div>
       <div class="tl"><h4>5 · Listing goes live</h4><p>Approved docs appear on the listings page. Buyers and investors can then be matched to you.</p></div>
       <div class="tl"><h4>6 · Deal &amp; transfer</h4><p>Negotiation happens in a private DTO chat room. On completion, DTO collects the 7% fee and records the transfer.</p></div>
@@ -286,10 +287,11 @@
     </details>
     <details class="faq">
       <summary>How is my doc's value decided?</summary>
-      <div class="faq-body"><p>Through the DoxStox formula: <strong>DS = 200I + 100P + 150R + 75G</strong>
-      — influence, partners, reputation and growth. Share price is <strong>DS ÷ 100</strong> in DTC.
-      Staff may make reasonable adjustments for factors a formula can't capture. See the
-      <a href="doxstox.html">DoxStox page</a> for the full breakdown and a calculator.</p></div>
+      <div class="faq-body"><p>DTO staff assign it after manually reviewing your doc. They weigh four
+      things — community influence, partnerships, reputation and growth — and cross-check against
+      comparable docs already listed. There is no public formula, which is deliberate: a published
+      equation just tells people which number to inflate. See
+      <a href="doxstox.html">how valuation works</a> for the full process.</p></div>
     </details>
     <details class="faq">
       <summary>How long does review take?</summary>
@@ -350,7 +352,7 @@
       <div>
         <h4>Explore</h4>
         <a href="how-it-works.html">How It Works</a>
-        <a href="doxstox.html">DoxStox &amp; Formula</a>
+        <a href="doxstox.html">How Docs Are Valued</a>
         <a href="buyouts.html">Full Doc Buyouts</a>
         <a href="listings.html">Live Listings</a>
         <a href="apply.html">Apply / List Your Doc</a>

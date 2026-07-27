@@ -12,9 +12,9 @@ which is what makes it free to host forever.
 
 | File | Purpose |
 |---|---|
-| `index.html` | Home — what DTO is, the four-step apply flow, formula teaser |
+| `index.html` | Home — what DTO is, the four-step apply flow, valuation overview |
 | `how-it-works.html` | Buying & selling, DoxStox, shares, valuation process, mission |
-| `doxstox.html` | The DoxStox formula + interactive calculator |
+| `doxstox.html` | How docs are valued — the staff review process |
 | `buyouts.html` | Real-money buyout system, 7% fee calculator, 9-step process |
 | `listings.html` | Live listings — searchable, filterable, sortable |
 | `apply.html` | **Request system** — multi-step wizard, timeline, FAQ |
@@ -69,7 +69,8 @@ Edit **`data/listings.json`** and push. Editable straight from the GitHub web UI
 - `type` — `"stock"` or `"buyout"`
 - `verified` — `true` → green Verified badge, `false` → In Review
 - `askingPrice` — USD number for buyouts, `null` for stock listings
-- Share price is computed automatically as `DS ÷ 100`
+- `doxstox` / `sharePrice` — the values **you assign during review**. Use `null` for either while
+  review is pending and the listing shows "Pending" / "Not yet set". Nothing is auto-calculated.
 
 ### Change the Google Form connection
 Edit **`assets/config.js`** only. Staff emails, fee rate and ticket prefix live there too.
@@ -109,15 +110,13 @@ python3 -m http.server 8000
 └── DEPLOY.md                 # hosting setup (Git-connected)
 ```
 
-## DoxStox formula
+## Valuation
 
-```
-DS = 200I + 100P + 150R + 75G          SP = DS / 100
-```
+DoxStox scores and share prices are **assigned by DTO staff** through manual review. There is no
+public formula and the site calculates nothing — it displays exactly the values you put in
+`data/listings.json`.
 
-I = Influence (1–10) · P = Partners (1 pt each) · R = Reputation (0–10) · G = Growth (0–10)
-
-Worked example: I=6, P=4, R=7, G=5 → **DS = 3025** → **30.25 DTC/share**
+Staff weigh four factors: community influence, partnerships, reputation, and growth.
 
 ## Contact
 

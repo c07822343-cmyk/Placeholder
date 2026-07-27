@@ -268,7 +268,7 @@ td.score { color: var(--gold); font-weight: 800; font-variant-numeric: tabular-n
 .badge.pending { color: var(--muted); border-color: var(--line); background: var(--panel); }
 
 /* ---------- Formula ---------- */
-.formula {
+.callout {
   background: var(--panel-2);
   border: 1px solid var(--line);
   border-left: 4px solid var(--gold);
@@ -280,7 +280,7 @@ td.score { color: var(--gold); font-weight: 800; font-variant-numeric: tabular-n
   letter-spacing: .5px;
   overflow-x: auto;
 }
-.formula small { display: block; font-family: var(--font); font-size: .8rem; color: var(--muted); margin-top: 8px; letter-spacing: 0; }
+.callout small { display: block; font-family: var(--font); font-size: .8rem; color: var(--muted); margin-top: 8px; letter-spacing: 0; }
 
 /* ---------- Calculator ---------- */
 .calc {

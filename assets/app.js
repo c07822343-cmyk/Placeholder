@@ -22,51 +22,16 @@ document.querySelectorAll('[data-year]').forEach(function (el) {
   el.textContent = new Date().getFullYear();
 });
 
-/* ---------- DoxStox calculator ----------
-   DS = 200I + 100P + 150R + 75G
-   SP = DS / 100                              */
+/* ---------- Shared helpers ----------
+   Valuations are assigned by DTO staff. There is no public formula. */
 window.DTO = {
-  score: function (I, P, R, G) {
-    return 200 * I + 100 * P + 150 * R + 75 * G;
-  },
-  sharePrice: function (ds) {
-    return ds / 100;
-  },
   fee: function (price) {
     return price * 0.07;
+  },
+  money: function (n) {
+    return '$' + Number(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 };
-
-(function initCalc() {
-  var form = document.getElementById('calc');
-  if (!form) return;
-
-  var ids = ['I', 'P', 'R', 'G'];
-  function read(id) { return parseInt(document.getElementById('in' + id).value, 10) || 0; }
-
-  function render() {
-    var I = read('I'), P = read('P'), R = read('R'), G = read('G');
-    var parts = { I: 200 * I, P: 100 * P, R: 150 * R, G: 75 * G };
-    var ds = parts.I + parts.P + parts.R + parts.G;
-    var sp = window.DTO.sharePrice(ds);
-
-    ids.forEach(function (id) {
-      document.getElementById('val' + id).textContent = read(id);
-      document.getElementById('part' + id).textContent = parts[id].toLocaleString();
-    });
-    document.getElementById('dsOut').textContent = ds.toLocaleString();
-    var ds2 = document.getElementById('dsOut2');
-    if (ds2) ds2.textContent = ds.toLocaleString();
-    document.getElementById('spOut').textContent = sp.toFixed(2) + ' DTC / share';
-    document.getElementById('spRound').textContent =
-      'Rounded for simplicity: ' + Math.round(sp) + ' DTC per share';
-  }
-
-  ids.forEach(function (id) {
-    document.getElementById('in' + id).addEventListener('input', render);
-  });
-  render();
-})();
 
 /* ---------- Fee calculator ---------- */
 (function initFee() {
@@ -106,8 +71,10 @@ window.DTO = {
     });
 
     rows.sort(function (a, b) {
-      if (state.sort === 'ds-desc') return b.doxstox - a.doxstox;
-      if (state.sort === 'ds-asc') return a.doxstox - b.doxstox;
+      var av = (a.doxstox == null) ? -1 : a.doxstox;
+      var bv = (b.doxstox == null) ? -1 : b.doxstox;
+      if (state.sort === 'ds-desc') return bv - av;
+      if (state.sort === 'ds-asc') return av - bv;
       if (state.sort === 'name') return a.name.localeCompare(b.name);
       return 0;
     });
@@ -119,14 +86,23 @@ window.DTO = {
         '</td></tr>';
     } else {
       tbody.innerHTML = rows.map(function (r) {
-        var sp = window.DTO.sharePrice(r.doxstox);
-        var price = r.type === 'buyout'
-          ? (r.askingPrice ? '$' + Number(r.askingPrice).toLocaleString() + ' USD' : 'Open to offers')
-          : sp.toFixed(2) + ' DTC / share';
+        var price;
+        if (r.type === 'buyout') {
+          price = r.askingPrice
+            ? '$' + Number(r.askingPrice).toLocaleString() + ' USD'
+            : '<span style="color:var(--muted)">Open to offers</span>';
+        } else {
+          price = (r.sharePrice != null)
+            ? Number(r.sharePrice).toLocaleString() + ' DTC / share'
+            : '<span style="color:var(--muted)">Not yet set</span>';
+        }
+        var score = (r.doxstox != null)
+          ? Number(r.doxstox).toLocaleString()
+          : '<span style="color:var(--muted);font-weight:500">Pending</span>';
         return '<tr>' +
           '<td class="doc-name">' + r.name + '<br><small style="color:var(--muted);font-weight:500">' + r.description + '</small></td>' +
           '<td>' + badge(r.type) + '</td>' +
-          '<td class="score">' + r.doxstox.toLocaleString() + '</td>' +
+          '<td class="score">' + score + '</td>' +
           '<td>' + price + '</td>' +
           '<td>' + (r.verified
             ? '<span class="badge verified">Verified</span>'

@@ -103,10 +103,10 @@ picks it up.
 ```
 
 - `type` — `"stock"` or `"buyout"`
-- `doxstox` — the score from `DS = 200I + 100P + 150R + 75G`
+- `doxstox` — the score you assigned during review (`null` if still pending)
 - `verified` — `true` shows a green **Verified** badge, `false` shows **In Review**
-- `askingPrice` — USD number for buyouts; `null` for stock listings (share price is auto-computed
-  as `DS ÷ 100`)
+- `sharePrice` — DTC per share you set for stock listings (`null` if still pending)
+- `askingPrice` — USD number for buyouts; `null` for stock listings
 
 You can edit this file straight from the GitHub web UI — no local setup needed.
 

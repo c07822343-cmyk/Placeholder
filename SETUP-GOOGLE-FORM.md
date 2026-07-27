@@ -19,31 +19,14 @@ Total time: about 10 minutes, one time only.
 
 Go to <https://forms.new> and create a form called **DTO Requests**.
 
-Add these **16 questions, in this order**. The type matters; the wording doesn't have to be exact
-(the helper script matches loosely), but keeping it identical is safest.
+Add the **15 questions** listed in **[`FORM-QUESTIONS.md`](FORM-QUESTIONS.md)** — that file has the
+exact titles and field types to copy.
 
-| # | Question title | Type | Required |
-|---|---|---|---|
-| 1 | Request Type | Short answer | No |
-| 2 | Name / Handle | Short answer | No |
-| 3 | Contact Email | Short answer | No |
-| 4 | Discord or other contact | Short answer | No |
-| 5 | Doc Name | Short answer | No |
-| 6 | Doc Link | Short answer | No |
-| 7 | Description | Paragraph | No |
-| 8 | Asking Price | Short answer | No |
-| 9 | Budget | Short answer | No |
-| 10 | Influence | Short answer | No |
-| 11 | Partners | Short answer | No |
-| 12 | Reputation | Short answer | No |
-| 13 | Growth | Short answer | No |
-| 14 | Estimated DoxStox | Short answer | No |
-| 15 | Notes | Paragraph | No |
-| 16 | Ticket ID | Short answer | No |
+Three rules that will silently break submissions:
 
-> **Important — leave every question set to "not required", and use Short answer / Paragraph only.**
-> The website does its own validation before submitting. If Google marks a question required, or you
-> use multiple-choice/dropdown types, submissions can be silently rejected.
+- **Leave every question NOT required** — the site legitimately sends some fields blank
+- **Short answer / Paragraph types only** — no multiple choice, dropdowns or number validation
+- **No response validation** on any question, including the email one
 
 ### Two settings to check
 

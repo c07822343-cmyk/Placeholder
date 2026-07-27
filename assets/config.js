@@ -32,11 +32,10 @@ window.DTO_CONFIG = {
     description:   "",   // Description
     askingPrice:   "",   // Asking Price (USD)
     budget:        "",   // Budget (USD)
-    influence:     "",   // Influence
-    partners:      "",   // Partners
-    reputation:    "",   // Reputation
-    growth:        "",   // Growth
-    doxstox:       "",   // Estimated DoxStox
+    influence:     "",   // Community Influence
+    partners:      "",   // Partnerships
+    reputation:    "",   // Reputation & History
+    growth:        "",   // Recent Growth
     notes:         "",   // Notes
     ticket:        ""    // Ticket ID
   },
@@ -48,7 +47,9 @@ window.DTO_CONFIG = {
     { address: "Calderman@icloud.com",       note: "Secondary inbox" }
   ],
 
-  /* ---- 4. Options -------------------------------------------- */
+  /* ---- 4. Options --------------------------------------------
+     Note: doc values are assigned by DTO staff during review.
+     There is no public formula and nothing is auto-calculated.   */
   options: {
     feeRate: 0.07,              // DTO transaction fee
     ticketPrefix: "DTO",        // Ticket IDs look like DTO-7F3K2A

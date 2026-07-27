@@ -1,14 +1,18 @@
 # Google Form questions — copy this exactly
 
-Create the form at <https://forms.new>, title it **DTO Requests**, then add these **16 questions in
+Create the form at <https://forms.new>, title it **DTO Requests**, then add these **15 questions in
 this exact order**.
 
 Order matters more than wording — the site maps answers by position and by ID. Keeping the titles
 identical makes the auto-mapping script work perfectly, so copy them exactly if you can.
 
+> **Updated:** the old "Estimated DoxStox" question has been removed, and the four stat questions are
+> now written answers instead of numbers. Doc values are assigned by DTO staff during review — the
+> site never calculates anything.
+
 ---
 
-## The 16 questions
+## The 15 questions
 
 | # | Question title (copy exactly) | Question type |
 |---|---|---|
@@ -21,15 +25,18 @@ identical makes the auto-mapping script work perfectly, so copy them exactly if 
 | 7 | `Description` | **Paragraph** |
 | 8 | `Asking Price` | Short answer |
 | 9 | `Budget` | Short answer |
-| 10 | `Influence` | Short answer |
-| 11 | `Partners` | Short answer |
-| 12 | `Reputation` | Short answer |
-| 13 | `Growth` | Short answer |
-| 14 | `Estimated DoxStox` | Short answer |
-| 15 | `Notes` | **Paragraph** |
-| 16 | `Ticket ID` | Short answer |
+| 10 | `Community Influence` | **Paragraph** |
+| 11 | `Partnerships` | **Paragraph** |
+| 12 | `Reputation and History` | **Paragraph** |
+| 13 | `Recent Growth` | **Paragraph** |
+| 14 | `Notes` | **Paragraph** |
+| 15 | `Ticket ID` | Short answer |
 
-Only #7 and #15 are **Paragraph**. Everything else is **Short answer**.
+**Paragraph:** #7, #10, #11, #12, #13, #14 — six of them.
+**Short answer:** #1, #2, #3, #4, #5, #6, #8, #9, #15 — nine of them.
+
+Questions 10–13 receive written descriptions now (e.g. *"Referenced by most study docs, around 4
+active partners"*), so they need the room a Paragraph field gives.
 
 ---
 
@@ -37,7 +44,8 @@ Only #7 and #15 are **Paragraph**. Everything else is **Short answer**.
 
 **1. Leave every question NOT required.**
 The website validates before submitting. If Google marks a question required and the site sends it
-empty (e.g. Budget is blank for a seller), Google rejects the whole submission silently.
+empty (Budget is blank for a seller, Doc Link is blank for a buyer), Google rejects the whole
+submission silently.
 
 **2. Use only Short answer / Paragraph.**
 No multiple choice, no dropdowns, no linear scale, no number validation. Those types reject values
@@ -70,7 +78,7 @@ submit.
 ## Check it's public before sending me the link
 
 Open the form link in a **private/incognito window**. If it asks you to sign in, it's still
-restricted and the website won't be able to submit to it. Fix the settings above and re-check.
+restricted and the website won't be able to submit to it.
 
 ---
 
@@ -83,13 +91,12 @@ https://docs.google.com/forms/d/e/1FAIpQLSd.../viewform
 ```
 
 I'll pull the entry IDs, wire them into `assets/config.js`, test a submission end-to-end, and push.
-Then requests from the website land straight in your spreadsheet.
 
 ---
 
 ## Which questions get filled per request type
 
-Not every request fills every field — that's expected, blanks are normal.
+Not every request fills every field — blanks are normal and expected.
 
 | Field | Stock Listing | Full Buyout | Verified Buyer | Valuation Only |
 |---|:-:|:-:|:-:|:-:|
@@ -102,8 +109,10 @@ Not every request fills every field — that's expected, blanks are normal.
 | Description | ✅ | ✅ | ✅ *(what they want to buy)* | ✅ |
 | Asking Price | — | ✅ | — | — |
 | Budget | — | — | ✅ | — |
-| Influence / Partners / Reputation / Growth | ✅ | ✅ | — | ✅ |
-| Estimated DoxStox | ✅ | ✅ | — | ✅ |
+| Community Influence | ✅ | ✅ | — | ✅ |
+| Partnerships | optional | optional | — | optional |
+| Reputation and History | optional | optional | — | optional |
+| Recent Growth | optional | optional | — | optional |
 | Notes | optional | optional | optional | optional |
 | Ticket ID | ✅ | ✅ | ✅ | ✅ |
 
@@ -111,11 +120,32 @@ Not every request fills every field — that's expected, blanks are normal.
 
 ---
 
-## After it's connected
+## Reviewing requests
 
 In the form's **Responses** tab:
 
 - Click the green **Sheets** icon to pipe everything into a spreadsheet — that becomes your review
-  queue. Add your own columns (Status, Verified Score, Assigned To) to the right; new responses
-  won't disturb them.
+  queue.
+- Add your own columns to the right for the values **you** decide:
+  **`DoxStox Score`**, **`Share Price (DTC)`**, **`Status`**, **`Reviewed By`**.
+  New responses append below without disturbing them.
 - Click **⋮ → Get email notifications for new responses** so you know the moment someone applies.
+
+When you've settled on a score, add the doc to `data/listings.json` on the site with the values you
+assigned:
+
+```json
+{
+  "name": "Study Vault",
+  "description": "High-traffic notes archive.",
+  "type": "stock",
+  "doxstox": 1875,
+  "sharePrice": 18.75,
+  "verified": true,
+  "askingPrice": null
+}
+```
+
+Both `doxstox` and `sharePrice` are yours to set — the site displays exactly what you put there and
+calculates nothing. Use `null` for either while review is still pending, and the listing shows
+"Pending" / "Not yet set".

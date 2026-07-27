@@ -30,10 +30,10 @@ HINTS = [
     ("asking price",  "askingPrice"),
     ("budget",        "budget"),
     ("influence",     "influence"),
+    ("partnership",   "partners"),
     ("partner",       "partners"),
     ("reputation",    "reputation"),
     ("growth",        "growth"),
-    ("doxstox",       "doxstox"),
     ("note",          "notes"),
     ("ticket",        "ticket"),
 ]
@@ -109,7 +109,7 @@ def main():
 
     keys = ["requestType", "name", "email", "contactAlt", "docName", "docLink",
             "description", "askingPrice", "budget", "influence", "partners",
-            "reputation", "growth", "doxstox", "notes", "ticket"]
+            "reputation", "growth", "notes", "ticket"]
 
     print("\n" + "=" * 60)
     print("Paste this into assets/config.js")

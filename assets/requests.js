@@ -151,28 +151,6 @@
     return true;
   }
 
-  /* ---------------- live DoxStox ---------------- */
-
-  function doxstox() {
-    var I = +val('influence') || 0,
-        P = +val('partners') || 0,
-        R = +val('reputation') || 0,
-        G = +val('growth') || 0;
-    return 200 * I + 100 * P + 150 * R + 75 * G;
-  }
-
-  function updateEstimate() {
-    var ds = doxstox();
-    var sp = ds / 100;
-    var box = document.getElementById('reqEstimate');
-    if (!box) return;
-    box.innerHTML =
-      '<div class="est-row"><span>Estimated DoxStox score</span><b>' + ds.toLocaleString() + '</b></div>' +
-      '<div class="est-row"><span>Indicative share price</span><b>' + sp.toFixed(2) + ' DTC</b></div>' +
-      '<div class="est-note">Unofficial preview using DS = 200I + 100P + 150R + 75G. ' +
-      'DTO staff set the final verified score.</div>';
-  }
-
   /* ---------------- price / fee preview ---------------- */
 
   function updateFee() {
@@ -203,11 +181,10 @@
       add('Doc link', val('doc_link'));
       add('Description', val('description'));
       if (requestType() === 'Full Buyout') add('Asking price', val('asking_price') ? '$' + val('asking_price') : '');
-      add('Influence', val('influence') + ' / 10');
-      add('Partners', val('partners'));
-      add('Reputation', val('reputation') + ' / 10');
-      add('Growth', val('growth') + ' / 10');
-      add('Estimated DoxStox', doxstox().toLocaleString());
+      add('Community influence', val('influence'));
+      add('Partnerships', val('partners'));
+      add('Reputation &amp; history', val('reputation'));
+      add('Recent growth', val('growth'));
     } else {
       add('Budget', val('budget') ? '$' + val('budget') : '');
       add('Interests', val('description'));
@@ -251,7 +228,6 @@
     put('partners', val('partners'));
     put('reputation', val('reputation'));
     put('growth', val('growth'));
-    put('doxstox', isSeller() ? doxstox() : '');
     put('notes', val('notes'));
     put('ticket', ticket);
     return fd;
@@ -286,12 +262,19 @@
         );
       }
       lines.push(
-        'Self-reported stats (DTO staff verify):',
-        '  Influence  : ' + val('influence') + ' / 10',
-        '  Partners   : ' + val('partners'),
-        '  Reputation : ' + val('reputation') + ' / 10',
-        '  Growth     : ' + val('growth') + ' / 10',
-        '  Est. DoxStox: ' + doxstox().toLocaleString(),
+        'Background for DTO staff valuation:',
+        '',
+        'Community influence:',
+        '  ' + (val('influence') || '—'),
+        '',
+        'Partnerships:',
+        '  ' + (val('partners') || '—'),
+        '',
+        'Reputation & history:',
+        '  ' + (val('reputation') || '—'),
+        '',
+        'Recent growth:',
+        '  ' + (val('growth') || '—'),
         ''
       );
     } else {
@@ -435,15 +418,6 @@
     if (r.checked) r.dispatchEvent(new Event('change'));
   });
 
-  // live previews
-  ['influence', 'partners', 'reputation', 'growth'].forEach(function (n) {
-    var el = form.querySelector('[name="' + n + '"]');
-    if (el) el.addEventListener('input', function () {
-      var out = form.querySelector('[data-out="' + n + '"]');
-      if (out) out.textContent = el.value;
-      updateEstimate();
-    });
-  });
   var ap = form.querySelector('[name="asking_price"]');
   if (ap) ap.addEventListener('input', updateFee);
 
@@ -457,7 +431,6 @@
     }
   });
 
-  updateEstimate();
   updateFee();
   show(0);
 })();
