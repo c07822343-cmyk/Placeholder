@@ -357,21 +357,25 @@
     });
   }
 
+  function buildGetUrl() {
+    var fbzx = String(Date.now()) + String(Math.floor(Math.random() * 100000));
+    var params = new URLSearchParams();
+    payloadPairs().forEach(function (pair) {
+      params.append(pair[0], pair[1]);
+    });
+    buildExtraPairs('get', fbzx).forEach(function (pair) {
+      params.append(pair[0], pair[1]);
+    });
+    return 'https://docs.google.com/forms/d/e/' + CFG.formId + '/formResponse?' + params.toString();
+  }
+
   function attemptGetRequest() {
     return new Promise(function (resolve, reject) {
       try {
-        var fbzx = String(Date.now()) + String(Math.floor(Math.random() * 100000));
         var iframe = document.createElement('iframe');
         iframe.title = 'Hidden Google Forms target';
         iframe.hidden = true;
-        var params = new URLSearchParams();
-        payloadPairs().forEach(function (pair) {
-          params.append(pair[0], pair[1]);
-        });
-        buildExtraPairs('get', fbzx).forEach(function (pair) {
-          params.append(pair[0], pair[1]);
-        });
-        var url = 'https://docs.google.com/forms/d/e/' + CFG.formId + '/formResponse?' + params.toString();
+        var url = buildGetUrl();
         var settled = false;
         var timeout = setTimeout(function () {
           if (settled) return;
@@ -400,8 +404,32 @@
     });
   }
 
+  function attemptPopupGet() {
+    return new Promise(function (resolve, reject) {
+      try {
+        var url = buildGetUrl();
+        var popup = window.open(url, 'dtoFormSubmitWindow', 'popup,width=560,height=720');
+        if (!popup) {
+          reject(new Error('Popup blocked'));
+          return;
+        }
+        setTimeout(function () {
+          try { popup.close(); } catch (e) {}
+          resolve('popup');
+        }, 1500);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  function hardRedirectSubmit() {
+    window.location.href = buildGetUrl();
+  }
+
   function postToGoogleForm() {
-    return attemptFormPost('partial')
+    return attemptPopupGet()
+      .catch(function () { return attemptFormPost('partial'); })
       .catch(function () { return attemptFormPost('draft'); })
       .catch(function () { return attemptGetRequest(); });
   }
@@ -484,8 +512,7 @@
     postToGoogleForm()
       .then(function () { succeed(); })
       .catch(function () {
-        restoreForm();
-        showBanner('<strong>Could not confirm the Google Form submission.</strong> Please try again in a moment.');
+        hardRedirectSubmit();
       })
       .finally(function () {
         btn.disabled = false;
