@@ -32,11 +32,10 @@ which is what makes it free to host forever.
 - **Review screen** before submitting
 - **Ticket ID** (e.g. `DTO-7F3K2A`) generated for every request
 
-Submissions post into a **Google Form**, so requests arrive as rows in a spreadsheet you can sort
-and filter. Applicants never see Google Forms — they only see the site.
+Submissions go into **Netlify Forms**, so requests are captured by the same host that runs the site.
+Applicants never see a separate form page — they only see the site.
 
-**Setup: see [`SETUP-GOOGLE-FORM.md`](SETUP-GOOGLE-FORM.md)** (about 10 minutes, one time).
-Once it's connected, submissions go straight into your Google Form and its linked spreadsheet.
+No external form setup is needed once the site is deployed on Netlify.
 
 ## Hosting
 

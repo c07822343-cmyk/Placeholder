@@ -70,10 +70,10 @@ You can start with A and switch to B whenever — nothing is wasted.
 
 Two things left, both optional and neither blocks launch:
 
-1. **Connect the request form to Google Forms** so applications land in a spreadsheet instead of
-   your inbox → [`SETUP-GOOGLE-FORM.md`](SETUP-GOOGLE-FORM.md) (~10 min)
+1. **Claim the Netlify site** so form submissions are stored in **Netlify Forms** under your site's
+   dashboard.
 
-   *Once connected, Apply submissions go straight into your Google Form and linked sheet.*
+   *Once deployed on Netlify, Apply submissions go straight into Netlify Forms.*
 
 2. **Add listings** by editing `data/listings.json` → see [`README.md`](README.md)
 

@@ -138,11 +138,8 @@ python3 -m http.server 8000
 
 ## Handling incoming requests
 
-The **Apply** page has a built-in request wizard that submits into a **Google Form**, so requests
-arrive as rows in a spreadsheet. This stays free with no submission limits that matter, and needs no
-server.
+The **Apply** page has a built-in request wizard that submits into **Netlify Forms** when the site is
+hosted on Netlify. No separate form service or server is required.
 
-**Setup takes ~10 minutes — see [`SETUP-GOOGLE-FORM.md`](SETUP-GOOGLE-FORM.md).**
-
-Once connected, submissions go straight into your Google Form and whatever Google Sheet you link to
-that form.
+After deployment, open your Netlify dashboard and you'll see submissions under the site's **Forms**
+section automatically.
