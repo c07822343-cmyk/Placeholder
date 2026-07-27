@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Live Listings — DTO</title>
-<meta name="description" content="Google Docs currently listed on DTO for stock investment or full buyout.">
-<meta property="og:title" content="Live Listings — DTO">
-<meta property="og:description" content="Google Docs currently listed on DTO for stock investment or full buyout.">
+<title>Listing Details — DTO</title>
+<meta name="description" content="View contact details and public information for a specific DTO listing.">
+<meta property="og:title" content="Listing Details — DTO">
+<meta property="og:description" content="View contact details and public information for a specific DTO listing.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#070b12">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23f5c542'/><text x='50' y='68' font-size='46' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='%2314100a'>DTO</text></svg>">
@@ -27,66 +27,21 @@
 
 <section class="hero" style="padding-bottom:22px">
   <div class="wrap">
-    <span class="eyebrow">Market</span>
-    <h1>Live <span class="accent">listings</span></h1>
-    <p class="lede">Docs currently listed on DTO for stock investment or full buyout. Every listing shown
-    here has been submitted to DTO staff; verified listings have completed review.</p>
+    <span class="eyebrow">Listing</span>
+    <h1 id="listingDetailTitle">Loading listing…</h1>
+    <p class="lede" id="listingDetailLead">Pulling the latest public details for this listing from DTO's live listings sheet.</p>
     <div class="hero-cta">
-      <a class="btn btn-gold" href="apply.html">Add your doc</a>
-      <a class="btn btn-ghost" href="doxstox.html">How scores are set</a>
+      <a class="btn btn-ghost" href="listings.html">&#8592; Back to listings</a>
+      <a class="btn btn-gold" href="apply.html#request">Ask DTO about this listing</a>
     </div>
   </div>
 </section>
 
 <section class="block">
   <div class="wrap">
-    <div class="grid" style="grid-template-columns:1.4fr .8fr .8fr;gap:12px;margin-bottom:20px">
-      <div>
-        <label class="form-label" for="fSearch">Search</label>
-        <input type="text" id="fSearch" placeholder="Search docs…" aria-label="Search listings by name or description">
-      </div>
-      <div>
-        <label class="form-label" for="fType">Listing type</label>
-        <select id="fType" aria-label="Filter by listing type">
-          <option value="all">All listing types</option>
-          <option value="stock">Stock listings</option>
-          <option value="buyout">Full buyouts</option>
-        </select>
-      </div>
-      <div>
-        <label class="form-label" for="fSort">Sort by</label>
-        <select id="fSort" aria-label="Sort listings">
-          <option value="ds-desc">Highest DoxStox</option>
-          <option value="ds-asc">Lowest DoxStox</option>
-          <option value="name">Name A–Z</option>
-        </select>
-      </div>
+    <div id="listingDetailPage">
+      <div class="card" style="padding:24px">Loading listing details…</div>
     </div>
-    <p class="section-sub" id="listingCount" style="margin-bottom:14px"></p>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Doc</th><th>Type</th><th>DoxStox</th><th>Price</th><th>Status</th><th></th>
-          </tr>
-        </thead>
-        <tbody id="listingRows">
-          <tr><td colspan="6" style="text-align:center;padding:30px">Loading listings…</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="notice mt-24">DoxStox scores and share prices are set by DTO staff during review and
-    updated weekly. Buyout prices are asking prices in USD; the final figure is agreed between buyer and
-    seller with DTO as verifier, and the 7% DTO fee applies to every completed deal.</div>
-  </div>
-</section>
-
-<section class="block">
-  <div class="wrap">
-    <h2>Want to appear here?</h2>
-    <p class="section-sub">Send DTO staff your doc link, name, a short description and whether you want a
-    stock listing or a full buyout. Listings go live once review is complete.</p>
-    <p><a class="btn btn-gold" href="apply.html">Start a request</a></p>
   </div>
 </section>
 

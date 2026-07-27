@@ -61,7 +61,10 @@ window.DTO_CONFIG = {
       sharePrice: "Share Price",
       askingPrice: "Asking Price",
       verified: "Verified",
-      published: "Published"
+      published: "Published",
+      email: "Email",
+      discord: "Discord",
+      docLink: "Doc Link"
     }
   },
 

@@ -717,6 +717,31 @@ listings = """
 """
 
 # --------------------------------------------------------------------------
+# Listing detail
+# --------------------------------------------------------------------------
+listing_detail = """
+<section class="hero" style="padding-bottom:22px">
+  <div class="wrap">
+    <span class="eyebrow">Listing</span>
+    <h1 id="listingDetailTitle">Loading listing…</h1>
+    <p class="lede" id="listingDetailLead">Pulling the latest public details for this listing from DTO's live listings sheet.</p>
+    <div class="hero-cta">
+      <a class="btn btn-ghost" href="listings.html">&#8592; Back to listings</a>
+      <a class="btn btn-gold" href="apply.html#request">Ask DTO about this listing</a>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div id="listingDetailPage">
+      <div class="card" style="padding:24px">Loading listing details…</div>
+    </div>
+  </div>
+</section>
+"""
+
+# --------------------------------------------------------------------------
 # Apply — on-site request system (submits into a Google Form)
 # --------------------------------------------------------------------------
 apply_page = """
@@ -1018,6 +1043,9 @@ if __name__ == "__main__":
          "How DTO handles real-money full doc buyouts: pricing, the 7% fee and the full transfer process.", buyouts)
     page("listings.html", "Live Listings — DTO",
          "Google Docs currently listed on DTO for stock investment or full buyout.", listings)
+    page("listing-details.html", "Listing Details — DTO",
+         "View contact details and public information for a specific DTO listing.", listing_detail,
+         active="listings.html")
     page("apply.html", "Apply to DTO — List Your Doc or Get a Valuation",
          "Submit a request to DTO: list your Google Doc for stock investment, sell it in a full buyout, "
          "or get a valuation. Reviewed manually by DTO staff.", apply_page)
