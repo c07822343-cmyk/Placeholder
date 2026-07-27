@@ -7,6 +7,13 @@ them directly. Run:  python3 build.py
 import pathlib
 
 ROOT = pathlib.Path(__file__).parent
+ASSET_VERSION = str(max(
+    (ROOT / "build.py").stat().st_mtime_ns,
+    (ROOT / "assets" / "app.js").stat().st_mtime_ns,
+    (ROOT / "assets" / "config.js").stat().st_mtime_ns,
+    (ROOT / "assets" / "requests.js").stat().st_mtime_ns,
+    (ROOT / "assets" / "style.css").stat().st_mtime_ns,
+))
 
 NAV = [
     ("index.html", "Home"),
@@ -94,7 +101,7 @@ def page(filename, title, description, body, active=None):
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#070b12">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23f5c542'/><text x='50' y='68' font-size='46' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='%2314100a'>DTO</text></svg>">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v={ASSET_VERSION}">
 </head>
 <body>
 {header(active)}
@@ -102,9 +109,9 @@ def page(filename, title, description, body, active=None):
 {body}
 </main>
 {FOOTER}
-<script src="assets/config.js"></script>
-<script src="assets/app.js"></script>
-<script src="assets/requests.js"></script>
+<script src="assets/config.js?v={ASSET_VERSION}"></script>
+<script src="assets/app.js?v={ASSET_VERSION}"></script>
+<script src="assets/requests.js?v={ASSET_VERSION}"></script>
 </body>
 </html>
 """
@@ -970,9 +977,9 @@ apply_page = """
 
 <section class="block">
   <div class="wrap">
-    <h2>Prefer email?</h2>
-    <p class="section-sub">The form above is fastest, but you can always email staff directly. Include
-    your doc link, doc name, a short description, and whether you want a stock listing or a full buyout.</p>
+    <h2>Need help?</h2>
+    <p class="section-sub">Use the form above for submissions. These addresses are only for support,
+    follow-up questions, or checking on an existing ticket.</p>
     <div class="grid g3">
 """ + "".join(
     '<a class="mail-tile" href="mailto:%s"><span class="em">&#9993;</span>'
