@@ -269,12 +269,36 @@
     return lines.join('\n');
   }
 
-  function postToGoogleForm() {
+  function buildExtraPairs(mode, fbzx) {
+    if (mode === 'partial') {
+      return [
+        ['fvv', '1'],
+        ['pageHistory', '0'],
+        ['partialResponse', '[null,null,"' + fbzx + '"]'],
+        ['fbzx', fbzx]
+      ];
+    }
+    if (mode === 'draft') {
+      return [
+        ['fvv', '1'],
+        ['pageHistory', '0'],
+        ['draftResponse', '[]'],
+        ['fbzx', fbzx]
+      ];
+    }
+    return [
+      ['usp', 'pp_url'],
+      ['submit', 'Submit'],
+      ['fbzx', fbzx]
+    ];
+  }
+
+  function attemptFormPost(mode) {
     return new Promise(function (resolve, reject) {
       try {
         var fbzx = String(Date.now()) + String(Math.floor(Math.random() * 100000));
         var url = 'https://docs.google.com/forms/d/e/' + CFG.formId + '/formResponse?usp=pp_url';
-        var targetName = 'dtoFormTarget_' + fbzx;
+        var targetName = 'dtoFormTarget_' + mode + '_' + fbzx;
         var iframe = document.createElement('iframe');
         iframe.name = targetName;
         iframe.title = 'Hidden Google Forms target';
@@ -288,20 +312,7 @@
         tempForm.acceptCharset = 'UTF-8';
         tempForm.style.display = 'none';
 
-        payloadPairs().forEach(function (pair) {
-          var input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = pair[0];
-          input.value = pair[1];
-          tempForm.appendChild(input);
-        });
-
-        [
-          ['fvv', '1'],
-          ['pageHistory', '0'],
-          ['partialResponse', '[null,null,"' + fbzx + '"]'],
-          ['fbzx', fbzx]
-        ].forEach(function (pair) {
+        payloadPairs().concat(buildExtraPairs(mode, fbzx)).forEach(function (pair) {
           var input = document.createElement('input');
           input.type = 'hidden';
           input.name = pair[0];
@@ -314,22 +325,23 @@
         var timeout = setTimeout(function () {
           if (settled) return;
           settled = true;
-          reject(new Error('Timed out waiting for Google Forms'));
+          cleanup();
+          reject(new Error('Timed out waiting for Google Forms (' + mode + ')'));
+        }, 8000);
+
+        function cleanup() {
+          clearTimeout(timeout);
           setTimeout(function () {
             tempForm.remove();
             iframe.remove();
           }, 50);
-        }, 12000);
+        }
 
         iframe.addEventListener('load', function () {
           if (!submitted || settled) return;
           settled = true;
-          clearTimeout(timeout);
-          resolve();
-          setTimeout(function () {
-            tempForm.remove();
-            iframe.remove();
-          }, 1500);
+          cleanup();
+          resolve(mode);
         });
 
         document.body.appendChild(iframe);
@@ -343,6 +355,55 @@
         reject(err);
       }
     });
+  }
+
+  function attemptGetRequest() {
+    return new Promise(function (resolve, reject) {
+      try {
+        var fbzx = String(Date.now()) + String(Math.floor(Math.random() * 100000));
+        var iframe = document.createElement('iframe');
+        iframe.title = 'Hidden Google Forms target';
+        iframe.hidden = true;
+        var params = new URLSearchParams();
+        payloadPairs().forEach(function (pair) {
+          params.append(pair[0], pair[1]);
+        });
+        buildExtraPairs('get', fbzx).forEach(function (pair) {
+          params.append(pair[0], pair[1]);
+        });
+        var url = 'https://docs.google.com/forms/d/e/' + CFG.formId + '/formResponse?' + params.toString();
+        var settled = false;
+        var timeout = setTimeout(function () {
+          if (settled) return;
+          settled = true;
+          cleanup();
+          reject(new Error('Timed out waiting for Google Forms (get)'));
+        }, 8000);
+
+        function cleanup() {
+          clearTimeout(timeout);
+          setTimeout(function () { iframe.remove(); }, 50);
+        }
+
+        iframe.addEventListener('load', function () {
+          if (settled) return;
+          settled = true;
+          cleanup();
+          resolve('get');
+        });
+
+        document.body.appendChild(iframe);
+        iframe.src = url;
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  function postToGoogleForm() {
+    return attemptFormPost('partial')
+      .catch(function () { return attemptFormPost('draft'); })
+      .catch(function () { return attemptGetRequest(); });
   }
 
   function showPending() {
