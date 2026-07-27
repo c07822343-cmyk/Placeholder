@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apply to DTO — List Your Doc or Become a Verified Buyer</title>
+<meta name="description" content="Submit a request to DTO: list your Google Doc for stock investment, sell it in a full buyout, or register as a verified buyer. Reviewed manually by DTO staff.">
+<meta property="og:title" content="Apply to DTO — List Your Doc or Become a Verified Buyer">
+<meta property="og:description" content="Submit a request to DTO: list your Google Doc for stock investment, sell it in a full buyout, or register as a verified buyer. Reviewed manually by DTO staff.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#070b12">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23f5c542'/><text x='50' y='68' font-size='46' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='%2314100a'>DTO</text></svg>">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="index.html">
+      <span class="mark">DTO</span>
+      <span>Docs Trade Organization<small>By BananaNetworkz</small></span>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">&#9776;</button>
+    <nav class="nav-links"><a href="index.html">Home</a><a href="how-it-works.html">How It Works</a><a href="doxstox.html">DoxStox</a><a href="buyouts.html">Buyouts</a><a href="listings.html">Listings</a><a href="apply.html" class="cta active">Apply</a></nav>
+  </div>
+</header>
+<main>
+
+<section class="hero" style="padding-bottom:26px">
+  <div class="wrap">
+    <span class="eyebrow">Requests</span>
+    <h1>Apply to <span class="accent">DTO</span></h1>
+    <p class="lede">List a doc for stock investment, sell it outright in a full buyout, or register as a
+    verified buyer. Complete the request below — it takes about a minute, and everything is reviewed
+    manually by DTO staff.</p>
+    <div class="hero-cta">
+      <a class="btn btn-gold" href="#request">Start a request</a>
+      <a class="btn btn-ghost" href="#faq">Read the FAQ</a>
+    </div>
+  </div>
+</section>
+
+<section class="block" style="padding-top:20px">
+  <div class="wrap">
+    <div class="grid g3">
+      <div class="card"><span class="icon">&#9889;</span><h3>Takes ~1 minute</h3><p>Four short steps. No account, no password, nothing to install.</p></div>
+      <div class="card"><span class="icon">&#128273;</span><h3>Goes straight to staff</h3><p>Your request lands in DTO's private review queue the moment you submit.</p></div>
+      <div class="card"><span class="icon">&#127903;</span><h3>You get a ticket ID</h3><p>Quote it in any email and staff can pull your request up instantly.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="request">
+  <div class="wrap">
+    <h2>Submit a request</h2>
+    <p class="section-sub">All fields marked required must be completed. DTO staff verify every stat you
+    provide — fake or misleading information results in rejection.</p>
+
+    <div class="setup-banner" id="setupBanner" hidden></div>
+
+    <div id="reqWrap">
+      <form id="dtoRequest" class="req-shell" autocomplete="on" novalidate>
+
+        <div class="req-head">
+          <div class="step-label" id="reqStepLabel">Step 1</div>
+          <div class="progress-track"><div class="progress-bar" id="reqProgressBar"></div></div>
+          <div id="reqDots"></div>
+        </div>
+
+        <!-- STEP 1 : request type -->
+        <div class="step" data-title="Request type">
+          <h3>What would you like to do?</h3>
+          <p class="step-sub">Pick the option that matches your goal. You can change this later by
+          emailing staff with your ticket ID.</p>
+          <div class="type-grid" data-required-radio="request_type">
+            <label class="type-card">
+              <input type="radio" name="request_type" value="Stock Listing" checked>
+              <span class="tc-check"></span>
+              <span class="tc-icon">&#128200;</span>
+              <span class="tc-title">Stock Listing</span>
+              <span class="tc-desc">Keep ownership of your doc and let investors buy shares. Value
+              updates weekly with your DoxStox score.</span>
+            </label>
+            <label class="type-card">
+              <input type="radio" name="request_type" value="Full Buyout">
+              <span class="tc-check"></span>
+              <span class="tc-icon">&#128176;</span>
+              <span class="tc-title">Full Buyout</span>
+              <span class="tc-desc">Sell your doc outright for real money. Ownership transfers fully to
+              the buyer once payment clears.</span>
+            </label>
+            <label class="type-card">
+              <input type="radio" name="request_type" value="Verified Buyer">
+              <span class="tc-check"></span>
+              <span class="tc-icon">&#128737;</span>
+              <span class="tc-title">Become a Verified Buyer</span>
+              <span class="tc-desc">Get approved as a legitimate purchaser so sellers are matched and
+              recommended to you first.</span>
+            </label>
+            <label class="type-card">
+              <input type="radio" name="request_type" value="Valuation Only">
+              <span class="tc-check"></span>
+              <span class="tc-icon">&#128269;</span>
+              <span class="tc-title">Valuation Only</span>
+              <span class="tc-desc">Just want to know what your doc is worth? Get an official DoxStox
+              score without listing it.</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- STEP 2 : about you -->
+        <div class="step" data-title="Your details" hidden>
+          <h3>How can DTO reach you?</h3>
+          <p class="step-sub">Staff will contact you here to confirm details and open a private chat room
+          for negotiation.</p>
+          <div class="field-wrap half">
+            <label class="form-label" for="f_name">Name or handle <span style="color:var(--red)">*</span></label>
+            <input type="text" id="f_name" name="name" data-required placeholder="e.g. BananaNetworkz">
+          </div>
+          <div class="field-wrap half">
+            <label class="form-label" for="f_email">Contact email <span style="color:var(--red)">*</span></label>
+            <input type="email" id="f_email" name="email" data-required placeholder="you@example.com">
+          </div>
+          <div class="field-wrap">
+            <label class="form-label" for="f_alt">Discord or other contact <span style="color:var(--muted);font-weight:500">(optional)</span></label>
+            <input type="text" id="f_alt" name="contact_alt" placeholder="username#0000">
+            <span class="hint" style="color:var(--muted);font-size:.8rem">Speeds things up — staff often
+            reach out here first.</span>
+          </div>
+          <div class="notice">DTO never asks for passwords or account access. Ownership transfers happen
+          through Google Docs' own sharing settings, with staff supervising.</div>
+        </div>
+
+        <!-- STEP 3a : doc details (sellers) -->
+        <div class="step" data-title="Doc details" data-only="seller" hidden>
+          <h3>Tell us about your doc</h3>
+          <p class="step-sub">This is what staff review, and what buyers or investors see once approved.</p>
+          <div class="field-wrap">
+            <label class="form-label" for="f_docname">Doc name <span style="color:var(--red)">*</span></label>
+            <input type="text" id="f_docname" name="doc_name" data-required placeholder="e.g. Study Vault">
+          </div>
+          <div class="field-wrap">
+            <label class="form-label" for="f_doclink">Doc link <span style="color:var(--red)">*</span></label>
+            <input type="url" id="f_doclink" name="doc_link" data-required
+                   placeholder="https://docs.google.com/document/d/...">
+            <span class="hint" style="color:var(--muted);font-size:.8rem">Set sharing to "Anyone with the
+            link can view" so staff can evaluate it.</span>
+          </div>
+          <div class="field-wrap">
+            <label class="form-label" for="f_desc">Description <span style="color:var(--red)">*</span></label>
+            <textarea id="f_desc" name="description" data-required
+              placeholder="What the doc is, who it serves, and why it matters in the community."></textarea>
+          </div>
+          <div class="field-wrap" id="priceWrap" hidden>
+            <label class="form-label" for="f_price">Asking price in USD</label>
+            <input type="number" id="f_price" name="asking_price" min="0" step="1" placeholder="100">
+            <div class="est-panel" id="reqFee"></div>
+          </div>
+        </div>
+
+        <!-- STEP 3b : buyer details -->
+        <div class="step" data-title="Buyer profile" data-only="buyer" hidden>
+          <h3>Your buyer profile</h3>
+          <p class="step-sub">DTO matches verified buyers to sellers based on budget, interest category
+          and activity level.</p>
+          <div class="field-wrap">
+            <label class="form-label" for="f_budget">Budget in USD <span style="color:var(--red)">*</span></label>
+            <input type="number" id="f_budget" name="budget" data-required min="0" step="1" placeholder="250">
+          </div>
+          <div class="field-wrap">
+            <label class="form-label" for="f_int">What kind of docs are you looking for? <span style="color:var(--red)">*</span></label>
+            <textarea id="f_int" name="description" data-required
+              placeholder="Categories, size, influence level, anything specific you're hunting for."></textarea>
+          </div>
+          <div class="notice">Verification reduces scams on both sides. Staff may ask for proof of funds
+          or trade history before approving you as a verified buyer.</div>
+        </div>
+
+        <!-- STEP 4 : stats (sellers) -->
+        <div class="step" data-title="Doc stats" data-only="seller" hidden>
+          <h3>Self-reported stats</h3>
+          <p class="step-sub">Give your honest estimate for each. Staff verify everything and set the
+          official score — inflated numbers only slow your review down.</p>
+
+          <div class="slide-row">
+            <label for="s_inf">Influence <b data-out="influence">5</b></label>
+            <input type="range" id="s_inf" name="influence" min="1" max="10" step="1" value="5">
+            <div class="scale"><span>1 · unknown</span><span>5 · average</span><span>10 · central</span></div>
+          </div>
+          <div class="slide-row">
+            <label for="s_par">Partners <b data-out="partners">0</b></label>
+            <input type="range" id="s_par" name="partners" min="0" max="20" step="1" value="0">
+            <div class="scale"><span>0</span><span>10</span><span>20+</span></div>
+          </div>
+          <div class="slide-row">
+            <label for="s_rep">Reputation <b data-out="reputation">5</b></label>
+            <input type="range" id="s_rep" name="reputation" min="0" max="10" step="1" value="5">
+            <div class="scale"><span>0 · untrusted</span><span>5</span><span>10 · flawless</span></div>
+          </div>
+          <div class="slide-row">
+            <label for="s_gro">Growth <b data-out="growth">5</b></label>
+            <input type="range" id="s_gro" name="growth" min="0" max="10" step="1" value="5">
+            <div class="scale"><span>0 · flat</span><span>5</span><span>10 · surging</span></div>
+          </div>
+
+          <div class="est-panel" id="reqEstimate"></div>
+        </div>
+
+        <!-- STEP 5 : review -->
+        <div class="step" data-title="Review &amp; submit" hidden>
+          <h3>Review your request</h3>
+          <p class="step-sub">Check everything below, then submit. You'll get a ticket ID to quote in any
+          follow-up email.</p>
+          <div class="field-wrap">
+            <label class="form-label" for="f_notes">Anything else staff should know <span style="color:var(--muted);font-weight:500">(optional)</span></label>
+            <textarea id="f_notes" name="notes" style="min-height:80px"
+              placeholder="Partnerships, history, previous sales, special conditions…"></textarea>
+          </div>
+          <div class="card" style="padding:18px 20px">
+            <div id="reqReview"></div>
+          </div>
+          <p style="margin-top:18px;text-align:center">
+            <span class="ticket-chip">&#127903; <span id="reqTicket"></span></span>
+          </p>
+          <div class="notice" style="margin-top:18px">By submitting you confirm the information is
+          accurate, and you accept that DTO applies a <strong>7% fee</strong> to completed transactions
+          and may decline any submission.</div>
+        </div>
+
+        <div class="req-nav">
+          <button type="button" class="btn btn-ghost" id="reqBack">&#8592; Back</button>
+          <button type="button" class="btn btn-gold" id="reqNext">Continue &#8594;</button>
+          <button type="button" class="btn btn-gold" id="reqSubmit" hidden>Submit request</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- success -->
+    <div id="reqDone" class="req-shell done-panel" hidden>
+      <div class="tick">&#10003;</div>
+      <h3>Request received</h3>
+      <p id="doneMsg">Your request is in DTO's review queue. Staff will get back to you within
+      <span id="doneTime">24–48 hours</span>.</p>
+      <p style="margin-bottom:22px"><span class="ticket-chip">&#127903; <span id="doneTicket"></span></span></p>
+      <p style="font-size:.88rem">Save that ticket ID — quoting it in an email lets staff find your
+      request instantly.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px">
+        <a class="btn btn-ghost" id="doneCopy" href="#">Copy request details</a>
+        <a class="btn btn-ghost" id="doneMail" href="#">Email staff directly</a>
+        <a class="btn btn-gold" href="listings.html">Browse listings</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>What happens next</h2>
+    <p class="section-sub">Every request follows the same reviewed path — no shortcuts, no private
+    side-deals.</p>
+    <div class="timeline">
+      <div class="tl"><h4>1 · Request received</h4><p>Your submission lands in DTO's private review queue with its ticket ID attached.</p></div>
+      <div class="tl"><h4>2 · Staff review</h4><p>Staff open your doc, check your stats against what they can verify, and flag anything inconsistent.</p></div>
+      <div class="tl"><h4>3 · DoxStox evaluation</h4><p>Your official score is calculated with DS = 200I + 100P + 150R + 75G, then adjusted for anything the formula can't measure.</p></div>
+      <div class="tl"><h4>4 · You're contacted</h4><p>Staff email you the verdict — approved with a score and share price, or declined with a reason.</p></div>
+      <div class="tl"><h4>5 · Listing goes live</h4><p>Approved docs appear on the listings page. Buyers and investors can then be matched to you.</p></div>
+      <div class="tl"><h4>6 · Deal &amp; transfer</h4><p>Negotiation happens in a private DTO chat room. On completion, DTO collects the 7% fee and records the transfer.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="faq">
+  <div class="wrap">
+    <h2>Frequently asked questions</h2>
+    <p class="section-sub">Still unsure about something? Email staff — the addresses are below.</p>
+
+    <details class="faq" open>
+      <summary>Does it cost anything to apply?</summary>
+      <div class="faq-body"><p>No. Submitting a request, getting reviewed and receiving a DoxStox score
+      are all free. DTO only earns from the <strong>7% fee</strong> applied to completed transactions.</p></div>
+    </details>
+    <details class="faq">
+      <summary>What's the difference between a stock listing and a full buyout?</summary>
+      <div class="faq-body"><p>With a <strong>stock listing</strong> you keep ownership of your doc and
+      investors buy shares in its future value. With a <strong>full buyout</strong> you sell the doc
+      entirely and ownership transfers to the buyer.</p></div>
+    </details>
+    <details class="faq">
+      <summary>How is my doc's value decided?</summary>
+      <div class="faq-body"><p>Through the DoxStox formula: <strong>DS = 200I + 100P + 150R + 75G</strong>
+      — influence, partners, reputation and growth. Share price is <strong>DS ÷ 100</strong> in DTC.
+      Staff may make reasonable adjustments for factors a formula can't capture. See the
+      <a href="doxstox.html">DoxStox page</a> for the full breakdown and a calculator.</p></div>
+    </details>
+    <details class="faq">
+      <summary>How long does review take?</summary>
+      <div class="faq-body"><p>Usually 24–48 hours. Requests with a working doc link and honest stats move
+      fastest. Scores are then re-reviewed and updated weekly.</p></div>
+    </details>
+    <details class="faq">
+      <summary>Can my request be rejected?</summary>
+      <div class="faq-body"><p>Yes. DTO reserves the right to decline any submission. The most common
+      reason is fake or misleading stats, which is why honest self-reporting matters — staff verify
+      everything.</p></div>
+    </details>
+    <details class="faq">
+      <summary>Is it safe? How do I know I won't get scammed?</summary>
+      <div class="faq-body"><p>Every deal runs through DTO verification. Only <strong>verified buyers</strong>
+      are recommended to sellers, negotiation happens in staff-provided private chat rooms, and payment is
+      confirmed before ownership transfers. Private deals made outside DTO are not recognised and are not
+      protected.</p></div>
+    </details>
+    <details class="faq">
+      <summary>Do I need a Google account or to sign in anywhere?</summary>
+      <div class="faq-body"><p>No. The form on this page needs no account. Just make sure your doc's
+      sharing is set so staff can view it.</p></div>
+    </details>
+    <details class="faq">
+      <summary>What is DTC?</summary>
+      <div class="faq-body"><p>DTO Credits — the internal unit used for share prices and stock-based
+      trades. Full buyouts use real money (USD or another agreed currency).</p></div>
+    </details>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>Prefer email?</h2>
+    <p class="section-sub">The form above is fastest, but you can always email staff directly. Include
+    your doc link, doc name, a short description, and whether you want a stock listing or a full buyout.</p>
+    <div class="grid g3">
+<a class="mail-tile" href="mailto:the.crypt1c.core@gmail.com"><span class="em">&#9993;</span><span>the.crypt1c.core@gmail.com<small>Primary — best for fast responses</small></span></a><a class="mail-tile" href="mailto:494325@bsd48.org"><span class="em">&#9993;</span><span>494325@bsd48.org<small>Secondary inbox</small></span></a><a class="mail-tile" href="mailto:Calderman@icloud.com"><span class="em">&#9993;</span><span>Calderman@icloud.com<small>Secondary inbox</small></span></a>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="brand" style="margin-bottom:12px">
+          <span class="mark">DTO</span>
+          <span>Docs Trade Organization<small>By BananaNetworkz</small></span>
+        </div>
+        <p>A marketplace and exchange for the Google Docs community — buy, sell, trade
+        and invest in docs with staff-verified valuations.</p>
+        <p><strong style="color:var(--text)">7% fee</strong> on every completed transaction supports
+        platform maintenance, verification and staff operations.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="doxstox.html">DoxStox &amp; Formula</a>
+        <a href="buyouts.html">Full Doc Buyouts</a>
+        <a href="listings.html">Live Listings</a>
+        <a href="apply.html">Apply / List Your Doc</a>
+        <a href="apply.html#faq">FAQ</a>
+      </div>
+      <div>
+        <h4>Contact DTO Staff</h4>
+        <a href="mailto:the.crypt1c.core@gmail.com">the.crypt1c.core@gmail.com</a>
+        <a href="mailto:494325@bsd48.org">494325@bsd48.org</a>
+        <a href="mailto:Calderman@icloud.com">Calderman@icloud.com</a>
+      </div>
+    </div>
+    <div class="copyright">
+      &copy; <span data-year></span> DTO — Docs Trade Organization · Created by BananaNetworkz.
+      All listings and valuations are reviewed manually by DTO staff.
+    </div>
+  </div>
+</footer>
+<script src="assets/config.js"></script>
+<script src="assets/app.js"></script>
+<script src="assets/requests.js"></script>
+</body>
+</html>

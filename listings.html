@@ -19,8 +19,8 @@
       <span class="mark">DTO</span>
       <span>Docs Trade Organization<small>By BananaNetworkz</small></span>
     </a>
-    <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
-    <nav class="nav-links"><a href="index.html">Home</a><a href="how-it-works.html">How It Works</a><a href="doxstox.html">DoxStox</a><a href="buyouts.html">Buyouts</a><a href="listings.html" class="active">Listings</a><a href="join.html">List Your Doc</a></nav>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">&#9776;</button>
+    <nav class="nav-links"><a href="index.html">Home</a><a href="how-it-works.html">How It Works</a><a href="doxstox.html">DoxStox</a><a href="buyouts.html">Buyouts</a><a href="listings.html" class="active">Listings</a><a href="apply.html" class="cta">Apply</a></nav>
   </div>
 </header>
 <main>
@@ -32,7 +32,7 @@
     <p class="lede">Docs currently listed on DTO for stock investment or full buyout. Every listing shown
     here has been submitted to DTO staff; verified listings have completed review.</p>
     <div class="hero-cta">
-      <a class="btn btn-gold" href="join.html">Add your doc</a>
+      <a class="btn btn-gold" href="apply.html">Add your doc</a>
       <a class="btn btn-ghost" href="doxstox.html">How scores are set</a>
     </div>
   </div>
@@ -41,17 +41,26 @@
 <section class="block">
   <div class="wrap">
     <div class="grid" style="grid-template-columns:1.4fr .8fr .8fr;gap:12px;margin-bottom:20px">
-      <input type="text" id="fSearch" placeholder="Search docs…">
-      <select id="fType">
-        <option value="all">All listing types</option>
-        <option value="stock">Stock listings</option>
-        <option value="buyout">Full buyouts</option>
-      </select>
-      <select id="fSort">
-        <option value="ds-desc">Highest DoxStox</option>
-        <option value="ds-asc">Lowest DoxStox</option>
-        <option value="name">Name A–Z</option>
-      </select>
+      <div>
+        <label class="form-label" for="fSearch">Search</label>
+        <input type="text" id="fSearch" placeholder="Search docs…" aria-label="Search listings by name or description">
+      </div>
+      <div>
+        <label class="form-label" for="fType">Listing type</label>
+        <select id="fType" aria-label="Filter by listing type">
+          <option value="all">All listing types</option>
+          <option value="stock">Stock listings</option>
+          <option value="buyout">Full buyouts</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label" for="fSort">Sort by</label>
+        <select id="fSort" aria-label="Sort listings">
+          <option value="ds-desc">Highest DoxStox</option>
+          <option value="ds-asc">Lowest DoxStox</option>
+          <option value="name">Name A–Z</option>
+        </select>
+      </div>
     </div>
     <p class="section-sub" id="listingCount" style="margin-bottom:14px"></p>
     <div class="table-wrap">
@@ -77,7 +86,7 @@
     <h2>Want to appear here?</h2>
     <p class="section-sub">Send DTO staff your doc link, name, a short description and whether you want a
     stock listing or a full buyout. Listings go live once review is complete.</p>
-    <p><a class="btn btn-gold" href="join.html">Open the listing form</a></p>
+    <p><a class="btn btn-gold" href="apply.html">Start a request</a></p>
   </div>
 </section>
 
@@ -101,7 +110,8 @@
         <a href="doxstox.html">DoxStox &amp; Formula</a>
         <a href="buyouts.html">Full Doc Buyouts</a>
         <a href="listings.html">Live Listings</a>
-        <a href="join.html">List Your Doc</a>
+        <a href="apply.html">Apply / List Your Doc</a>
+        <a href="apply.html#faq">FAQ</a>
       </div>
       <div>
         <h4>Contact DTO Staff</h4>
@@ -116,6 +126,8 @@
     </div>
   </div>
 </footer>
+<script src="assets/config.js"></script>
 <script src="assets/app.js"></script>
+<script src="assets/requests.js"></script>
 </body>
 </html>

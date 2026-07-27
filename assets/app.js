@@ -115,7 +115,7 @@ window.DTO = {
     if (!rows.length) {
       tbody.innerHTML =
         '<tr><td colspan="6" style="text-align:center;padding:34px">' +
-        'No listings match that filter. <a href="join.html">Submit your doc</a> to be listed.' +
+        'No listings match that filter. <a href="apply.html">Submit your doc</a> to be listed.' +
         '</td></tr>';
     } else {
       tbody.innerHTML = rows.map(function (r) {
@@ -131,7 +131,7 @@ window.DTO = {
           '<td>' + (r.verified
             ? '<span class="badge verified">Verified</span>'
             : '<span class="badge pending">In Review</span>') + '</td>' +
-          '<td><a class="btn btn-ghost" style="padding:7px 14px;font-size:.83rem" href="join.html#inquire">Inquire</a></td>' +
+          '<td><a class="btn btn-ghost" style="padding:7px 14px;font-size:.83rem" href="apply.html#request">Inquire</a></td>' +
           '</tr>';
       }).join('');
     }
@@ -156,99 +156,38 @@ window.DTO = {
   if (search) search.addEventListener('input', function () { state.q = this.value.toLowerCase(); draw(); });
 })();
 
-/* ---------- Listing-type radio highlight ---------- */
-document.querySelectorAll('.radio-card input[type="radio"]').forEach(function (r) {
-  r.addEventListener('change', function () {
-    document.querySelectorAll('.radio-card').forEach(function (c) { c.classList.remove('selected'); });
-    if (r.checked) r.closest('.radio-card').classList.add('selected');
-  });
-  if (r.checked) r.closest('.radio-card').classList.add('selected');
+/* ---------- Nav a11y: reflect toggle state ---------- */
+document.addEventListener('click', function (e) {
+  var t = e.target.closest('.nav-toggle');
+  if (!t) return;
+  var links = document.querySelector('.nav-links');
+  t.setAttribute('aria-expanded', links && links.classList.contains('open') ? 'true' : 'false');
 });
 
-/* ---------- Submission form: build a prefilled mailto as a fallback ---------- */
-(function initSubmitForm() {
-  var form = document.getElementById('listingForm');
-  if (!form) return;
+/* ---------- Setup banner: only shown while the Google Form isn't wired up ---------- */
+(function () {
+  var el = document.getElementById('setupBanner');
+  if (!el) return;
+  var cfg = window.DTO_CONFIG || {};
+  var configured = cfg.formId && cfg.entries && cfg.entries.requestType;
+  if (configured) { el.remove(); return; }
+  el.hidden = false;
+  el.innerHTML = '<strong>Staff note:</strong> the Google Form isn\'t connected yet, so requests ' +
+    'currently open a prefilled email to DTO staff. Everything works — see ' +
+    '<code>SETUP-GOOGLE-FORM.md</code> to route requests into a spreadsheet instead. ' +
+    'This notice disappears automatically once connected.';
+})();
 
-  function buildBody(fd) {
-    return [
-      'DTO LISTING REQUEST',
-      '--------------------------------',
-      'Doc name:      ' + (fd.get('doc_name') || ''),
-      'Doc link:      ' + (fd.get('doc_link') || ''),
-      'Listing type:  ' + (fd.get('listing_type') || ''),
-      'Asking price:  ' + (fd.get('asking_price') || 'n/a'),
-      'Contact:       ' + (fd.get('email') || ''),
-      '',
-      'Description:',
-      (fd.get('description') || ''),
-      '',
-      'Self-reported stats (DTO staff will verify):',
-      '  Influence:    ' + (fd.get('influence') || '-') + ' / 10',
-      '  Partners:     ' + (fd.get('partners') || '-'),
-      '  Reputation:   ' + (fd.get('reputation') || '-') + ' / 10',
-      '  Growth:       ' + (fd.get('growth') || '-') + ' / 10',
-      '',
-      'Notes:',
-      (fd.get('notes') || 'none')
-    ].join('\n');
-  }
-
-  var mailBtn = document.getElementById('mailtoBtn');
-  if (mailBtn) {
-    mailBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      var fd = new FormData(form);
-      var subject = 'DTO Listing Request — ' + (fd.get('doc_name') || 'Untitled Doc');
-      location.href = 'mailto:the.crypt1c.core@gmail.com'
-        + '?cc=494325@bsd48.org,Calderman@icloud.com'
-        + '&subject=' + encodeURIComponent(subject)
-        + '&body=' + encodeURIComponent(buildBody(fd));
+/* ---------- Reveal-on-scroll ---------- */
+(function () {
+  if (!('IntersectionObserver' in window)) return;
+  var els = document.querySelectorAll('.card, .tl, details.faq');
+  if (!els.length) return;
+  els.forEach(function (e) { e.classList.add('reveal'); });
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
     });
-  }
-
-  var copyBtn = document.getElementById('copyBtn');
-  if (copyBtn) {
-    copyBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      var text = buildBody(new FormData(form));
-      navigator.clipboard.writeText(text).then(function () {
-        copyBtn.textContent = 'Copied ✓';
-        setTimeout(function () { copyBtn.textContent = 'Copy request text'; }, 2200);
-      });
-    });
-  }
-
-  // Show/hide asking price depending on listing type
-  function toggleprice() {
-    var t = form.querySelector('input[name="listing_type"]:checked');
-    var wrap = document.getElementById('priceWrap');
-    if (!wrap) return;
-    wrap.style.display = (t && t.value === 'Full Buyout') ? '' : 'none';
-  }
-  form.querySelectorAll('input[name="listing_type"]').forEach(function (r) {
-    r.addEventListener('change', toggleprice);
-  });
-  toggleprice();
-
-  // Live DoxStox estimate on the form
-  function estimate() {
-    var fd = new FormData(form);
-    var ds = window.DTO.score(
-      +fd.get('influence') || 0, +fd.get('partners') || 0,
-      +fd.get('reputation') || 0, +fd.get('growth') || 0
-    );
-    var out = document.getElementById('formEstimate');
-    if (out) {
-      out.innerHTML = 'Estimated DoxStox score: <strong>' + ds.toLocaleString() +
-        '</strong> &nbsp;·&nbsp; Indicative share price: <strong>' +
-        window.DTO.sharePrice(ds).toFixed(2) + ' DTC</strong>' +
-        '<br><small>Unofficial. Final value is set by DTO staff review.</small>';
-    }
-  }
-  ['influence', 'partners', 'reputation', 'growth'].forEach(function (n) {
-    var el = form.querySelector('[name="' + n + '"]');
-    if (el) el.addEventListener('input', estimate);
-  });
-  estimate();
+  }, { rootMargin: '0px 0px -40px 0px', threshold: .05 });
+  els.forEach(function (e) { io.observe(e); });
 })();

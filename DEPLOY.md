@@ -127,17 +127,13 @@ python3 -m http.server 8000
 
 ---
 
-## Handling incoming listing requests
+## Handling incoming requests
 
-The `join.html` form has **no backend** — by design, since there's nothing to pay for and nothing to
-break. It builds a fully formatted email and opens the visitor's mail app addressed to
-`the.crypt1c.core@gmail.com` (cc: `494325@bsd48.org`, `Calderman@icloud.com`).
+The **Apply** page has a built-in request wizard that submits into a **Google Form**, so requests
+arrive as rows in a spreadsheet. This stays free with no submission limits that matter, and needs no
+server.
 
-If you later want submissions to land in a dashboard instead of an inbox, both of these stay free:
+**Setup takes ~10 minutes — see [`SETUP-GOOGLE-FORM.md`](SETUP-GOOGLE-FORM.md).**
 
-- **Netlify Forms** — 100 submissions/month free; add `netlify` and `data-netlify="true"` to the
-  `<form>` tag in `build.py` (only works if you host on Netlify)
-- **Formspree** / **Web3Forms** — 50–250 submissions/month free, works on any host; set the form's
-  `action` to your endpoint URL
-
-Tell me if you want one of those wired up.
+Until you connect it, the wizard still works: it falls back to opening a prefilled email to
+`the.crypt1c.core@gmail.com` (cc'ing the other two staff inboxes). Nothing breaks either way.
