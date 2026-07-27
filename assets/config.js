@@ -17,23 +17,23 @@ window.DTO_CONFIG = {
      From the form's URL:
      https://docs.google.com/forms/d/e/<<<THIS PART>>>/viewform
      Leave as "" to use the email fallback.                     */
-  formId: "",
+  formId: "1FAIpQLScfH4oX7zVdHpvpW1QbHtzyqSfLmyB8cby2hQvo2cGzxMxh3A",
 
   /* ---- 2. Entry IDs for each question -----------------------
      Run:  python3 tools/get-entry-ids.py <your form URL>
      and paste the output here.                                 */
   entries: {
-    requestType:   "",   // Request Type
-    name:          "",   // Name / Handle
-    email:         "",   // Contact Email
-    contactAlt:    "",   // Discord / other contact
-    docName:       "",   // Doc Name
-    docLink:       "",   // Doc Link
-    description:   "",   // Description
-    askingPrice:   "",   // Asking Price (USD)
-    partners:      "",   // Partnerships
-    notes:         "",   // Notes
-    ticket:        ""    // Ticket ID
+    requestType:   "entry.656105687",   // Request Type
+    name:          "entry.1725491539",   // Name / Handle
+    email:         "entry.785274658",   // Contact Email
+    contactAlt:    "entry.168688796",   // Discord / other contact
+    docName:       "entry.606101997",   // Doc Name
+    docLink:       "entry.1592773863",   // Doc Link
+    description:   "entry.833256481",   // Description
+    askingPrice:   "entry.1832918922",   // Asking Price (USD)
+    partners:      "entry.1335171348",   // Partnerships
+    notes:         "entry.1443836936",   // Notes
+    ticket:        "entry.100421319"    // Ticket ID
   },
 
   /* ---- 3. Staff contact -------------------------------------- */
