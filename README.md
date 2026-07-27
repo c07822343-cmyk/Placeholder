@@ -104,6 +104,7 @@ python3 -m http.server 8000
 ├── tools/get-entry-ids.py    # pulls entry IDs out of your Google Form
 ├── START-HERE.md             # ← easiest way to get online
 ├── UPDATING.md               # how to update without losing your URL
+├── FORM-QUESTIONS.md         # the 16 Google Form questions to create
 ├── SETUP-GOOGLE-FORM.md      # request system setup
 └── DEPLOY.md                 # hosting setup (Git-connected)
 ```

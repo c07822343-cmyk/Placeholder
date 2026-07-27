@@ -12,6 +12,9 @@ Total time: about 10 minutes, one time only.
 
 ---
 
+> **Just need the question list to build the form?** See
+> **[`FORM-QUESTIONS.md`](FORM-QUESTIONS.md)** — it's the copy-paste version of Step 1.
+
 ## Step 1 — Create the Google Form
 
 Go to <https://forms.new> and create a form called **DTO Requests**.
