@@ -31,10 +31,7 @@ window.DTO_CONFIG = {
     docLink:       "",   // Doc Link
     description:   "",   // Description
     askingPrice:   "",   // Asking Price (USD)
-    influence:     "",   // Community Influence
     partners:      "",   // Partnerships
-    reputation:    "",   // Reputation & History
-    growth:        "",   // Recent Growth
     notes:         "",   // Notes
     ticket:        ""    // Ticket ID
   },

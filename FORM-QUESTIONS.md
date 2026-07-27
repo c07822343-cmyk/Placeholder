@@ -12,7 +12,7 @@ identical makes the auto-mapping script work perfectly, so copy them exactly if 
 
 ---
 
-## The 14 questions
+## The 11 questions
 
 | # | Question title (copy exactly) | Question type |
 |---|---|---|
@@ -24,18 +24,15 @@ identical makes the auto-mapping script work perfectly, so copy them exactly if 
 | 6 | `Doc Link` | Short answer |
 | 7 | `Description` | **Paragraph** |
 | 8 | `Asking Price` | Short answer |
-| 9 | `Community Influence` | **Paragraph** |
-| 10 | `Partnerships` | **Paragraph** |
-| 11 | `Reputation and History` | **Paragraph** |
-| 12 | `Recent Growth` | **Paragraph** |
-| 13 | `Notes` | **Paragraph** |
-| 14 | `Ticket ID` | Short answer |
+| 9 | `Partnerships` | **Paragraph** |
+| 10 | `Notes` | **Paragraph** |
+| 11 | `Ticket ID` | Short answer |
 
-**Paragraph:** #7, #9, #10, #11, #12, #13 — six of them.
-**Short answer:** #1, #2, #3, #4, #5, #6, #8, #14 — eight of them.
+**Paragraph:** #7, #9, #10 — three of them.
+**Short answer:** #1, #2, #3, #4, #5, #6, #8, #11 — eight of them.
 
-Questions 9–12 receive written descriptions now (e.g. *"Referenced by most study docs, around 4
-active partners"*), so they need the room a Paragraph field gives.
+Questions 7, 9 and 10 receive written descriptions (e.g. *"Partners with Study Vault and Meme Ledger,
+monthly joint events"*), so they need the room a Paragraph field gives.
 
 ---
 
@@ -107,10 +104,7 @@ Not every request fills every field — blanks are normal and expected.
 | Doc Link | ✅ | ✅ | ✅ |
 | Description | ✅ | ✅ | ✅ |
 | Asking Price | — | ✅ | — |
-| Community Influence | ✅ | ✅ | ✅ |
 | Partnerships | optional | optional | optional |
-| Reputation and History | optional | optional | optional |
-| Recent Growth | optional | optional | optional |
 | Notes | optional | optional | optional |
 | Ticket ID | ✅ | ✅ | ✅ |
 

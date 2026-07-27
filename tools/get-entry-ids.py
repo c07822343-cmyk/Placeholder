@@ -29,11 +29,8 @@ HINTS = [
     ("description",   "description"),
     ("asking price",  "askingPrice"),
 
-    ("influence",     "influence"),
     ("partnership",   "partners"),
     ("partner",       "partners"),
-    ("reputation",    "reputation"),
-    ("growth",        "growth"),
     ("note",          "notes"),
     ("ticket",        "ticket"),
 ]
@@ -108,8 +105,8 @@ def main():
                 break
 
     keys = ["requestType", "name", "email", "contactAlt", "docName", "docLink",
-            "description", "askingPrice", "influence", "partners",
-            "reputation", "growth", "notes", "ticket"]
+            "description", "askingPrice", "partners",
+            "notes", "ticket"]
 
     print("\n" + "=" * 60)
     print("Paste this into assets/config.js")

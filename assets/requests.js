@@ -180,10 +180,7 @@
       add('Doc link', val('doc_link'));
       add('Description', val('description'));
       if (requestType() === 'Full Buyout') add('Asking price', val('asking_price') ? '$' + val('asking_price') : '');
-      add('Community influence', val('influence'));
       add('Partnerships', val('partners'));
-      add('Reputation &amp; history', val('reputation'));
-      add('Recent growth', val('growth'));
     }
     add('Notes', val('notes'));
 
@@ -219,10 +216,7 @@
     put('docLink', val('doc_link'));
     put('description', val('description'));
     put('askingPrice', val('asking_price'));
-    put('influence', val('influence'));
     put('partners', val('partners'));
-    put('reputation', val('reputation'));
-    put('growth', val('growth'));
     put('notes', val('notes'));
     put('ticket', ticket);
     return fd;
@@ -259,17 +253,8 @@
       lines.push(
         'Background for DTO staff valuation:',
         '',
-        'Community influence:',
-        '  ' + (val('influence') || '—'),
-        '',
         'Partnerships:',
         '  ' + (val('partners') || '—'),
-        '',
-        'Reputation & history:',
-        '  ' + (val('reputation') || '—'),
-        '',
-        'Recent growth:',
-        '  ' + (val('growth') || '—'),
         ''
       );
     }

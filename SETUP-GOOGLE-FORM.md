@@ -19,7 +19,7 @@ Total time: about 10 minutes, one time only.
 
 Go to <https://forms.new> and create a form called **DTO Requests**.
 
-Add the **14 questions** listed in **[`FORM-QUESTIONS.md`](FORM-QUESTIONS.md)** — that file has the
+Add the **11 questions** listed in **[`FORM-QUESTIONS.md`](FORM-QUESTIONS.md)** — that file has the
 exact titles and field types to copy.
 
 Three rules that will silently break submissions:
