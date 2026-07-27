@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DoxStox Formula & Calculator — DTO</title>
+<meta name="description" content="The official DoxStox formula DS = 200I + 100P + 150R + 75G, with an interactive calculator and share price conversion.">
+<meta property="og:title" content="DoxStox Formula & Calculator — DTO">
+<meta property="og:description" content="The official DoxStox formula DS = 200I + 100P + 150R + 75G, with an interactive calculator and share price conversion.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#070b12">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23f5c542'/><text x='50' y='68' font-size='46' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='%2314100a'>DTO</text></svg>">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="index.html">
+      <span class="mark">DTO</span>
+      <span>Docs Trade Organization<small>By BananaNetworkz</small></span>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+    <nav class="nav-links"><a href="index.html">Home</a><a href="how-it-works.html">How It Works</a><a href="doxstox.html" class="active">DoxStox</a><a href="buyouts.html">Buyouts</a><a href="listings.html">Listings</a><a href="join.html">List Your Doc</a></nav>
+  </div>
+</header>
+<main>
+
+<section class="hero" style="padding-bottom:26px">
+  <div class="wrap">
+    <span class="eyebrow">Valuation system</span>
+    <h1>DoxStox <span class="accent">formula</span></h1>
+    <p class="lede">Every registered doc receives a DoxStox score. It is the baseline number behind share
+    prices, suggested buyout ranges and a doc's overall standing in the DTO market.</p>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>Core score</h2>
+    <div class="formula">
+      DS = 200I + 100P + 150R + 75G
+      <small>Share price: SP = DS ÷ 100 &nbsp;(expressed in DTC per share)</small>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>What each part means</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h3>I — Influence (1–10) <span class="badge buyout">×200</span></h3>
+        <p style="margin-bottom:10px">The <strong style="color:var(--text)">most important factor</strong>.
+        DTO staff decide based on how well-known the doc is, how often it gets referenced, and how
+        "important" it feels in the ecosystem.</p>
+        <ul class="clean">
+          <li><strong>1</strong> — unknown doc</li>
+          <li><strong>5</strong> — average active doc</li>
+          <li><strong>10</strong> — central / huge influence</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>P — Partners <span class="badge buyout">×100</span></h3>
+        <p style="margin-bottom:10px">Each partnership counts as 1 point. A partner is another doc linking
+        to or working with it.</p>
+        <ul class="clean">
+          <li>0 partners = <strong>0</strong></li>
+          <li>3 partners = <strong>3</strong></li>
+          <li>10 partners = <strong>10</strong></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>R — Reputation (0–10) <span class="badge buyout">×150</span></h3>
+        <p style="margin-bottom:10px">Based on trust. DTO staff score:</p>
+        <ul class="clean">
+          <li>Honesty</li>
+          <li>Scam history</li>
+          <li>Reliability</li>
+          <li>Successful trades</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>G — Growth (0–10) <span class="badge buyout">×75</span></h3>
+        <p style="margin-bottom:10px">A weekly momentum score, based on:</p>
+        <ul class="clean">
+          <li>Activity increase</li>
+          <li>New partners gained</li>
+          <li>Rising influence</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>DoxStox calculator</h2>
+    <p class="section-sub">Move the sliders to see how a doc's score and share price are built. This is an
+    unofficial estimate — final values are set by DTO staff.</p>
+    <form id="calc" class="calc" onsubmit="return false">
+      <div class="card">
+        <div class="field">
+          <label for="inI">Influence (I) <span class="val" id="valI">6</span></label>
+          <input type="range" id="inI" min="1" max="10" step="1" value="6">
+          <span class="hint">1 = unknown · 5 = average active doc · 10 = central influence</span>
+        </div>
+        <div class="field">
+          <label for="inP">Partners (P) <span class="val" id="valP">4</span></label>
+          <input type="range" id="inP" min="0" max="20" step="1" value="4">
+          <span class="hint">One point per partnered doc</span>
+        </div>
+        <div class="field">
+          <label for="inR">Reputation (R) <span class="val" id="valR">7</span></label>
+          <input type="range" id="inR" min="0" max="10" step="1" value="7">
+          <span class="hint">Honesty, scam history, reliability, successful trades</span>
+        </div>
+        <div class="field mb-0">
+          <label for="inG">Growth (G) <span class="val" id="valG">5</span></label>
+          <input type="range" id="inG" min="0" max="10" step="1" value="5">
+          <span class="hint">Weekly momentum: activity, new partners, rising influence</span>
+        </div>
+      </div>
+      <div class="result">
+        <div class="ds-label">DoxStox score</div>
+        <div class="ds" id="dsOut">3,025</div>
+        <div class="sp" id="spOut">30.25 DTC / share</div>
+        <div class="breakdown">
+          <div><span>200 × Influence</span><b id="partI">1,200</b></div>
+          <div><span>100 × Partners</span><b id="partP">400</b></div>
+          <div><span>150 × Reputation</span><b id="partR">1,050</b></div>
+          <div><span>75 × Growth</span><b id="partG">375</b></div>
+          <div><span>Total DS</span><b id="dsOut2"></b></div>
+        </div>
+        <p class="hint" id="spRound" style="margin-top:14px;font-size:.8rem;color:var(--muted)"></p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>Worked example</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h3>A doc with…</h3>
+        <ul class="clean">
+          <li>Influence = <strong>6</strong></li>
+          <li>Partners = <strong>4</strong></li>
+          <li>Reputation = <strong>7</strong></li>
+          <li>Growth = <strong>5</strong></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Calculation</h3>
+        <ul class="clean">
+          <li>200 × 6 = <strong>1,200</strong></li>
+          <li>100 × 4 = <strong>400</strong></li>
+          <li>150 × 7 = <strong>1,050</strong></li>
+          <li>75 × 5 = <strong>375</strong></li>
+          <li>Final: <strong style="color:var(--gold)">DS = 3,025</strong></li>
+          <li>Share price: <strong style="color:var(--gold)">30.25 DTC</strong> (round to 30 DTC for
+          simplicity)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>Why this formula works</h2>
+    <div class="grid g4">
+      <div class="card"><h3>Influence</h3><p>Controls overall weight — the main driver of value.</p></div>
+      <div class="card"><h3>Partners</h3><p>Reflect network strength across the ecosystem.</p></div>
+      <div class="card"><h3>Reputation</h3><p>Prevents scam inflation of a doc's value.</p></div>
+      <div class="card"><h3>Growth</h3><p>Shows momentum week to week.</p></div>
+    </div>
+    <div class="notice mt-24">Even if someone cheats one category, they can't fully break the system —
+    and DTO staff review every score before it is published.</div>
+  </div>
+</section>
+
+</main>
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="brand" style="margin-bottom:12px">
+          <span class="mark">DTO</span>
+          <span>Docs Trade Organization<small>By BananaNetworkz</small></span>
+        </div>
+        <p>A marketplace and exchange for the Google Docs community — buy, sell, trade
+        and invest in docs with staff-verified valuations.</p>
+        <p><strong style="color:var(--text)">7% fee</strong> on every completed transaction supports
+        platform maintenance, verification and staff operations.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="doxstox.html">DoxStox &amp; Formula</a>
+        <a href="buyouts.html">Full Doc Buyouts</a>
+        <a href="listings.html">Live Listings</a>
+        <a href="join.html">List Your Doc</a>
+      </div>
+      <div>
+        <h4>Contact DTO Staff</h4>
+        <a href="mailto:the.crypt1c.core@gmail.com">the.crypt1c.core@gmail.com</a>
+        <a href="mailto:494325@bsd48.org">494325@bsd48.org</a>
+        <a href="mailto:Calderman@icloud.com">Calderman@icloud.com</a>
+      </div>
+    </div>
+    <div class="copyright">
+      &copy; <span data-year></span> DTO — Docs Trade Organization · Created by BananaNetworkz.
+      All listings and valuations are reviewed manually by DTO staff.
+    </div>
+  </div>
+</footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

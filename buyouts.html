@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Full Doc Buyouts (Real Money) — DTO</title>
+<meta name="description" content="How DTO handles real-money full doc buyouts: verified buyers, matching, pricing, the 7% fee and the 9-step buyout process.">
+<meta property="og:title" content="Full Doc Buyouts (Real Money) — DTO">
+<meta property="og:description" content="How DTO handles real-money full doc buyouts: verified buyers, matching, pricing, the 7% fee and the 9-step buyout process.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#070b12">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23f5c542'/><text x='50' y='68' font-size='46' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='%2314100a'>DTO</text></svg>">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="index.html">
+      <span class="mark">DTO</span>
+      <span>Docs Trade Organization<small>By BananaNetworkz</small></span>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+    <nav class="nav-links"><a href="index.html">Home</a><a href="how-it-works.html">How It Works</a><a href="doxstox.html">DoxStox</a><a href="buyouts.html" class="active">Buyouts</a><a href="listings.html">Listings</a><a href="join.html">List Your Doc</a></nav>
+  </div>
+</header>
+<main>
+
+<section class="hero" style="padding-bottom:26px">
+  <div class="wrap">
+    <span class="eyebrow">Real money</span>
+    <h1>Full Doc <span class="accent">Buyout</span> system</h1>
+    <p class="lede">A Full Doc Buyout is when a Google Doc is completely purchased using real money
+    instead of DTO Credits or shares. This results in full ownership transfer of the doc from the current
+    owner to the buyer. All buyouts are handled and verified through DTO staff to ensure safety,
+    legitimacy and fair pricing.</p>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>Buyers &amp; sellers system</h2>
+    <p class="section-sub">DTO organizes buyouts using two groups.</p>
+    <div class="grid g2">
+      <div class="card">
+        <h3>Sellers</h3>
+        <p style="margin-bottom:10px">Users who want to fully sell their Google Doc. They list:</p>
+        <ul class="clean">
+          <li>Doc name</li>
+          <li>Asking price (USD)</li>
+          <li>Description</li>
+          <li>Basic stats (influence, partnerships, etc.)</li>
+          <li>DTO evaluation (DoxStox score if available)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Buyers <span class="badge verified">Verified</span></h3>
+        <p style="margin-bottom:10px">Users looking to purchase full ownership of docs using real money.</p>
+        <ul class="clean">
+          <li>DTO maintains a list of <strong>verified buyers</strong> — users reviewed and approved by
+          staff as legitimate and serious purchasers.</li>
+          <li>Only verified buyers are recommended to sellers, to reduce scams and fake offers.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>Buyer matching system</h2>
+    <p class="section-sub">DTO acts as a middle layer between buyers and sellers.</p>
+    <div class="grid g2">
+      <div class="card">
+        <ul class="clean">
+          <li>Sellers submit docs for buyout listing</li>
+          <li>DTO reviews and approves the listing</li>
+          <li>DTO may introduce buyers directly to sellers for faster deals</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Verified buyers are matched on</h3>
+        <ul class="clean">
+          <li><strong>Budget</strong></li>
+          <li><strong>Interest category</strong></li>
+          <li><strong>Activity level</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>Pricing system (real money)</h2>
+    <p class="section-sub">All buyouts use real currency (USD or an agreed currency).</p>
+    <div class="grid g3">
+      <div class="card"><h3>Suggested range</h3><p>Based on the doc's DoxStox evaluation.</p></div>
+      <div class="card"><h3>Market comparison</h3><p>How similar docs have been priced.</p></div>
+      <div class="card"><h3>Sale history</h3><p>Previous sales, where available.</p></div>
+    </div>
+    <div class="notice mt-24">The final price is agreed between buyer and seller, with
+    <strong>DTO acting as the verifier</strong>.</div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>The DTO fee — 7%</h2>
+    <p class="section-sub">DTO takes a 7% transaction fee on every completed full buyout. It is applied
+    automatically to the final sale price and funds platform maintenance, verification systems and staff
+    operations.</p>
+    <div class="calc">
+      <div class="card">
+        <label class="form-label" for="feePrice">Final sale price (USD)</label>
+        <input type="number" id="feePrice" min="0" step="1" value="100">
+        <p class="hint" style="color:var(--muted);font-size:.85rem;margin-top:10px">
+          Example from the DTO rulebook: a doc sold for $100 means a $7 fee, the seller receives $93, and
+          the buyer pays $100 total.</p>
+      </div>
+      <div class="result">
+        <div class="ds-label">DTO fee (7%)</div>
+        <div class="ds" id="feeOut">$7.00</div>
+        <div class="breakdown">
+          <div><span>Buyer pays</span><b id="buyerOut">$100.00</b></div>
+          <div><span>DTO fee (7%)</span><b id="feeOut2"></b></div>
+          <div><span>Seller receives</span><b id="sellerOut">$93.00</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>Buyout process</h2>
+    <ol class="steps">
+      <li><strong>Seller submits doc for buyout listing</strong>Send the doc link, name, description and asking price to DTO staff.</li>
+      <li><strong>DTO verifies and approves listing</strong>Stats are checked and a DoxStox evaluation is attached.</li>
+      <li><strong>Verified buyers are matched or recommended</strong>Based on budget, interest category and activity level.</li>
+      <li><strong>Buyer contacts DTO staff with intent to purchase</strong>All contact runs through DTO.</li>
+      <li><strong>DTO facilitates negotiation and agreement</strong>In a private chat room provided by staff.</li>
+      <li><strong>Payment is confirmed</strong>Verified by DTO before anything transfers.</li>
+      <li><strong>DTO collects the 7% fee</strong>Applied to the final agreed sale price.</li>
+      <li><strong>Ownership of the Google Doc is transferred</strong>Full control passes to the buyer.</li>
+      <li><strong>Transaction is recorded as complete</strong>Logged in DTO's ownership records.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>Important rules</h2>
+    <div class="notice warn">
+      <ul class="clean">
+        <li>All buyouts must go through <strong>DTO verification</strong></li>
+        <li>Private deals outside DTO are <strong>not recognized</strong></li>
+        <li>Only <strong>verified buyers</strong> are recommended to sellers</li>
+        <li>The <strong>7% DTO fee</strong> applies to all completed buyouts</li>
+        <li>Any suspicious activity may result in <strong>removal or blacklist</strong></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>Why this system exists</h2>
+    <div class="grid g3">
+      <div class="card"><h3>Prevent scams</h3><p>Real-money transactions carry real risk — DTO verifies both sides.</p></div>
+      <div class="card"><h3>Serious buyers only</h3><p>Sellers only deal with buyers DTO has reviewed.</p></div>
+      <div class="card"><h3>Fair pricing</h3><p>DoxStox provides guidance instead of guesswork.</p></div>
+      <div class="card"><h3>Trust &amp; transparency</h3><p>Every deal is recorded and verifiable.</p></div>
+      <div class="card"><h3>Sustainable operations</h3><p>The 7% fee model keeps DTO running.</p></div>
+      <div class="card"><h3>A structured marketplace</h3><p>Real-value trades in an organized venue.</p></div>
+    </div>
+    <p class="mt-24"><a class="btn btn-gold" href="join.html">Submit a doc for buyout</a>
+    <a class="btn btn-ghost" href="listings.html">See current buyout listings</a></p>
+  </div>
+</section>
+
+</main>
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="brand" style="margin-bottom:12px">
+          <span class="mark">DTO</span>
+          <span>Docs Trade Organization<small>By BananaNetworkz</small></span>
+        </div>
+        <p>A marketplace and exchange for the Google Docs community — buy, sell, trade
+        and invest in docs with staff-verified valuations.</p>
+        <p><strong style="color:var(--text)">7% fee</strong> on every completed transaction supports
+        platform maintenance, verification and staff operations.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="doxstox.html">DoxStox &amp; Formula</a>
+        <a href="buyouts.html">Full Doc Buyouts</a>
+        <a href="listings.html">Live Listings</a>
+        <a href="join.html">List Your Doc</a>
+      </div>
+      <div>
+        <h4>Contact DTO Staff</h4>
+        <a href="mailto:the.crypt1c.core@gmail.com">the.crypt1c.core@gmail.com</a>
+        <a href="mailto:494325@bsd48.org">494325@bsd48.org</a>
+        <a href="mailto:Calderman@icloud.com">Calderman@icloud.com</a>
+      </div>
+    </div>
+    <div class="copyright">
+      &copy; <span data-year></span> DTO — Docs Trade Organization · Created by BananaNetworkz.
+      All listings and valuations are reviewed manually by DTO staff.
+    </div>
+  </div>
+</footer>
+<script src="assets/app.js"></script>
+</body>
+</html>
