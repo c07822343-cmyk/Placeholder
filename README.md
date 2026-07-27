@@ -40,9 +40,11 @@ Until it's connected, submissions fall back to opening a prefilled email to staf
 
 ## Hosting
 
-Free, 24/7, works with a **private repo**. Configs for all three hosts are committed.
+**New here? Read [`START-HERE.md`](START-HERE.md)** — the fastest route is dragging
+`dto-website.zip` onto <https://app.netlify.com/drop>. Live in 30 seconds, no account needed.
 
-**See [`DEPLOY.md`](DEPLOY.md).** Recommended: Cloudflare Pages (unlimited bandwidth, free).
+For auto-deploying from GitHub (works with this private repo), see [`DEPLOY.md`](DEPLOY.md).
+Recommended: Cloudflare Pages — unlimited bandwidth, free.
 
 ---
 
@@ -90,6 +92,7 @@ python3 -m http.server 8000
 
 ```
 ├── build.py                  # generates the .html files
+├── make-zip.py               # packages dto-website.zip for drag-and-drop hosting
 ├── assets/
 │   ├── config.js             # ← Google Form + staff settings (edit this)
 │   ├── style.css             # all styling
@@ -97,8 +100,9 @@ python3 -m http.server 8000
 │   └── requests.js           # the request wizard
 ├── data/listings.json        # ← listings (edit this)
 ├── tools/get-entry-ids.py    # pulls entry IDs out of your Google Form
+├── START-HERE.md             # ← easiest way to get online
 ├── SETUP-GOOGLE-FORM.md      # request system setup
-└── DEPLOY.md                 # hosting setup
+└── DEPLOY.md                 # hosting setup (Git-connected)
 ```
 
 ## DoxStox formula
