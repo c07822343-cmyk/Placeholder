@@ -1,82 +1,143 @@
-# Deploying DTO — free, 24/7 hosting
+# Deploying DTO — free, 24/7, private repo
 
-The site is plain static HTML/CSS/JS, so any static host will run it for free, forever, with no
-server and no database. Everything is already committed on the branch
-`arena/019fa143-placeholder`.
+The repo stays **private**. That rules out GitHub Pages (Pages on a private repo requires a paid
+GitHub plan), but the hosts below all deploy from a private GitHub repo on their **free** tier, with
+free HTTPS, no sleeping, and no credit card.
 
-Pick **one** of the options below. Option A is the simplest if you want to stay on GitHub.
+The site is plain static HTML/CSS/JS — no build step, no server, no database. Config files for all
+three hosts are already committed, so you just click through the connect flow.
+
+**Branch to deploy: `arena/019fa143-placeholder`**
 
 ---
 
-## Option A — GitHub Pages (recommended, ~2 minutes)
+## Option 1 — Cloudflare Pages ⭐ recommended
 
-I could not enable Pages automatically because the agent token doesn't have repo-admin rights, and
-**Pages on a private repo requires a paid plan** — so first make the repo public (free tier):
+Best free tier of the three: unlimited bandwidth, unlimited requests, 500 builds/month.
 
-1. Go to <https://github.com/c07822343-cmyk/Placeholder/settings>
-2. Scroll to **Danger Zone → Change repository visibility → Make public**.
+1. Sign up / log in at <https://dash.cloudflare.com>
+2. Left sidebar → **Workers & Pages** → **Create** → **Pages** tab → **Connect to Git**
+3. Click **Connect GitHub**, authorize Cloudflare, and grant it access to the
+   `c07822343-cmyk/Placeholder` repository (choose *Only select repositories* if you like — private
+   repos are fully supported)
+4. Select the **Placeholder** repo → **Begin setup**
+5. Fill in:
+   - **Project name:** `dto` (this becomes your URL)
+   - **Production branch:** `arena/019fa143-placeholder`
+   - **Framework preset:** `None`
+   - **Build command:** *leave completely empty*
+   - **Build output directory:** `/`
+6. **Save and Deploy**
 
-Then turn on Pages:
-
-3. Go to **Settings → Pages**
-4. Under **Build and deployment**:
-   - Source: **Deploy from a branch**
-   - Branch: **`arena/019fa143-placeholder`** (or `main` after you merge), folder **`/ (root)`**
-5. Click **Save**. After ~1 minute the site is live at:
+Live in ~30 seconds at:
 
 ```
-https://c07822343-cmyk.github.io/Placeholder/
+https://dto.pages.dev
 ```
 
-The `.nojekyll` file in the repo root is already there so GitHub serves the files as-is.
-
-### Optional: automated deploys
-If you prefer the GitHub Actions deployment method instead of branch deployment, copy
-`docs/github-pages-workflow.yml.txt` to `.github/workflows/pages.yml` and commit it from your own
-account (the agent token isn't allowed to create workflow files), then set
-**Settings → Pages → Source → GitHub Actions**.
+Every future push to that branch redeploys automatically. The committed `_headers` file is picked up
+by Cloudflare for caching and security headers.
 
 ---
 
-## Option B — Cloudflare Pages (free, works with a private repo)
+## Option 2 — Netlify
 
-1. Sign in at <https://dash.cloudflare.com> → **Workers & Pages → Create → Pages → Connect to Git**
-2. Authorize GitHub and pick `c07822343-cmyk/Placeholder`
-3. Production branch: `arena/019fa143-placeholder`
-4. Framework preset: **None**. Build command: **leave empty**. Build output directory: **`/`**
-5. **Save and Deploy** → live at `https://<project>.pages.dev`
+Free tier: 100 GB bandwidth/month, 300 build minutes/month.
 
-Unlimited free bandwidth, no sleeping, custom domains free.
+1. Log in at <https://app.netlify.com>
+2. **Add new site** → **Import an existing project** → **Deploy with GitHub**
+3. Authorize Netlify and grant access to the private `Placeholder` repo
+4. Settings are auto-detected from the committed `netlify.toml`:
+   - **Branch to deploy:** change it to `arena/019fa143-placeholder`
+   - **Build command:** empty · **Publish directory:** `.`
+5. **Deploy site** → live at `https://<random-name>.netlify.app`
+   (rename it under **Site configuration → Change site name**, e.g. `dto.netlify.app`)
 
----
-
-## Option C — Netlify (free, drag-and-drop, no Git needed)
-
-- Fast path: go to <https://app.netlify.com/drop> and drag the whole project folder onto the page.
-  It's live in seconds at a `*.netlify.app` URL.
-- Or **Add new site → Import from Git**, choose the repo, leave the build command empty and set the
-  publish directory to `.`
+### Netlify without connecting Git at all
+If you'd rather not link the repo: download/zip the project folder and drag it onto
+<https://app.netlify.com/drop>. Live in seconds. Re-drag to update.
 
 ---
 
-## Option D — Vercel (free)
+## Option 3 — Vercel
 
-<https://vercel.com/new> → import the repo → Framework preset **Other** → no build command →
-output directory `.` → Deploy.
+Free Hobby tier, private repos supported.
+
+1. <https://vercel.com/new> → **Import Git Repository** → authorize GitHub → pick `Placeholder`
+2. **Framework Preset:** `Other` · **Build Command:** empty · **Output Directory:** `.`
+3. **Deploy** → live at `https://<project>.vercel.app`
+4. Set the production branch under **Settings → Git → Production Branch** →
+   `arena/019fa143-placeholder`
+
+`vercel.json` is already committed with the correct headers.
 
 ---
 
-## After it's live
+## Custom domain (optional, all three)
 
-- **Custom domain** (optional): all four hosts support free custom domains with automatic HTTPS.
-- **Updating listings:** edit `data/listings.json` and push — the site picks it up on next load.
-- **Updating page copy:** edit the strings in `build.py`, run `python3 build.py`, and push the
-  regenerated `.html` files.
+All three hosts give free custom domains with automatic HTTPS. Buy a domain (e.g. `dto.exchange`,
+~$10/yr) and add it under the project's **Domains** tab, then point the nameservers/CNAME where they
+tell you. Not required — the free `*.pages.dev` / `*.netlify.app` / `*.vercel.app` URL works
+permanently.
 
-## Local preview
+Free-domain alternative: <https://www.js.org> or a `is-a.dev` subdomain if you want a nicer name at
+zero cost.
 
+---
+
+## Running the site day to day
+
+### Add or update a listing
+Edit **`data/listings.json`**, commit, push. The host redeploys in seconds and the listings page
+picks it up.
+
+```json
+{
+  "name": "Doc name",
+  "description": "One-line description shown under the name",
+  "type": "stock",
+  "doxstox": 3025,
+  "verified": true,
+  "askingPrice": null
+}
+```
+
+- `type` — `"stock"` or `"buyout"`
+- `doxstox` — the score from `DS = 200I + 100P + 150R + 75G`
+- `verified` — `true` shows a green **Verified** badge, `false` shows **In Review**
+- `askingPrice` — USD number for buyouts; `null` for stock listings (share price is auto-computed
+  as `DS ÷ 100`)
+
+You can edit this file straight from the GitHub web UI — no local setup needed.
+
+### Change page copy
+The `.html` files are generated. Edit the strings in `build.py`, then:
+
+```bash
+python3 build.py
+git add -A && git commit -m "Update copy" && git push origin arena/019fa143-placeholder
+```
+
+### Local preview
 ```bash
 cd Placeholder
 python3 -m http.server 8000
 # http://localhost:8000
 ```
+
+---
+
+## Handling incoming listing requests
+
+The `join.html` form has **no backend** — by design, since there's nothing to pay for and nothing to
+break. It builds a fully formatted email and opens the visitor's mail app addressed to
+`the.crypt1c.core@gmail.com` (cc: `494325@bsd48.org`, `Calderman@icloud.com`).
+
+If you later want submissions to land in a dashboard instead of an inbox, both of these stay free:
+
+- **Netlify Forms** — 100 submissions/month free; add `netlify` and `data-netlify="true"` to the
+  `<form>` tag in `build.py` (only works if you host on Netlify)
+- **Formspree** / **Web3Forms** — 50–250 submissions/month free, works on any host; set the form's
+  `action` to your endpoint URL
+
+Tell me if you want one of those wired up.

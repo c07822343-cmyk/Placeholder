@@ -51,7 +51,10 @@ python3 -m http.server 8000
 
 ## Hosting
 
-Deployed free, 24/7, via **GitHub Pages** from the `.github/workflows/pages.yml` workflow.
+Private repo, so hosting is via **Cloudflare Pages** (or Netlify / Vercel) — all free, 24/7,
+with configs already committed (`_headers`, `netlify.toml`, `vercel.json`).
+
+See **[DEPLOY.md](DEPLOY.md)** for click-by-click setup.
 
 ## DoxStox formula
 
