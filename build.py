@@ -922,7 +922,7 @@ apply_page = """
       <p style="margin-bottom:22px"><span class="ticket-chip">&#127903; <span id="doneTicket"></span></span></p>
       <p style="font-size:.88rem">Save that ticket ID — quoting it in any follow-up message lets staff find your
       request instantly.</p>
-      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px">
+      <div id="doneActions" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px">
         <a class="btn btn-ghost" id="doneCopy" href="#">Copy request details</a>
         <a class="btn btn-gold" href="listings.html">Browse listings</a>
       </div>

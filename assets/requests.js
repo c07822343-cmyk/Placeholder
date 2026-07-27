@@ -272,8 +272,9 @@
   function postToGoogleForm() {
     return new Promise(function (resolve, reject) {
       try {
-        var url = 'https://docs.google.com/forms/d/e/' + CFG.formId + '/formResponse';
-        var targetName = 'dtoFormTarget_' + Date.now();
+        var fbzx = String(Date.now()) + String(Math.floor(Math.random() * 100000));
+        var url = 'https://docs.google.com/forms/d/e/' + CFG.formId + '/formResponse?usp=pp_url';
+        var targetName = 'dtoFormTarget_' + fbzx;
         var iframe = document.createElement('iframe');
         iframe.name = targetName;
         iframe.title = 'Hidden Google Forms target';
@@ -298,8 +299,8 @@
         [
           ['fvv', '1'],
           ['pageHistory', '0'],
-          ['draftResponse', '[]'],
-          ['fbzx', String(Date.now())]
+          ['partialResponse', '[null,null,"' + fbzx + '"]'],
+          ['fbzx', fbzx]
         ].forEach(function (pair) {
           var input = document.createElement('input');
           input.type = 'hidden';
@@ -308,28 +309,76 @@
           tempForm.appendChild(input);
         });
 
+        var submitted = false;
+        var settled = false;
+        var timeout = setTimeout(function () {
+          if (settled) return;
+          settled = true;
+          reject(new Error('Timed out waiting for Google Forms'));
+          setTimeout(function () {
+            tempForm.remove();
+            iframe.remove();
+          }, 50);
+        }, 12000);
+
+        iframe.addEventListener('load', function () {
+          if (!submitted || settled) return;
+          settled = true;
+          clearTimeout(timeout);
+          resolve();
+          setTimeout(function () {
+            tempForm.remove();
+            iframe.remove();
+          }, 1500);
+        });
+
         document.body.appendChild(iframe);
         document.body.appendChild(tempForm);
 
-        tempForm.submit();
-
         setTimeout(function () {
-          tempForm.remove();
-          iframe.remove();
-          resolve();
-        }, 400);
+          submitted = true;
+          tempForm.submit();
+        }, 50);
       } catch (err) {
         reject(err);
       }
     });
   }
 
-  function succeed() {
+  function showPending() {
     var wrap = document.getElementById('reqWrap');
     var done = document.getElementById('reqDone');
+    var msg = document.getElementById('doneMsg');
+    var tk = document.getElementById('doneTicket');
+    var actions = document.getElementById('doneActions');
     if (wrap) wrap.hidden = true;
     if (!done) return;
     done.hidden = false;
+    if (tk) tk.textContent = ticket;
+    if (msg) {
+      msg.innerHTML = 'Submitting your request to DTO… please wait a moment.';
+    }
+    if (actions) actions.hidden = true;
+    done.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function restoreForm() {
+    var wrap = document.getElementById('reqWrap');
+    var done = document.getElementById('reqDone');
+    var actions = document.getElementById('doneActions');
+    if (wrap) wrap.hidden = false;
+    if (done) done.hidden = true;
+    if (actions) actions.hidden = false;
+  }
+
+  function succeed() {
+    var wrap = document.getElementById('reqWrap');
+    var done = document.getElementById('reqDone');
+    var actions = document.getElementById('doneActions');
+    if (wrap) wrap.hidden = true;
+    if (!done) return;
+    done.hidden = false;
+    if (actions) actions.hidden = false;
     var tk = document.getElementById('doneTicket');
     if (tk) tk.textContent = ticket;
     var msg = document.getElementById('doneMsg');
@@ -369,11 +418,13 @@
 
     btn.disabled = true;
     btn.textContent = 'Sending…';
+    showPending();
 
     postToGoogleForm()
       .then(function () { succeed(); })
       .catch(function () {
-        showBanner('<strong>Could not send the request right now.</strong> Refresh the page and try again in a moment.');
+        restoreForm();
+        showBanner('<strong>Could not confirm the Google Form submission.</strong> Please try again in a moment.');
       })
       .finally(function () {
         btn.disabled = false;
