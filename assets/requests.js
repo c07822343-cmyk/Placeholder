@@ -1,6 +1,6 @@
 /* ============================================================
    DTO — On-site request system
-   Multi-step application wizard that submits into a Google Form.
+   Multi-step application wizard that submits into Netlify Forms.
    ============================================================ */
 (function () {
   'use strict';
@@ -8,9 +8,12 @@
   var form = document.getElementById('dtoRequest');
   if (!form) return;
 
-  var CFG = window.DTO_CONFIG || { entries: {}, options: {}, emails: [] };
+  var CFG = window.DTO_CONFIG || { options: {}, emails: [], submissions: {} };
   var OPT = CFG.options || {};
+  var SUBMIT = CFG.submissions || {};
   var FEE = OPT.feeRate || 0.07;
+  var FORM_NAME = SUBMIT.formName || 'dto-request';
+  var BOT_FIELD = SUBMIT.botField || 'bot-field';
 
   var steps = Array.prototype.slice.call(form.querySelectorAll('.step'));
   var current = 0;
@@ -45,10 +48,33 @@
     return t === 'Stock Listing' || t === 'Full Buyout' || t === 'Valuation Only';
   }
 
+  function showBanner(html) {
+    var banner = document.getElementById('setupBanner');
+    if (!banner) return;
+    banner.innerHTML = html;
+    banner.hidden = !html;
+  }
+
+  function clearBanner() {
+    var banner = document.getElementById('setupBanner');
+    if (!banner) return;
+    banner.hidden = true;
+    banner.innerHTML = '';
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function onLocalPreview() {
+    return /^(localhost|127\.0\.0\.1|0\.0\.0\.0)$/i.test(location.hostname);
+  }
+
   /* ---------------- step navigation ---------------- */
 
   function relevantSteps() {
-    // Step visibility depends on the chosen request type
     return steps.filter(function (s) {
       var only = s.getAttribute('data-only');
       if (!only) return true;
@@ -67,8 +93,7 @@
     steps.forEach(function (s) { s.hidden = true; });
     list[current].hidden = false;
 
-    // progress
-    var pct = Math.round(((current) / (list.length - 1)) * 100);
+    var pct = Math.round((current / (list.length - 1)) * 100);
     var bar = document.getElementById('reqProgressBar');
     if (bar) bar.style.width = pct + '%';
 
@@ -95,7 +120,6 @@
     if (send) send.hidden = !last;
 
     if (last) buildReview();
-
     form.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
@@ -105,7 +129,7 @@
     var bad = null;
 
     stepEl.querySelectorAll('[data-required]').forEach(function (el) {
-      if (el.offsetParent === null) return;      // hidden field
+      if (el.offsetParent === null) return;
       var v = (el.value || '').trim();
       var ok = !!v;
 
@@ -131,7 +155,6 @@
       }
     });
 
-    // radio groups
     stepEl.querySelectorAll('[data-required-radio]').forEach(function (g) {
       var n = g.getAttribute('data-required-radio');
       if (!form.querySelector('[name="' + n + '"]:checked')) {
@@ -194,12 +217,6 @@
     if (t) t.textContent = ticket;
   }
 
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
-
   /* ---------------- submission ---------------- */
 
   function payloadValues() {
@@ -208,230 +225,68 @@
       requestType: type,
       name: val('name'),
       email: val('email'),
-      contactAlt: val('contact_alt') || '—',
+      contactAlt: val('contact_alt') || 'None provided',
       docName: val('doc_name'),
       docLink: val('doc_link'),
       description: val('description'),
-      partners: val('partners') || 'None provided',
       askingPrice: type === 'Full Buyout' ? (val('asking_price') || '0') : 'N/A',
+      partners: val('partners') || 'None provided',
       notes: val('notes') || 'None',
-      ticket: ticket
+      ticket: ticket,
+      submittedAt: new Date().toISOString()
     };
   }
 
-  function payloadPairs() {
-    var e = CFG.entries || {};
-    var values = payloadValues();
-    var pairs = [];
-    Object.keys(values).forEach(function (key) {
-      if (e[key]) pairs.push([e[key], String(values[key])]);
-    });
-    return pairs;
-  }
-
   function requestSummary() {
-    var lines = [
-      'DTO REQUEST — ' + ticket,
-      '=========================================',
-      'Request type : ' + requestType(),
-      'Name/handle  : ' + val('name'),
-      'Email        : ' + val('email'),
-      'Other contact: ' + (val('contact_alt') || '—'),
-      ''
-    ];
-    if (isSeller()) {
-      lines.push(
-        'Doc name     : ' + val('doc_name'),
-        'Doc link     : ' + val('doc_link'),
-        '',
-        'Description:',
-        val('description'),
-        ''
-      );
-      if (requestType() === 'Full Buyout') {
-        var p = parseFloat(val('asking_price')) || 0;
-        lines.push(
-          'Asking price : $' + p.toFixed(2),
-          'DTO fee (' + (FEE * 100) + '%): $' + (p * FEE).toFixed(2),
-          'Seller nets  : $' + (p - p * FEE).toFixed(2),
-          ''
-        );
-      }
-      lines.push(
-        'Background for DTO staff valuation:',
-        '',
-        'Partnerships:',
-        '  ' + (val('partners') || '—'),
-        ''
-      );
-    }
-    lines.push('Notes:', val('notes') || 'none');
-    return lines.join('\n');
-  }
-
-  function buildExtraPairs(mode, fbzx) {
-    if (mode === 'partial') {
-      return [
-        ['fvv', '1'],
-        ['pageHistory', '0'],
-        ['partialResponse', '[null,null,"' + fbzx + '"]'],
-        ['fbzx', fbzx]
-      ];
-    }
-    if (mode === 'draft') {
-      return [
-        ['fvv', '1'],
-        ['pageHistory', '0'],
-        ['draftResponse', '[]'],
-        ['fbzx', fbzx]
-      ];
-    }
+    var values = payloadValues();
     return [
-      ['usp', 'pp_url'],
-      ['submit', 'Submit'],
-      ['fbzx', fbzx]
-    ];
+      'DTO REQUEST — ' + values.ticket,
+      '=========================================',
+      'Request type : ' + values.requestType,
+      'Name/handle  : ' + values.name,
+      'Email        : ' + values.email,
+      'Other contact: ' + values.contactAlt,
+      '',
+      'Doc name     : ' + values.docName,
+      'Doc link     : ' + values.docLink,
+      '',
+      'Description:',
+      values.description,
+      '',
+      'Asking price : ' + values.askingPrice,
+      '',
+      'Partnerships:',
+      values.partners,
+      '',
+      'Notes:',
+      values.notes
+    ].join('\n');
   }
 
-  function attemptFormPost(mode) {
-    return new Promise(function (resolve, reject) {
-      try {
-        var fbzx = String(Date.now()) + String(Math.floor(Math.random() * 100000));
-        var url = 'https://docs.google.com/forms/d/e/' + CFG.formId + '/formResponse?usp=pp_url';
-        var targetName = 'dtoFormTarget_' + mode + '_' + fbzx;
-        var iframe = document.createElement('iframe');
-        iframe.name = targetName;
-        iframe.title = 'Hidden Google Forms target';
-        iframe.hidden = true;
-
-        var tempForm = document.createElement('form');
-        tempForm.method = 'POST';
-        tempForm.action = url;
-        tempForm.target = targetName;
-        tempForm.enctype = 'application/x-www-form-urlencoded';
-        tempForm.acceptCharset = 'UTF-8';
-        tempForm.style.display = 'none';
-
-        payloadPairs().concat(buildExtraPairs(mode, fbzx)).forEach(function (pair) {
-          var input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = pair[0];
-          input.value = pair[1];
-          tempForm.appendChild(input);
-        });
-
-        var submitted = false;
-        var settled = false;
-        var timeout = setTimeout(function () {
-          if (settled) return;
-          settled = true;
-          cleanup();
-          reject(new Error('Timed out waiting for Google Forms (' + mode + ')'));
-        }, 8000);
-
-        function cleanup() {
-          clearTimeout(timeout);
-          setTimeout(function () {
-            tempForm.remove();
-            iframe.remove();
-          }, 50);
-        }
-
-        iframe.addEventListener('load', function () {
-          if (!submitted || settled) return;
-          settled = true;
-          cleanup();
-          resolve(mode);
-        });
-
-        document.body.appendChild(iframe);
-        document.body.appendChild(tempForm);
-
-        setTimeout(function () {
-          submitted = true;
-          tempForm.submit();
-        }, 50);
-      } catch (err) {
-        reject(err);
-      }
-    });
-  }
-
-  function buildGetUrl() {
-    var fbzx = String(Date.now()) + String(Math.floor(Math.random() * 100000));
+  function buildNetlifyBody() {
     var params = new URLSearchParams();
-    payloadPairs().forEach(function (pair) {
-      params.append(pair[0], pair[1]);
+    var values = payloadValues();
+    params.append('form-name', FORM_NAME);
+    params.append(BOT_FIELD, '');
+    Object.keys(values).forEach(function (key) {
+      params.append(key, String(values[key]));
     });
-    buildExtraPairs('get', fbzx).forEach(function (pair) {
-      params.append(pair[0], pair[1]);
-    });
-    return 'https://docs.google.com/forms/d/e/' + CFG.formId + '/formResponse?' + params.toString();
+    params.append('requestSummary', requestSummary());
+    return params.toString();
   }
 
-  function attemptGetRequest() {
-    return new Promise(function (resolve, reject) {
-      try {
-        var iframe = document.createElement('iframe');
-        iframe.title = 'Hidden Google Forms target';
-        iframe.hidden = true;
-        var url = buildGetUrl();
-        var settled = false;
-        var timeout = setTimeout(function () {
-          if (settled) return;
-          settled = true;
-          cleanup();
-          reject(new Error('Timed out waiting for Google Forms (get)'));
-        }, 8000);
-
-        function cleanup() {
-          clearTimeout(timeout);
-          setTimeout(function () { iframe.remove(); }, 50);
-        }
-
-        iframe.addEventListener('load', function () {
-          if (settled) return;
-          settled = true;
-          cleanup();
-          resolve('get');
-        });
-
-        document.body.appendChild(iframe);
-        iframe.src = url;
-      } catch (err) {
-        reject(err);
+  function submitToNetlify() {
+    return fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: buildNetlifyBody()
+    }).then(function (res) {
+      if (!res.ok) throw new Error('Netlify form request failed');
+      if (onLocalPreview() && !res.headers.get('x-nf-request-id')) {
+        throw new Error('Netlify Forms is not active on local preview');
       }
+      return res;
     });
-  }
-
-  function attemptPopupGet() {
-    return new Promise(function (resolve, reject) {
-      try {
-        var url = buildGetUrl();
-        var popup = window.open(url, 'dtoFormSubmitWindow', 'popup,width=560,height=720');
-        if (!popup) {
-          reject(new Error('Popup blocked'));
-          return;
-        }
-        setTimeout(function () {
-          try { popup.close(); } catch (e) {}
-          resolve('popup');
-        }, 1500);
-      } catch (err) {
-        reject(err);
-      }
-    });
-  }
-
-  function hardRedirectSubmit() {
-    window.location.href = buildGetUrl();
-  }
-
-  function postToGoogleForm() {
-    return attemptPopupGet()
-      .catch(function () { return attemptFormPost('partial'); })
-      .catch(function () { return attemptFormPost('draft'); })
-      .catch(function () { return attemptGetRequest(); });
   }
 
   function showPending() {
@@ -444,9 +299,7 @@
     if (!done) return;
     done.hidden = false;
     if (tk) tk.textContent = ticket;
-    if (msg) {
-      msg.innerHTML = 'Submitting your request to DTO… please wait a moment.';
-    }
+    if (msg) msg.innerHTML = 'Submitting your request to DTO… please wait a moment.';
     if (actions) actions.hidden = true;
     done.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
@@ -472,7 +325,7 @@
     if (tk) tk.textContent = ticket;
     var msg = document.getElementById('doneMsg');
     if (msg) {
-      msg.innerHTML = 'Your request was sent straight to DTO\'s Google Form and added to the review queue. Staff will get back to you within <strong>' +
+      msg.innerHTML = 'Your request was submitted to DTO\'s Netlify request queue. Staff will get back to you within <strong>' +
         (OPT.responseTime || '24–48 hours') + '</strong>.';
     }
     done.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -494,12 +347,6 @@
     clearBanner();
 
     var btn = document.getElementById('reqSubmit');
-
-    if (!isConfigured()) {
-      showBanner('<strong>Google Form not connected.</strong> Add the live form ID and entry IDs in <code>assets/config.js</code> before accepting requests.');
-      return;
-    }
-
     if ('onLine' in navigator && !navigator.onLine) {
       showBanner('<strong>You appear to be offline.</strong> Reconnect to the internet and try submitting again.');
       return;
@@ -509,10 +356,11 @@
     btn.textContent = 'Sending…';
     showPending();
 
-    postToGoogleForm()
+    submitToNetlify()
       .then(function () { succeed(); })
       .catch(function () {
-        hardRedirectSubmit();
+        restoreForm();
+        showBanner('<strong>Could not send the request.</strong> This form works only on the deployed Netlify site. If you already deployed there, try refreshing and submitting again.');
       })
       .finally(function () {
         btn.disabled = false;
@@ -549,16 +397,12 @@
     }
   });
 
-  // Request-type cards
   form.querySelectorAll('[name="request_type"]').forEach(function (r) {
     r.addEventListener('change', function () {
       form.querySelectorAll('.type-card').forEach(function (c) { c.classList.remove('selected'); });
       r.closest('.type-card').classList.add('selected');
-      // reveal / hide buyout-only price
       var pw = document.getElementById('priceWrap');
       if (pw) pw.hidden = requestType() !== 'Full Buyout';
-      var sellerCopy = document.querySelectorAll('[data-seller-copy]');
-      sellerCopy.forEach(function (el) { el.hidden = !isSeller(); });
     });
     if (r.checked) r.dispatchEvent(new Event('change'));
   });
@@ -566,7 +410,6 @@
   var ap = form.querySelector('[name="asking_price"]');
   if (ap) ap.addEventListener('input', updateFee);
 
-  // clear errors as the user types
   form.addEventListener('input', function (e) {
     if (e.target.classList && e.target.classList.contains('invalid')) {
       e.target.classList.remove('invalid');
@@ -576,10 +419,10 @@
     }
   });
 
-  if (isConfigured()) {
-    showBanner('<strong>Connected:</strong> requests on this page go straight into DTO\'s Google Form and linked Google Sheet.');
+  if (onLocalPreview()) {
+    showBanner('<strong>Preview mode:</strong> submissions are configured for Netlify Forms and will work once this site is deployed on Netlify.');
   } else {
-    showBanner('<strong>Google Form not connected yet.</strong> This page needs a live form ID and entry IDs in <code>assets/config.js</code>.');
+    showBanner('<strong>Connected:</strong> this request form is configured for Netlify Forms.');
   }
 
   updateFee();

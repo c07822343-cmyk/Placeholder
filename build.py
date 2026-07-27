@@ -742,7 +742,7 @@ listing_detail = """
 """
 
 # --------------------------------------------------------------------------
-# Apply — on-site request system (submits into a Google Form)
+# Apply — on-site request system (submits into Netlify Forms)
 # --------------------------------------------------------------------------
 apply_page = """
 <section class="hero" style="padding-bottom:26px">
@@ -776,6 +776,24 @@ apply_page = """
     provide — fake or misleading information results in rejection.</p>
 
     <div class="setup-banner" id="setupBanner" hidden></div>
+
+    <form name="dto-request" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="dto-request">
+      <input type="text" name="bot-field">
+      <input type="text" name="requestType">
+      <input type="text" name="name">
+      <input type="email" name="email">
+      <input type="text" name="contactAlt">
+      <input type="text" name="docName">
+      <input type="text" name="docLink">
+      <textarea name="description"></textarea>
+      <input type="text" name="askingPrice">
+      <textarea name="partners"></textarea>
+      <textarea name="notes"></textarea>
+      <input type="text" name="ticket">
+      <textarea name="requestSummary"></textarea>
+      <input type="text" name="submittedAt">
+    </form>
 
     <div id="reqWrap">
       <form id="dtoRequest" class="req-shell" autocomplete="on" novalidate>

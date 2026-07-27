@@ -10,7 +10,7 @@
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#070b12">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23f5c542'/><text x='50' y='68' font-size='46' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='%2314100a'>DTO</text></svg>">
-<link rel="stylesheet" href="assets/style.css?v=1785188571107000792">
+<link rel="stylesheet" href="assets/style.css?v=1785189085331473076">
 </head>
 <body>
 <header class="site">
@@ -56,6 +56,24 @@
     provide — fake or misleading information results in rejection.</p>
 
     <div class="setup-banner" id="setupBanner" hidden></div>
+
+    <form name="dto-request" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="dto-request">
+      <input type="text" name="bot-field">
+      <input type="text" name="requestType">
+      <input type="text" name="name">
+      <input type="email" name="email">
+      <input type="text" name="contactAlt">
+      <input type="text" name="docName">
+      <input type="text" name="docLink">
+      <textarea name="description"></textarea>
+      <input type="text" name="askingPrice">
+      <textarea name="partners"></textarea>
+      <textarea name="notes"></textarea>
+      <input type="text" name="ticket">
+      <textarea name="requestSummary"></textarea>
+      <input type="text" name="submittedAt">
+    </form>
 
     <div id="reqWrap">
       <form id="dtoRequest" class="req-shell" autocomplete="on" novalidate>
@@ -327,8 +345,8 @@
     </div>
   </div>
 </footer>
-<script src="assets/config.js?v=1785188571107000792"></script>
-<script src="assets/app.js?v=1785188571107000792"></script>
-<script src="assets/requests.js?v=1785188571107000792"></script>
+<script src="assets/config.js?v=1785189085331473076"></script>
+<script src="assets/app.js?v=1785189085331473076"></script>
+<script src="assets/requests.js?v=1785189085331473076"></script>
 </body>
 </html>
