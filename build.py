@@ -170,12 +170,12 @@ home = """
         <span class="icon">&#128176;</span>
         <h3>Real-money buyouts</h3>
         <p>Full Doc Buyouts transfer complete ownership for real currency, verified end-to-end by
-        DTO staff with only verified buyers recommended.</p>
+        DTO staff.</p>
       </div>
       <div class="card">
         <span class="icon">&#128737;</span>
         <h3>Scam resistance</h3>
-        <p>Manual verification, a verified-buyer list, and staff-adjusted valuations keep the market
+        <p>Manual verification and staff-adjusted valuations keep the market
         fair and resistant to manipulation.</p>
       </div>
       <div class="card">
@@ -210,7 +210,7 @@ home = """
     <p class="section-sub">The whole request happens right here on the site — no account, no sign-in,
     nothing to install. Pick what you want to do, tell us about your doc, and submit.</p>
     <div class="grid g4">
-      <div class="card"><h3>1 · Choose</h3><p>Stock listing, full buyout, verified buyer, or a valuation on its own.</p></div>
+      <div class="card"><h3>1 · Choose</h3><p>Stock listing, full buyout, or a valuation on its own.</p></div>
       <div class="card"><h3>2 · Describe</h3><p>Doc link, description, and background on how your doc stands in the community.</p></div>
       <div class="card"><h3>3 · Submit</h3><p>Your request goes straight into DTO's review queue with a ticket ID.</p></div>
       <div class="card"><h3>4 · Hear back</h3><p>Staff respond within 24–48 hours with your verified score or a decision.</p></div>
@@ -537,12 +537,10 @@ buyouts = """
         </ul>
       </div>
       <div class="card">
-        <h3>Buyers <span class="badge verified">Verified</span></h3>
+        <h3>Buyers</h3>
         <p style="margin-bottom:10px">Users looking to purchase full ownership of docs using real money.</p>
         <ul class="clean">
-          <li>DTO maintains a list of <strong>verified buyers</strong> — users reviewed and approved by
-          staff as legitimate and serious purchasers.</li>
-          <li>Only verified buyers are recommended to sellers, to reduce scams and fake offers.</li>
+          <li>DTO reviews each buyer to reduce scams and fake offers.</li>
         </ul>
       </div>
     </div>
@@ -562,7 +560,7 @@ buyouts = """
         </ul>
       </div>
       <div class="card">
-        <h3>Verified buyers are matched on</h3>
+        <h3>Buyers are matched on</h3>
         <ul class="clean">
           <li><strong>Budget</strong></li>
           <li><strong>Interest category</strong></li>
@@ -620,7 +618,7 @@ buyouts = """
     <ol class="steps">
       <li><strong>Seller submits doc for buyout listing</strong>Send the doc link, name, description and asking price to DTO staff.</li>
       <li><strong>DTO verifies and approves listing</strong>Stats are checked and a DoxStox evaluation is attached.</li>
-      <li><strong>Verified buyers are matched or recommended</strong>Based on budget, interest category and activity level.</li>
+      <li><strong>Buyers are matched or recommended</strong>Based on budget, interest category and activity level.</li>
       <li><strong>Buyer contacts DTO staff with intent to purchase</strong>All contact runs through DTO.</li>
       <li><strong>DTO facilitates negotiation and agreement</strong>In a private chat room provided by staff.</li>
       <li><strong>Payment is confirmed</strong>Verified by DTO before anything transfers.</li>
@@ -638,7 +636,7 @@ buyouts = """
       <ul class="clean">
         <li>All buyouts must go through <strong>DTO verification</strong></li>
         <li>Private deals outside DTO are <strong>not recognized</strong></li>
-        <li>Only <strong>verified buyers</strong> are recommended to sellers</li>
+        <li>Only <strong>reviewed buyers</strong> are recommended to sellers</li>
         <li>The <strong>7% DTO fee</strong> applies to all completed buyouts</li>
         <li>Any suspicious activity may result in <strong>removal or blacklist</strong></li>
       </ul>
@@ -741,8 +739,8 @@ apply_page = """
   <div class="wrap">
     <span class="eyebrow">Requests</span>
     <h1>Apply to <span class="accent">DTO</span></h1>
-    <p class="lede">List a doc for stock investment, sell it outright in a full buyout, or register as a
-    verified buyer. Complete the request below — it takes about a minute, and everything is reviewed
+    <p class="lede">List a doc for stock investment, sell it outright in a full buyout, or get a valuation.
+    Complete the request below — it takes about a minute, and everything is reviewed
     manually by DTO staff.</p>
     <div class="hero-cta">
       <a class="btn btn-gold" href="#request">Start a request</a>
@@ -799,14 +797,6 @@ apply_page = """
               <span class="tc-title">Full Buyout</span>
               <span class="tc-desc">Sell your doc outright for real money. Ownership transfers fully to
               the buyer once payment clears.</span>
-            </label>
-            <label class="type-card">
-              <input type="radio" name="request_type" value="Verified Buyer">
-              <span class="tc-check"></span>
-              <span class="tc-icon">&#128737;</span>
-              <span class="tc-title">Become a Verified Buyer</span>
-              <span class="tc-desc">Get approved as a legitimate purchaser so sellers are matched and
-              recommended to you first.</span>
             </label>
             <label class="type-card">
               <input type="radio" name="request_type" value="Valuation Only">
@@ -867,24 +857,6 @@ apply_page = """
             <input type="number" id="f_price" name="asking_price" min="0" step="1" placeholder="100">
             <div class="est-panel" id="reqFee"></div>
           </div>
-        </div>
-
-        <!-- STEP 3b : buyer details -->
-        <div class="step" data-title="Buyer profile" data-only="buyer" hidden>
-          <h3>Your buyer profile</h3>
-          <p class="step-sub">DTO matches verified buyers to sellers based on budget, interest category
-          and activity level.</p>
-          <div class="field-wrap">
-            <label class="form-label" for="f_budget">Budget in USD <span style="color:var(--red)">*</span></label>
-            <input type="number" id="f_budget" name="budget" data-required min="0" step="1" placeholder="250">
-          </div>
-          <div class="field-wrap">
-            <label class="form-label" for="f_int">What kind of docs are you looking for? <span style="color:var(--red)">*</span></label>
-            <textarea id="f_int" name="description" data-required
-              placeholder="Categories, size, influence level, anything specific you're hunting for."></textarea>
-          </div>
-          <div class="notice">Verification reduces scams on both sides. Staff may ask for proof of funds
-          or trade history before approving you as a verified buyer.</div>
         </div>
 
         <!-- STEP 4 : background (sellers) -->
@@ -1018,8 +990,8 @@ apply_page = """
     </details>
     <details class="faq">
       <summary>Is it safe? How do I know I won't get scammed?</summary>
-      <div class="faq-body"><p>Every deal runs through DTO verification. Only <strong>verified buyers</strong>
-      are recommended to sellers, negotiation happens in staff-provided private chat rooms, and payment is
+      <div class="faq-body"><p>Every deal runs through DTO verification. Buyers are reviewed by staff,
+      negotiation happens in staff-provided private chat rooms, and payment is
       confirmed before ownership transfers. Private deals made outside DTO are not recognised and are not
       protected.</p></div>
     </details>
@@ -1076,11 +1048,11 @@ if __name__ == "__main__":
          "Every doc receives a DoxStox score assigned by DTO staff through manual review of its "
          "influence, partnerships, reputation and growth.", doxstox)
     page("buyouts.html", "Full Doc Buyouts (Real Money) — DTO",
-         "How DTO handles real-money full doc buyouts: verified buyers, matching, pricing, the 7% fee and "
+         "How DTO handles real-money full doc buyouts: buyer matching, pricing, the 7% fee and "
          "the 9-step buyout process.", buyouts)
     page("listings.html", "Live Listings — DTO",
          "Google Docs currently listed on DTO for stock investment or full buyout.", listings)
-    page("apply.html", "Apply to DTO — List Your Doc or Become a Verified Buyer",
+    page("apply.html", "Apply to DTO — List Your Doc or Get a Valuation",
          "Submit a request to DTO: list your Google Doc for stock investment, sell it in a full buyout, "
-         "or register as a verified buyer. Reviewed manually by DTO staff.", apply_page)
+         "or get a valuation. Reviewed manually by DTO staff.", apply_page)
     page("404.html", "Page not found — DTO", "That page isn't listed on DTO.", NOT_FOUND, active="")

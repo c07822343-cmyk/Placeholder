@@ -42,7 +42,7 @@
 
   function isSeller() {
     var t = requestType();
-    return t === 'Stock Listing' || t === 'Full Buyout';
+    return t === 'Stock Listing' || t === 'Full Buyout' || t === 'Valuation Only';
   }
 
   /* ---------------- step navigation ---------------- */
@@ -53,7 +53,6 @@
       var only = s.getAttribute('data-only');
       if (!only) return true;
       if (only === 'seller') return isSeller();
-      if (only === 'buyer') return requestType() === 'Verified Buyer';
       if (only === 'buyout') return requestType() === 'Full Buyout';
       return true;
     });
@@ -185,9 +184,6 @@
       add('Partnerships', val('partners'));
       add('Reputation &amp; history', val('reputation'));
       add('Recent growth', val('growth'));
-    } else {
-      add('Budget', val('budget') ? '$' + val('budget') : '');
-      add('Interests', val('description'));
     }
     add('Notes', val('notes'));
 
@@ -223,7 +219,6 @@
     put('docLink', val('doc_link'));
     put('description', val('description'));
     put('askingPrice', val('asking_price'));
-    put('budget', val('budget'));
     put('influence', val('influence'));
     put('partners', val('partners'));
     put('reputation', val('reputation'));
@@ -275,14 +270,6 @@
         '',
         'Recent growth:',
         '  ' + (val('growth') || '—'),
-        ''
-      );
-    } else {
-      lines.push(
-        'Budget       : $' + (val('budget') || '—'),
-        '',
-        'Interests / what they want to buy:',
-        val('description'),
         ''
       );
     }
@@ -412,8 +399,6 @@
       if (pw) pw.hidden = requestType() !== 'Full Buyout';
       var sellerCopy = document.querySelectorAll('[data-seller-copy]');
       sellerCopy.forEach(function (el) { el.hidden = !isSeller(); });
-      var buyerCopy = document.querySelectorAll('[data-buyer-copy]');
-      buyerCopy.forEach(function (el) { el.hidden = isSeller(); });
     });
     if (r.checked) r.dispatchEvent(new Event('change'));
   });

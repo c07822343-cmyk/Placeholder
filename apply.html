@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Apply to DTO — List Your Doc or Become a Verified Buyer</title>
-<meta name="description" content="Submit a request to DTO: list your Google Doc for stock investment, sell it in a full buyout, or register as a verified buyer. Reviewed manually by DTO staff.">
-<meta property="og:title" content="Apply to DTO — List Your Doc or Become a Verified Buyer">
-<meta property="og:description" content="Submit a request to DTO: list your Google Doc for stock investment, sell it in a full buyout, or register as a verified buyer. Reviewed manually by DTO staff.">
+<title>Apply to DTO — List Your Doc or Get a Valuation</title>
+<meta name="description" content="Submit a request to DTO: list your Google Doc for stock investment, sell it in a full buyout, or get a valuation. Reviewed manually by DTO staff.">
+<meta property="og:title" content="Apply to DTO — List Your Doc or Get a Valuation">
+<meta property="og:description" content="Submit a request to DTO: list your Google Doc for stock investment, sell it in a full buyout, or get a valuation. Reviewed manually by DTO staff.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#070b12">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23f5c542'/><text x='50' y='68' font-size='46' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='%2314100a'>DTO</text></svg>">
@@ -29,8 +29,8 @@
   <div class="wrap">
     <span class="eyebrow">Requests</span>
     <h1>Apply to <span class="accent">DTO</span></h1>
-    <p class="lede">List a doc for stock investment, sell it outright in a full buyout, or register as a
-    verified buyer. Complete the request below — it takes about a minute, and everything is reviewed
+    <p class="lede">List a doc for stock investment, sell it outright in a full buyout, or get a valuation.
+    Complete the request below — it takes about a minute, and everything is reviewed
     manually by DTO staff.</p>
     <div class="hero-cta">
       <a class="btn btn-gold" href="#request">Start a request</a>
@@ -87,14 +87,6 @@
               <span class="tc-title">Full Buyout</span>
               <span class="tc-desc">Sell your doc outright for real money. Ownership transfers fully to
               the buyer once payment clears.</span>
-            </label>
-            <label class="type-card">
-              <input type="radio" name="request_type" value="Verified Buyer">
-              <span class="tc-check"></span>
-              <span class="tc-icon">&#128737;</span>
-              <span class="tc-title">Become a Verified Buyer</span>
-              <span class="tc-desc">Get approved as a legitimate purchaser so sellers are matched and
-              recommended to you first.</span>
             </label>
             <label class="type-card">
               <input type="radio" name="request_type" value="Valuation Only">
@@ -155,24 +147,6 @@
             <input type="number" id="f_price" name="asking_price" min="0" step="1" placeholder="100">
             <div class="est-panel" id="reqFee"></div>
           </div>
-        </div>
-
-        <!-- STEP 3b : buyer details -->
-        <div class="step" data-title="Buyer profile" data-only="buyer" hidden>
-          <h3>Your buyer profile</h3>
-          <p class="step-sub">DTO matches verified buyers to sellers based on budget, interest category
-          and activity level.</p>
-          <div class="field-wrap">
-            <label class="form-label" for="f_budget">Budget in USD <span style="color:var(--red)">*</span></label>
-            <input type="number" id="f_budget" name="budget" data-required min="0" step="1" placeholder="250">
-          </div>
-          <div class="field-wrap">
-            <label class="form-label" for="f_int">What kind of docs are you looking for? <span style="color:var(--red)">*</span></label>
-            <textarea id="f_int" name="description" data-required
-              placeholder="Categories, size, influence level, anything specific you're hunting for."></textarea>
-          </div>
-          <div class="notice">Verification reduces scams on both sides. Staff may ask for proof of funds
-          or trade history before approving you as a verified buyer.</div>
         </div>
 
         <!-- STEP 4 : background (sellers) -->
@@ -306,8 +280,8 @@
     </details>
     <details class="faq">
       <summary>Is it safe? How do I know I won't get scammed?</summary>
-      <div class="faq-body"><p>Every deal runs through DTO verification. Only <strong>verified buyers</strong>
-      are recommended to sellers, negotiation happens in staff-provided private chat rooms, and payment is
+      <div class="faq-body"><p>Every deal runs through DTO verification. Buyers are reviewed by staff,
+      negotiation happens in staff-provided private chat rooms, and payment is
       confirmed before ownership transfers. Private deals made outside DTO are not recognised and are not
       protected.</p></div>
     </details>

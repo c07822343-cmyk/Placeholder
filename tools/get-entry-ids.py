@@ -28,7 +28,7 @@ HINTS = [
     ("doc link",      "docLink"),
     ("description",   "description"),
     ("asking price",  "askingPrice"),
-    ("budget",        "budget"),
+
     ("influence",     "influence"),
     ("partnership",   "partners"),
     ("partner",       "partners"),
@@ -108,7 +108,7 @@ def main():
                 break
 
     keys = ["requestType", "name", "email", "contactAlt", "docName", "docLink",
-            "description", "askingPrice", "budget", "influence", "partners",
+            "description", "askingPrice", "influence", "partners",
             "reputation", "growth", "notes", "ticket"]
 
     print("\n" + "=" * 60)

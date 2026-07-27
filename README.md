@@ -24,8 +24,8 @@ which is what makes it free to host forever.
 
 `apply.html` contains a four-to-five step wizard that handles all incoming requests:
 
-- **Four request types** — Stock Listing, Full Buyout, Verified Buyer, Valuation Only
-- **Conditional steps** — buyers skip the doc questions, sellers skip the budget question
+- **Three request types** — Stock Listing, Full Buyout, Valuation Only
+- **Conditional steps** — valuation-only requests skip the asking price question
 - **Live DoxStox preview** as the applicant moves the stat sliders
 - **Live 7% fee breakdown** on buyout asking prices
 - **Inline validation** with clear per-field errors

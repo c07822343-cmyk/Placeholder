@@ -80,10 +80,11 @@ window.DTO = {
     });
 
     if (!rows.length) {
+      var msg = state.rows.length === 0
+        ? 'No listings yet. <a href="apply.html">Submit your doc</a> to be the first.'
+        : 'No listings match that filter. <a href="apply.html">Submit your doc</a> to be listed.';
       tbody.innerHTML =
-        '<tr><td colspan="6" style="text-align:center;padding:34px">' +
-        'No listings match that filter. <a href="apply.html">Submit your doc</a> to be listed.' +
-        '</td></tr>';
+        '<tr><td colspan="6" style="text-align:center;padding:34px">' + msg + '</td></tr>';
     } else {
       tbody.innerHTML = rows.map(function (r) {
         var price;
