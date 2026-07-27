@@ -206,7 +206,7 @@
     var e = CFG.entries || {};
     var fd = new FormData();
     function put(key, v) {
-      if (e[key] && v !== '' && v != null) fd.append(e[key], v);
+      if (e[key]) fd.append(e[key], v == null ? '' : String(v));
     }
     put('requestType', requestType());
     put('name', val('name'));
@@ -215,14 +215,14 @@
     put('docName', val('doc_name'));
     put('docLink', val('doc_link'));
     put('description', val('description'));
-    put('askingPrice', val('asking_price'));
     put('partners', val('partners'));
+    put('askingPrice', val('asking_price'));
     put('notes', val('notes'));
     put('ticket', ticket);
     return fd;
   }
 
-  function emailBody() {
+  function requestSummary() {
     var lines = [
       'DTO REQUEST — ' + ticket,
       '=========================================',
@@ -262,28 +262,52 @@
     return lines.join('\n');
   }
 
-  function mailtoLink() {
-    var list = (CFG.emails || []).map(function (e) { return e.address; });
-    var to = list[0] || '';
-    var cc = list.slice(1).join(',');
-    return 'mailto:' + to +
-      (cc ? '?cc=' + cc + '&' : '?') +
-      'subject=' + encodeURIComponent('DTO Request ' + ticket + ' — ' + requestType()) +
-      '&body=' + encodeURIComponent(emailBody());
+  function postToGoogleForm() {
+    return new Promise(function (resolve, reject) {
+      try {
+        var url = 'https://docs.google.com/forms/d/e/' + CFG.formId + '/formResponse';
+        var targetName = 'dtoFormTarget_' + Date.now();
+        var iframe = document.createElement('iframe');
+        iframe.name = targetName;
+        iframe.title = 'Hidden Google Forms target';
+        iframe.hidden = true;
+
+        var tempForm = document.createElement('form');
+        tempForm.method = 'POST';
+        tempForm.action = url;
+        tempForm.target = targetName;
+        tempForm.style.display = 'none';
+
+        var fd = payload();
+        fd.append('fvv', '1');
+        fd.append('pageHistory', '0');
+        fd.append('draftResponse', '[]');
+        fd.append('fbzx', String(Date.now()));
+
+        fd.forEach(function (value, key) {
+          var input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = value;
+          tempForm.appendChild(input);
+        });
+
+        document.body.appendChild(iframe);
+        document.body.appendChild(tempForm);
+        tempForm.submit();
+
+        setTimeout(function () {
+          tempForm.remove();
+          iframe.remove();
+          resolve();
+        }, 900);
+      } catch (err) {
+        reject(err);
+      }
+    });
   }
 
-  function openMail() {
-    // An anchor click is more reliable than assigning location.href:
-    // it won't trigger an unload of the page in any browser.
-    var a = document.createElement('a');
-    a.href = mailtoLink();
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(function () { a.remove(); }, 0);
-  }
-
-  function succeed(viaEmail) {
+  function succeed() {
     var wrap = document.getElementById('reqWrap');
     var done = document.getElementById('reqDone');
     if (wrap) wrap.hidden = true;
@@ -292,52 +316,47 @@
     var tk = document.getElementById('doneTicket');
     if (tk) tk.textContent = ticket;
     var msg = document.getElementById('doneMsg');
-    if (msg && viaEmail) {
-      msg.innerHTML = 'Your email app should have opened with the request ready to send. ' +
-        '<strong>Press send in your mail app to finish.</strong> If nothing opened, use the copy button below.';
+    if (msg) {
+      msg.innerHTML = 'Your request was sent straight to DTO\'s Google Form and added to the review queue. Staff will get back to you within <strong>' +
+        (OPT.responseTime || '24–48 hours') + '</strong>.';
     }
-    var rt = document.getElementById('doneTime');
-    if (rt) rt.textContent = OPT.responseTime || '24–48 hours';
     done.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     var copy = document.getElementById('doneCopy');
     if (copy) {
       copy.onclick = function (ev) {
         ev.preventDefault();
-        navigator.clipboard.writeText(emailBody()).then(function () {
+        navigator.clipboard.writeText(requestSummary()).then(function () {
           copy.textContent = 'Copied ✓';
           setTimeout(function () { copy.textContent = 'Copy request details'; }, 2000);
         });
       };
     }
-    var mail = document.getElementById('doneMail');
-    if (mail) mail.href = mailtoLink();
   }
 
   function submit() {
     if (!validateStep()) return;
+    clearBanner();
 
     var btn = document.getElementById('reqSubmit');
-    var configured = CFG.formId && CFG.entries && CFG.entries.requestType;
 
-    if (!configured) {
-      // Fallback: prefilled email to DTO staff
-      openMail();
-      succeed(true);
+    if (!isConfigured()) {
+      showBanner('<strong>Google Form not connected.</strong> Add the live form ID and entry IDs in <code>assets/config.js</code> before accepting requests.');
+      return;
+    }
+
+    if ('onLine' in navigator && !navigator.onLine) {
+      showBanner('<strong>You appear to be offline.</strong> Reconnect to the internet and try submitting again.');
       return;
     }
 
     btn.disabled = true;
     btn.textContent = 'Sending…';
 
-    var url = 'https://docs.google.com/forms/d/e/' + CFG.formId + '/formResponse';
-
-    fetch(url, { method: 'POST', mode: 'no-cors', body: payload() })
-      .then(function () { succeed(false); })
+    postToGoogleForm()
+      .then(function () { succeed(); })
       .catch(function () {
-        // no-cors normally resolves opaque; reaching here means offline/blocked
-        openMail();
-        succeed(true);
+        showBanner('<strong>Could not send the request right now.</strong> Refresh the page and try again in a moment.');
       })
       .finally(function () {
         btn.disabled = false;
@@ -400,6 +419,12 @@
       if (er) er.remove();
     }
   });
+
+  if (isConfigured()) {
+    showBanner('<strong>Connected:</strong> requests on this page go straight into DTO\'s Google Form and linked Google Sheet.');
+  } else {
+    showBanner('<strong>Google Form not connected yet.</strong> This page needs a live form ID and entry IDs in <code>assets/config.js</code>.');
+  }
 
   updateFee();
   show(0);

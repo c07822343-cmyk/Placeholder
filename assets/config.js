@@ -6,9 +6,9 @@
 
    Step-by-step instructions: see SETUP-GOOGLE-FORM.md
 
-   Until you fill in formId + entry IDs below, the request form
-   still works perfectly — it falls back to opening a prefilled
-   email to DTO staff instead of posting to the Form.
+   Until you fill in formId + entry IDs below, submissions are
+   blocked on the site. Once connected, requests post straight
+   into your Google Form.
    ============================================================ */
 
 window.DTO_CONFIG = {

@@ -499,12 +499,12 @@ buyouts = """
 
 <section class="block">
   <div class="wrap">
-    <h2>Buyers &amp; sellers system</h2>
-    <p class="section-sub">DTO organizes buyouts using two groups.</p>
+    <h2>How buyout listings work</h2>
+    <p class="section-sub">DTO helps doc owners list a full sale and handles the process from review to transfer.</p>
     <div class="grid g2">
       <div class="card">
-        <h3>Sellers</h3>
-        <p style="margin-bottom:10px">Users who want to fully sell their Google Doc. They list:</p>
+        <h3>What sellers submit</h3>
+        <p style="margin-bottom:10px">To start a full buyout listing, send:</p>
         <ul class="clean">
           <li>Doc name</li>
           <li>Asking price (USD)</li>
@@ -514,10 +514,11 @@ buyouts = """
         </ul>
       </div>
       <div class="card">
-        <h3>Buyers</h3>
-        <p style="margin-bottom:10px">Users looking to purchase full ownership of docs using real money.</p>
+        <h3>What DTO does</h3>
         <ul class="clean">
-          <li>DTO reviews each buyer to reduce scams and fake offers.</li>
+          <li>Reviews the doc and listing details</li>
+          <li>Publishes the listing once approved</li>
+          <li>Facilitates contact and deal flow between buyer and seller</li>
         </ul>
       </div>
     </div>
@@ -526,22 +527,22 @@ buyouts = """
 
 <section class="block">
   <div class="wrap">
-    <h2>Buyer matching system</h2>
-    <p class="section-sub">DTO acts as a middle layer between buyers and sellers.</p>
+    <h2>Matching and negotiation</h2>
+    <p class="section-sub">DTO acts as the middle layer between interested buyers and sellers.</p>
     <div class="grid g2">
       <div class="card">
         <ul class="clean">
           <li>Sellers submit docs for buyout listing</li>
           <li>DTO reviews and approves the listing</li>
-          <li>DTO may introduce buyers directly to sellers for faster deals</li>
+          <li>DTO can introduce interested buyers once a listing is live</li>
         </ul>
       </div>
       <div class="card">
-        <h3>Buyers are matched on</h3>
+        <h3>What gets agreed</h3>
         <ul class="clean">
-          <li><strong>Budget</strong></li>
-          <li><strong>Interest category</strong></li>
-          <li><strong>Activity level</strong></li>
+          <li><strong>Final price</strong></li>
+          <li><strong>Transfer timing</strong></li>
+          <li><strong>Any special conditions</strong></li>
         </ul>
       </div>
     </div>
@@ -595,8 +596,8 @@ buyouts = """
     <ol class="steps">
       <li><strong>Seller submits doc for buyout listing</strong>Send the doc link, name, description and asking price to DTO staff.</li>
       <li><strong>DTO verifies and approves listing</strong>Stats are checked and a DoxStox evaluation is attached.</li>
-      <li><strong>Buyers are matched or recommended</strong>Based on budget, interest category and activity level.</li>
-      <li><strong>Buyer contacts DTO staff with intent to purchase</strong>All contact runs through DTO.</li>
+      <li><strong>Interested buyers are introduced</strong>DTO connects both sides once there is real interest.</li>
+      <li><strong>Negotiation runs through DTO staff</strong>All contact stays inside the DTO process.</li>
       <li><strong>DTO facilitates negotiation and agreement</strong>In a private chat room provided by staff.</li>
       <li><strong>Payment is confirmed</strong>Verified by DTO before anything transfers.</li>
       <li><strong>DTO collects the 7% fee</strong>Applied to the final agreed sale price.</li>
@@ -613,7 +614,7 @@ buyouts = """
       <ul class="clean">
         <li>All buyouts must go through <strong>DTO verification</strong></li>
         <li>Private deals outside DTO are <strong>not recognized</strong></li>
-        <li>Only <strong>reviewed buyers</strong> are recommended to sellers</li>
+        <li>All communication and transfer steps must stay inside the DTO process</li>
         <li>The <strong>7% DTO fee</strong> applies to all completed buyouts</li>
         <li>Any suspicious activity may result in <strong>removal or blacklist</strong></li>
       </ul>
@@ -626,7 +627,7 @@ buyouts = """
     <h2>Why this system exists</h2>
     <div class="grid g3">
       <div class="card"><h3>Prevent scams</h3><p>Real-money transactions carry real risk — DTO verifies both sides.</p></div>
-      <div class="card"><h3>Serious buyers only</h3><p>Sellers only deal with buyers DTO has reviewed.</p></div>
+      <div class="card"><h3>Structured negotiations</h3><p>DTO keeps the deal organized so both sides agree terms before the transfer happens.</p></div>
       <div class="card"><h3>Fair pricing</h3><p>DoxStox provides guidance instead of guesswork.</p></div>
       <div class="card"><h3>Trust &amp; transparency</h3><p>Every deal is recorded and verifiable.</p></div>
       <div class="card"><h3>Sustainable operations</h3><p>The 7% fee model keeps DTO running.</p></div>
@@ -885,14 +886,12 @@ apply_page = """
     <div id="reqDone" class="req-shell done-panel" hidden>
       <div class="tick">&#10003;</div>
       <h3>Request received</h3>
-      <p id="doneMsg">Your request is in DTO's review queue. Staff will get back to you within
-      <span id="doneTime">24–48 hours</span>.</p>
+      <p id="doneMsg">Your request is in DTO's review queue. Staff will get back to you shortly.</p>
       <p style="margin-bottom:22px"><span class="ticket-chip">&#127903; <span id="doneTicket"></span></span></p>
-      <p style="font-size:.88rem">Save that ticket ID — quoting it in an email lets staff find your
+      <p style="font-size:.88rem">Save that ticket ID — quoting it in any follow-up message lets staff find your
       request instantly.</p>
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px">
         <a class="btn btn-ghost" id="doneCopy" href="#">Copy request details</a>
-        <a class="btn btn-ghost" id="doneMail" href="#">Email staff directly</a>
         <a class="btn btn-gold" href="listings.html">Browse listings</a>
       </div>
     </div>
@@ -952,10 +951,9 @@ apply_page = """
     </details>
     <details class="faq">
       <summary>Is it safe? How do I know I won't get scammed?</summary>
-      <div class="faq-body"><p>Every deal runs through DTO verification. Buyers are reviewed by staff,
-      negotiation happens in staff-provided private chat rooms, and payment is
-      confirmed before ownership transfers. Private deals made outside DTO are not recognised and are not
-      protected.</p></div>
+      <div class="faq-body"><p>Every deal runs through DTO verification. Negotiation happens in
+      staff-provided private chat rooms, and payment is confirmed before ownership transfers. Private deals
+      made outside DTO are not recognised and are not protected.</p></div>
     </details>
     <details class="faq">
       <summary>Do I need a Google account or to sign in anywhere?</summary>
@@ -1010,8 +1008,7 @@ if __name__ == "__main__":
          "Every doc receives a DoxStox score assigned by DTO staff through manual review of its "
          "partnerships and overall doc quality.", doxstox)
     page("buyouts.html", "Full Doc Buyouts (Real Money) — DTO",
-         "How DTO handles real-money full doc buyouts: buyer matching, pricing, the 7% fee and "
-         "the 9-step buyout process.", buyouts)
+         "How DTO handles real-money full doc buyouts: pricing, the 7% fee and the full transfer process.", buyouts)
     page("listings.html", "Live Listings — DTO",
          "Google Docs currently listed on DTO for stock investment or full buyout.", listings)
     page("apply.html", "Apply to DTO — List Your Doc or Get a Valuation",

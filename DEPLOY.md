@@ -144,5 +144,5 @@ server.
 
 **Setup takes ~10 minutes — see [`SETUP-GOOGLE-FORM.md`](SETUP-GOOGLE-FORM.md).**
 
-Until you connect it, the wizard still works: it falls back to opening a prefilled email to
-`the.crypt1c.core@gmail.com` (cc'ing the other two staff inboxes). Nothing breaks either way.
+Once connected, submissions go straight into your Google Form and whatever Google Sheet you link to
+that form.
