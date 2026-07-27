@@ -43,6 +43,8 @@ Until it's connected, submissions fall back to opening a prefilled email to staf
 **New here? Read [`START-HERE.md`](START-HERE.md)** — the fastest route is dragging
 `dto-website.zip` onto <https://app.netlify.com/drop>. Live in 30 seconds, no account needed.
 
+Once it's live, **[`UPDATING.md`](UPDATING.md)** covers publishing changes without losing your URL.
+
 For auto-deploying from GitHub (works with this private repo), see [`DEPLOY.md`](DEPLOY.md).
 Recommended: Cloudflare Pages — unlimited bandwidth, free.
 
@@ -101,6 +103,7 @@ python3 -m http.server 8000
 ├── data/listings.json        # ← listings (edit this)
 ├── tools/get-entry-ids.py    # pulls entry IDs out of your Google Form
 ├── START-HERE.md             # ← easiest way to get online
+├── UPDATING.md               # how to update without losing your URL
 ├── SETUP-GOOGLE-FORM.md      # request system setup
 └── DEPLOY.md                 # hosting setup (Git-connected)
 ```

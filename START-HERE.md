@@ -16,14 +16,19 @@ That's it. The site is live at a URL like `https://silly-name-123.netlify.app`.
 
 Free forever, HTTPS included, never sleeps, no credit card.
 
-### Then (optional, 1 minute)
-- **Pick a nicer name:** sign up with the button it shows you (free — email or GitHub login), then
-  **Site configuration → Change site name** → e.g. `dto-exchange` → your URL becomes
-  `https://dto-exchange.netlify.app`
-- Without signing up the site still stays live, you just can't rename it or update it later.
+### Then — important, 1 minute
+When the site appears, Netlify shows a **"Sign up to claim this site"** banner. **Click it** (free,
+email or GitHub login).
 
-### To update the site later
-Re-drag a new zip onto the same page (or your site's **Deploys** tab). Takes seconds.
+This matters: an unclaimed site can't be updated, and the URL isn't really yours. Once claimed, go to
+**Site configuration → Change site name** and pick something real like `dto-exchange` — your
+permanent URL becomes `https://dto-exchange.netlify.app`.
+
+### To update the site later, keeping the same URL
+Go to your site's **Deploys** tab and drag the new zip there — **not** onto the Drop page again
+(that would create a second, separate site with a different URL).
+
+Full details, plus how to make updates automatic: **[`UPDATING.md`](UPDATING.md)**
 
 ---
 
