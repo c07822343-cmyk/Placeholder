@@ -7,7 +7,7 @@ free HTTPS, no sleeping, and no credit card.
 The site is plain static HTML/CSS/JS — no build step, no server, no database. Config files for all
 three hosts are already committed, so you just click through the connect flow.
 
-**Branch to deploy: `arena/019fa143-placeholder`**
+**Branch to deploy: `arena/019fa3a4-placeholder`**
 
 ---
 
@@ -23,7 +23,7 @@ Best free tier of the three: unlimited bandwidth, unlimited requests, 500 builds
 4. Select the **Placeholder** repo → **Begin setup**
 5. Fill in:
    - **Project name:** `dto` (this becomes your URL)
-   - **Production branch:** `arena/019fa143-placeholder`
+   - **Production branch:** `arena/019fa3a4-placeholder`
    - **Framework preset:** `None`
    - **Build command:** *leave completely empty*
    - **Build output directory:** `/`
@@ -48,7 +48,7 @@ Free tier: 100 GB bandwidth/month, 300 build minutes/month.
 2. **Add new site** → **Import an existing project** → **Deploy with GitHub**
 3. Authorize Netlify and grant access to the private `Placeholder` repo
 4. Settings are auto-detected from the committed `netlify.toml`:
-   - **Branch to deploy:** change it to `arena/019fa143-placeholder`
+   - **Branch to deploy:** change it to `arena/019fa3a4-placeholder`
    - **Build command:** empty · **Publish directory:** `.`
 5. **Deploy site** → live at `https://<random-name>.netlify.app`
    (rename it under **Site configuration → Change site name**, e.g. `dto.netlify.app`)
@@ -67,7 +67,7 @@ Free Hobby tier, private repos supported.
 2. **Framework Preset:** `Other` · **Build Command:** empty · **Output Directory:** `.`
 3. **Deploy** → live at `https://<project>.vercel.app`
 4. Set the production branch under **Settings → Git → Production Branch** →
-   `arena/019fa143-placeholder`
+   `arena/019fa3a4-placeholder`
 
 `vercel.json` is already committed with the correct headers.
 
@@ -115,7 +115,7 @@ The `.html` files are generated. Edit the strings in `build.py`, then:
 
 ```bash
 python3 build.py
-git add -A && git commit -m "Update copy" && git push origin arena/019fa143-placeholder
+git add -A && git commit -m "Update copy" && git push origin arena/019fa3a4-placeholder
 ```
 
 ### Local preview
