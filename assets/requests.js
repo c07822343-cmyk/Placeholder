@@ -202,23 +202,30 @@
 
   /* ---------------- submission ---------------- */
 
+  function payloadValues() {
+    var type = requestType();
+    return {
+      requestType: type,
+      name: val('name'),
+      email: val('email'),
+      contactAlt: val('contact_alt') || '—',
+      docName: val('doc_name'),
+      docLink: val('doc_link'),
+      description: val('description'),
+      partners: val('partners') || 'None provided',
+      askingPrice: type === 'Full Buyout' ? (val('asking_price') || '0') : 'N/A',
+      notes: val('notes') || 'None',
+      ticket: ticket
+    };
+  }
+
   function payload() {
     var e = CFG.entries || {};
     var fd = new FormData();
-    function put(key, v) {
-      if (e[key]) fd.append(e[key], v == null ? '' : String(v));
-    }
-    put('requestType', requestType());
-    put('name', val('name'));
-    put('email', val('email'));
-    put('contactAlt', val('contact_alt'));
-    put('docName', val('doc_name'));
-    put('docLink', val('doc_link'));
-    put('description', val('description'));
-    put('partners', val('partners'));
-    put('askingPrice', val('asking_price'));
-    put('notes', val('notes'));
-    put('ticket', ticket);
+    var values = payloadValues();
+    Object.keys(values).forEach(function (key) {
+      if (e[key]) fd.append(e[key], String(values[key]));
+    });
     return fd;
   }
 
@@ -262,10 +269,9 @@
     return lines.join('\n');
   }
 
-  function postToGoogleForm() {
+  function postViaHiddenForm(url) {
     return new Promise(function (resolve, reject) {
       try {
-        var url = 'https://docs.google.com/forms/d/e/' + CFG.formId + '/formResponse';
         var targetName = 'dtoFormTarget_' + Date.now();
         var iframe = document.createElement('iframe');
         iframe.name = targetName;
@@ -300,10 +306,35 @@
           tempForm.remove();
           iframe.remove();
           resolve();
-        }, 900);
+        }, 250);
       } catch (err) {
         reject(err);
       }
+    });
+  }
+
+  function postToGoogleForm() {
+    var url = 'https://docs.google.com/forms/d/e/' + CFG.formId + '/formResponse';
+
+    if (navigator.sendBeacon) {
+      try {
+        if (navigator.sendBeacon(url, payload())) {
+          return Promise.resolve();
+        }
+      } catch (e) {
+        // fall through to fetch / form post
+      }
+    }
+
+    return fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: payload(),
+      credentials: 'omit',
+      cache: 'no-store',
+      keepalive: true
+    }).catch(function () {
+      return postViaHiddenForm(url);
     });
   }
 
