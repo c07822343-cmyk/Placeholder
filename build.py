@@ -157,8 +157,8 @@ home = """
       <div class="card">
         <span class="icon">&#128200;</span>
         <h3>DoxStox valuation</h3>
-        <p>Every registered doc gets a DoxStox score built from influence, partnerships, reputation
-        and growth — reviewed and updated weekly.</p>
+        <p>Every registered doc gets a DoxStox score assigned by DTO staff after manual review —
+        updated weekly.</p>
       </div>
       <div class="card">
         <span class="icon">&#129297;</span>
@@ -194,11 +194,9 @@ home = """
     <p class="section-sub">Every doc receives a DoxStox score assigned by DTO staff after manual review.
     There's no public formula to game — just consistent human judgement, applied the same way to every
     doc and revisited weekly.</p>
-    <div class="grid g4">
-      <div class="card"><h3>Influence</h3><p>How well-known the doc is and how often others reference it.</p></div>
-      <div class="card"><h3>Partnerships</h3><p>Who it works with, and how active those relationships are.</p></div>
-      <div class="card"><h3>Reputation</h3><p>Trust, reliability and track record over time.</p></div>
-      <div class="card"><h3>Growth</h3><p>Momentum — whether it's climbing, steady or stalling.</p></div>
+    <div class="grid g2">
+      <div class="card"><h3>Partnerships</h3><p>Who it works with, and how active those relationships are. One meaningful partnership can outweigh several nominal ones.</p></div>
+      <div class="card"><h3>Staff judgement</h3><p>No public formula to game — just consistent human review applied the same way to every doc.</p></div>
     </div>
     <p class="mt-24"><a class="btn btn-gold" href="doxstox.html">How valuation works</a></p>
   </div>
@@ -254,7 +252,7 @@ how = """
   <div class="wrap">
     <h2>Buying and selling docs</h2>
     <p class="section-sub">Users may list their docs for sale through DTO. Once listed, DTO staff review
-    the doc and assign it a value based on its influence, partnerships, reputation, growth and overall
+    the doc and assign it a value based on its partnerships and overall
     standing within the community.</p>
     <div class="grid g2">
       <div class="card">
@@ -285,7 +283,7 @@ how = """
   <div class="wrap">
     <h2>DoxStox</h2>
     <p class="section-sub">DoxStox is DTO's valuation and investment system. Every registered doc receives
-    a DoxStox score representing its estimated value and influence within the community.</p>
+    a DoxStox score representing its estimated value within the community.</p>
     <div class="grid g2">
       <div class="card">
         <h3>Why not use view counts?</h3>
@@ -295,10 +293,9 @@ how = """
       <div class="card">
         <h3>Verifiable factors</h3>
         <ul class="clean">
-          <li><strong>Community influence</strong></li>
-          <li><strong>Partnerships</strong></li>
-          <li><strong>Reputation</strong></li>
-          <li><strong>Growth</strong></li>
+          <li><strong>Partnerships</strong> — who it works with and how active those relationships are</li>
+          <li><strong>Doc quality</strong> — content, organisation and usefulness</li>
+          <li><strong>Community standing</strong> — how the doc fits into the wider ecosystem</li>
         </ul>
       </div>
     </div>
@@ -315,7 +312,7 @@ how = """
     <ul class="clean">
       <li>Purchasing shares does <strong>not</strong> grant ownership of the doc itself — it represents an
       investment in that doc's future value.</li>
-      <li>As a doc grows, gains partnerships, improves its reputation or becomes more influential, its
+      <li>As a doc grows, gains partnerships or strengthens its community standing, its
       <strong>DoxStox score may increase</strong>.</li>
       <li>A rising DoxStox score can lead to a <strong>higher share value</strong>.</li>
       <li>Investors may <strong>buy, sell and trade shares</strong> through DTO.</li>
@@ -329,8 +326,8 @@ how = """
     <p class="section-sub">All values displayed on DTO are determined by DTO staff through manual review
     of each doc.</p>
     <div class="card">
-      <p>There is no public formula and no automatic calculation. Staff assess influence, partnerships,
-      reputation and growth together, weighing each according to the doc in front of them, and
+      <p>There is no public formula and no automatic calculation. Staff assess partnerships and overall
+      doc quality together, weighing each according to the doc in front of them, and
       cross-check against comparable listings. This keeps values
       <strong style="color:var(--text)">fair, accurate and resistant to manipulation</strong> — there is
       no single number for anyone to inflate.</p>
@@ -359,7 +356,7 @@ doxstox = """
   <div class="wrap">
     <span class="eyebrow">Valuation</span>
     <h1>How docs are <span class="accent">valued</span></h1>
-    <p class="lede">Every registered doc receives a DoxStox score — its estimated value and influence
+    <p class="lede">Every registered doc receives a DoxStox score — its estimated value
     within the community. Scores are assigned by DTO staff through manual review, not by a public
     formula.</p>
     <div class="hero-cta">
@@ -399,19 +396,9 @@ doxstox = """
 <section class="block">
   <div class="wrap">
     <h2>What staff assess</h2>
-    <p class="section-sub">Four factors shape every valuation. None has a fixed weight — their
-    importance depends on the doc.</p>
+    <p class="section-sub">Staff review each doc holistically — there is no fixed formula. The main
+    factor they look at is partnerships, alongside overall doc quality and community standing.</p>
     <div class="grid g2">
-      <div class="card">
-        <h3>&#127760; Community influence</h3>
-        <p style="margin-bottom:10px">How well-known the doc is, how often it gets referenced by others,
-        and how central it feels to the ecosystem. Typically the strongest signal.</p>
-        <ul class="clean">
-          <li>Recognition across the community</li>
-          <li>How often other docs reference it</li>
-          <li>Its role in the wider ecosystem</li>
-        </ul>
-      </div>
       <div class="card">
         <h3>&#129309; Partnerships</h3>
         <p style="margin-bottom:10px">Docs that link to or actively work with it. Network strength
@@ -423,23 +410,13 @@ doxstox = """
         </ul>
       </div>
       <div class="card">
-        <h3>&#11088; Reputation</h3>
-        <p style="margin-bottom:10px">Trust built over time. This can raise a valuation substantially —
-        or sink it.</p>
+        <h3>&#128220; Overall doc quality</h3>
+        <p style="margin-bottom:10px">Staff look at the doc as a whole — its content, organisation,
+        usefulness and how it fits into the wider ecosystem.</p>
         <ul class="clean">
-          <li>Honesty and reliability</li>
-          <li>Scam or dispute history</li>
-          <li>Track record of successful trades</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>&#128200; Growth</h3>
-        <p style="margin-bottom:10px">Momentum. A smaller doc climbing fast may be valued above a larger
-        one that has stalled.</p>
-        <ul class="clean">
-          <li>Activity trend over recent weeks</li>
-          <li>New partnerships gained</li>
-          <li>Rising or falling influence</li>
+          <li>Content quality and usefulness</li>
+          <li>How it fits into the community</li>
+          <li>Comparable docs already listed</li>
         </ul>
       </div>
     </div>
@@ -451,7 +428,7 @@ doxstox = """
     <h2>The review process</h2>
     <p class="section-sub">Every doc goes through the same path — no shortcuts, no exceptions.</p>
     <div class="timeline">
-      <div class="tl"><h4>1 · Submission</h4><p>You submit your doc with background on its influence, partnerships, reputation and growth.</p></div>
+      <div class="tl"><h4>1 · Submission</h4><p>You submit your doc with details about its partnerships and what it does.</p></div>
       <div class="tl"><h4>2 · Verification</h4><p>Staff open the doc and check what you've told them against what they can independently confirm.</p></div>
       <div class="tl"><h4>3 · Community review</h4><p>Standing is assessed against comparable docs already tracked by DTO.</p></div>
       <div class="tl"><h4>4 · Score assigned</h4><p>Staff agree a DoxStox score and, for stock listings, a price per share in DTC.</p></div>
@@ -472,9 +449,9 @@ doxstox = """
           <tr><th>Band</th><th>Typical profile</th></tr>
         </thead>
         <tbody>
-          <tr><td class="score">3,500+</td><td>Central to the ecosystem. Widely referenced, many active partnerships, spotless reputation.</td></tr>
-          <tr><td class="score">2,000 – 3,500</td><td>Well established and trusted, with a solid partner network and steady growth.</td></tr>
-          <tr><td class="score">1,000 – 2,000</td><td>Active and recognised, building its partnerships and reputation.</td></tr>
+          <tr><td class="score">3,500+</td><td>Central to the ecosystem. Many active partnerships and high-quality content.</td></tr>
+          <tr><td class="score">2,000 – 3,500</td><td>Well established with a solid partner network and strong doc quality.</td></tr>
+          <tr><td class="score">1,000 – 2,000</td><td>Active and recognised, building its partnerships.</td></tr>
           <tr><td class="score">Under 1,000</td><td>Newer or smaller docs, or those still establishing trust.</td></tr>
         </tbody>
       </table>
@@ -490,13 +467,13 @@ doxstox = """
     <div class="grid g2">
       <div class="card">
         <h3>Consistency</h3>
-        <p>The same four factors are applied to every doc, and scores are cross-checked against
+        <p>The same review process is applied to every doc, and scores are cross-checked against
         comparable listings so nothing is judged in isolation.</p>
       </div>
       <div class="card">
         <h3>Disagree with your score?</h3>
-        <p>Email staff with your ticket ID and anything they may have missed — new partnerships, recent
-        growth, corrected information. Scores are re-examined weekly regardless.</p>
+        <p>Email staff with your ticket ID and anything they may have missed — new partnerships or
+        corrected information. Scores are re-examined weekly regardless.</p>
       </div>
     </div>
     <p class="mt-24"><a class="btn btn-gold" href="apply.html">Request a valuation</a>
@@ -532,7 +509,7 @@ buyouts = """
           <li>Doc name</li>
           <li>Asking price (USD)</li>
           <li>Description</li>
-          <li>Basic stats (influence, partnerships, etc.)</li>
+          <li>Basic stats (partnerships, etc.)</li>
           <li>DTO evaluation (DoxStox score if available)</li>
         </ul>
       </div>
@@ -930,7 +907,7 @@ apply_page = """
     <div class="timeline">
       <div class="tl"><h4>1 · Request received</h4><p>Your submission lands in DTO's private review queue with its ticket ID attached.</p></div>
       <div class="tl"><h4>2 · Staff review</h4><p>Staff open your doc, check your stats against what they can verify, and flag anything inconsistent.</p></div>
-      <div class="tl"><h4>3 · DoxStox evaluation</h4><p>Staff weigh your doc's influence, partnerships, reputation and growth against comparable listings, then agree a score.</p></div>
+      <div class="tl"><h4>3 · DoxStox evaluation</h4><p>Staff weigh your doc's partnerships and quality against comparable listings, then agree a score.</p></div>
       <div class="tl"><h4>4 · You're contacted</h4><p>Staff email you the verdict — approved with a score and share price, or declined with a reason.</p></div>
       <div class="tl"><h4>5 · Listing goes live</h4><p>Approved docs appear on the listings page. Buyers and investors can then be matched to you.</p></div>
       <div class="tl"><h4>6 · Deal &amp; transfer</h4><p>Negotiation happens in a private DTO chat room. On completion, DTO collects the 7% fee and records the transfer.</p></div>
@@ -956,8 +933,8 @@ apply_page = """
     </details>
     <details class="faq">
       <summary>How is my doc's value decided?</summary>
-      <div class="faq-body"><p>DTO staff assign it after manually reviewing your doc. They weigh four
-      things — community influence, partnerships, reputation and growth — and cross-check against
+      <div class="faq-body"><p>DTO staff assign it after manually reviewing your doc. They look at
+      partnerships and overall doc quality — and cross-check against
       comparable docs already listed. There is no public formula, which is deliberate: a published
       equation just tells people which number to inflate. See
       <a href="doxstox.html">how valuation works</a> for the full process.</p></div>
@@ -1031,7 +1008,7 @@ if __name__ == "__main__":
          "How buying, selling, DoxStox valuation, shares and the DTO review process work.", how)
     page("doxstox.html", "How Docs Are Valued — DoxStox | DTO",
          "Every doc receives a DoxStox score assigned by DTO staff through manual review of its "
-         "influence, partnerships, reputation and growth.", doxstox)
+         "partnerships and overall doc quality.", doxstox)
     page("buyouts.html", "Full Doc Buyouts (Real Money) — DTO",
          "How DTO handles real-money full doc buyouts: buyer matching, pricing, the 7% fee and "
          "the 9-step buyout process.", buyouts)

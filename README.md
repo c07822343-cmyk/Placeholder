@@ -116,7 +116,7 @@ DoxStox scores and share prices are **assigned by DTO staff** through manual rev
 public formula and the site calculates nothing — it displays exactly the values you put in
 `data/listings.json`.
 
-Staff weigh four factors: community influence, partnerships, reputation, and growth.
+Staff review partnerships and overall doc quality, then assign a score.
 
 ## Contact
 
