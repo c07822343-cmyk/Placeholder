@@ -50,6 +50,19 @@ window.DTO.isUrl = function (s) {
   return /^https?:\/\//i.test(String(s || '').trim());
 };
 
+window.DTO.isEmail = function (s) {
+  return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(s || '').trim());
+};
+
+window.DTO.bestExternalHref = function (s) {
+  var v = String(s || '').trim();
+  if (!v) return '';
+  if (window.DTO.isUrl(v)) return v;
+  if (/^(discord\.gg|discord\.com|www\.discord\.com)\//i.test(v)) return 'https://' + v;
+  if (/^(docs\.google\.com|drive\.google\.com)\//i.test(v)) return 'https://' + v;
+  return '';
+};
+
 window.DTO.normalizeType = function (v) {
   var s = String(v || '').trim().toLowerCase();
   if (s.indexOf('buyout') !== -1) return 'buyout';
