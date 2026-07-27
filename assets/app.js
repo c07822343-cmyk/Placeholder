@@ -55,12 +55,47 @@ window.DTO = {
   var tbody = document.getElementById('listingRows');
   if (!tbody) return;
 
+  var CFG = window.DTO_CONFIG || {};
+  var SHEET = CFG.listings || {};
   var state = { type: 'all', q: '', sort: 'ds-desc', rows: [] };
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
 
   function badge(type) {
     return type === 'buyout'
       ? '<span class="badge buyout">Full Buyout</span>'
       : '<span class="badge stock">Stock Listing</span>';
+  }
+
+  function normalizeHeader(s) {
+    return String(s || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '');
+  }
+
+  function parseNumber(v) {
+    if (v == null || v === '') return null;
+    var cleaned = String(v).replace(/[$,]/g, '').trim();
+    if (!cleaned) return null;
+    var n = Number(cleaned);
+    return isFinite(n) ? n : null;
+  }
+
+  function parseBool(v) {
+    var s = String(v == null ? '' : v).trim().toLowerCase();
+    return s === 'true' || s === 'yes' || s === 'y' || s === '1' || s === 'published' || s === 'verified';
+  }
+
+  function normalizeType(v) {
+    var s = String(v || '').trim().toLowerCase();
+    if (s.indexOf('buyout') !== -1) return 'buyout';
+    return 'stock';
+  }
+
+  function isMeaningfulRow(row) {
+    return row && (row.name || row.description || row.type || row.doxstox != null || row.askingPrice != null || row.sharePrice != null);
   }
 
   function draw() {
@@ -83,13 +118,12 @@ window.DTO = {
       var msg = state.rows.length === 0
         ? 'No listings yet. <a href="apply.html">Submit your doc</a> to be the first.'
         : 'No listings match that filter. <a href="apply.html">Submit your doc</a> to be listed.';
-      tbody.innerHTML =
-        '<tr><td colspan="6" style="text-align:center;padding:34px">' + msg + '</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:34px">' + msg + '</td></tr>';
     } else {
       tbody.innerHTML = rows.map(function (r) {
         var price;
         if (r.type === 'buyout') {
-          price = r.askingPrice
+          price = r.askingPrice != null
             ? '$' + Number(r.askingPrice).toLocaleString() + ' USD'
             : '<span style="color:var(--muted)">Open to offers</span>';
         } else {
@@ -101,7 +135,7 @@ window.DTO = {
           ? Number(r.doxstox).toLocaleString()
           : '<span style="color:var(--muted);font-weight:500">Pending</span>';
         return '<tr>' +
-          '<td class="doc-name">' + r.name + '<br><small style="color:var(--muted);font-weight:500">' + r.description + '</small></td>' +
+          '<td class="doc-name">' + esc(r.name) + '<br><small style="color:var(--muted);font-weight:500">' + esc(r.description || '') + '</small></td>' +
           '<td>' + badge(r.type) + '</td>' +
           '<td class="score">' + score + '</td>' +
           '<td>' + price + '</td>' +
@@ -117,12 +151,120 @@ window.DTO = {
     if (c) c.textContent = rows.length + ' listing' + (rows.length === 1 ? '' : 's');
   }
 
-  fetch('data/listings.json')
-    .then(function (r) { return r.json(); })
-    .then(function (data) { state.rows = data.listings || []; draw(); })
+  function loadLocalListings() {
+    return fetch('data/listings.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) { return data.listings || []; });
+  }
+
+  function rowsFromSheetTable(table) {
+    var headers = (SHEET.headers || {});
+    var expected = {
+      name: normalizeHeader(headers.name || 'Doc Name'),
+      description: normalizeHeader(headers.description || 'Description'),
+      type: normalizeHeader(headers.type || 'Type'),
+      doxstox: normalizeHeader(headers.doxstox || 'DoxStox'),
+      sharePrice: normalizeHeader(headers.sharePrice || 'Share Price'),
+      askingPrice: normalizeHeader(headers.askingPrice || 'Asking Price'),
+      verified: normalizeHeader(headers.verified || 'Verified'),
+      published: normalizeHeader(headers.published || 'Published')
+    };
+
+    var rawRows = (table.rows || []).map(function (row) {
+      return (row.c || []).map(function (cell) {
+        return cell && cell.v != null ? String(cell.v) : '';
+      });
+    });
+
+    var headerIndex = rawRows.findIndex(function (row) {
+      var normalized = row.map(normalizeHeader);
+      return normalized.indexOf(expected.name) !== -1 && normalized.indexOf(expected.type) !== -1;
+    });
+
+    if (headerIndex === -1) return [];
+
+    var headerRow = rawRows[headerIndex].map(normalizeHeader);
+    var col = {};
+    Object.keys(expected).forEach(function (key) {
+      col[key] = headerRow.indexOf(expected[key]);
+    });
+
+    return rawRows.slice(headerIndex + 1).map(function (row) {
+      function at(key) {
+        var idx = col[key];
+        return idx >= 0 ? (row[idx] || '').trim() : '';
+      }
+      var publishedValue = at('published');
+      var published = !publishedValue || parseBool(publishedValue);
+      var item = {
+        name: at('name'),
+        description: at('description'),
+        type: normalizeType(at('type')),
+        doxstox: parseNumber(at('doxstox')),
+        sharePrice: parseNumber(at('sharePrice')),
+        askingPrice: parseNumber(at('askingPrice')),
+        verified: parseBool(at('verified')),
+        published: published
+      };
+      return item;
+    }).filter(function (row) {
+      return row.published && isMeaningfulRow(row);
+    });
+  }
+
+  function loadSheetListings() {
+    return new Promise(function (resolve, reject) {
+      if (SHEET.provider !== 'google-sheets' || !SHEET.sheetId) {
+        reject(new Error('No Google Sheet configured'));
+        return;
+      }
+
+      var cbName = '__dtoSheetCallback_' + Date.now();
+      var timedOut = false;
+      var script = document.createElement('script');
+      var timeout = setTimeout(function () {
+        timedOut = true;
+        cleanup();
+        reject(new Error('Timed out loading Google Sheet'));
+      }, 10000);
+
+      function cleanup() {
+        clearTimeout(timeout);
+        try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
+        if (script.parentNode) script.parentNode.removeChild(script);
+      }
+
+      window[cbName] = function (response) {
+        if (timedOut) return;
+        cleanup();
+        try {
+          resolve(rowsFromSheetTable(response.table || {}));
+        } catch (err) {
+          reject(err);
+        }
+      };
+
+      script.onerror = function () {
+        cleanup();
+        reject(new Error('Could not load Google Sheet script'));
+      };
+
+      var gid = encodeURIComponent(SHEET.gid || '0');
+      script.src = 'https://docs.google.com/spreadsheets/d/' + encodeURIComponent(SHEET.sheetId) +
+        '/gviz/tq?gid=' + gid + '&headers=0&tqx=out:json;responseHandler:' + cbName;
+      document.body.appendChild(script);
+    });
+  }
+
+  loadSheetListings()
+    .catch(function () { return loadLocalListings(); })
+    .then(function (rows) {
+      state.rows = rows || [];
+      draw();
+    })
     .catch(function () {
       tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px">' +
-        'Listings could not be loaded. Email <a href="mailto:the.crypt1c.core@gmail.com">the.crypt1c.core@gmail.com</a>.</td></tr>';
+        'Listings could not be loaded right now.</td></tr>';
     });
 
   var typeSel = document.getElementById('fType');
@@ -140,20 +282,6 @@ document.addEventListener('click', function (e) {
   var links = document.querySelector('.nav-links');
   t.setAttribute('aria-expanded', links && links.classList.contains('open') ? 'true' : 'false');
 });
-
-/* ---------- Setup banner: only shown while the Google Form isn't wired up ---------- */
-(function () {
-  var el = document.getElementById('setupBanner');
-  if (!el) return;
-  var cfg = window.DTO_CONFIG || {};
-  var configured = cfg.formId && cfg.entries && cfg.entries.requestType;
-  if (configured) { el.remove(); return; }
-  el.hidden = false;
-  el.innerHTML = '<strong>Staff note:</strong> the Google Form isn\'t connected yet, so requests ' +
-    'currently open a prefilled email to DTO staff. Everything works — see ' +
-    '<code>SETUP-GOOGLE-FORM.md</code> to route requests into a spreadsheet instead. ' +
-    'This notice disappears automatically once connected.';
-})();
 
 /* ---------- Reveal-on-scroll ---------- */
 (function () {

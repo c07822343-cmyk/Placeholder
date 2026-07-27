@@ -36,7 +36,7 @@ Submissions post into a **Google Form**, so requests arrive as rows in a spreads
 and filter. Applicants never see Google Forms — they only see the site.
 
 **Setup: see [`SETUP-GOOGLE-FORM.md`](SETUP-GOOGLE-FORM.md)** (about 10 minutes, one time).
-Until it's connected, submissions fall back to opening a prefilled email to staff — nothing breaks.
+Once it's connected, submissions go straight into your Google Form and its linked spreadsheet.
 
 ## Hosting
 

@@ -16,7 +16,8 @@ window.DTO_CONFIG = {
   /* ---- 1. Your Google Form ID -------------------------------
      From the form's URL:
      https://docs.google.com/forms/d/e/<<<THIS PART>>>/viewform
-     Leave as "" to use the email fallback.                     */
+     Leave as "" only if you want submissions disabled until
+     the form is configured.                                     */
   formId: "1FAIpQLScfH4oX7zVdHpvpW1QbHtzyqSfLmyB8cby2hQvo2cGzxMxh3A",
 
   /* ---- 2. Entry IDs for each question -----------------------
@@ -43,7 +44,28 @@ window.DTO_CONFIG = {
     { address: "Calderman@icloud.com",       note: "Secondary inbox" }
   ],
 
-  /* ---- 4. Options --------------------------------------------
+  /* ---- 4. Public listings source ------------------------------
+     The Listings page can pull approved listings directly from a
+     public Google Sheet, so staff can publish rows without a site
+     redeploy. Keep the header names in that sheet aligned with the
+     values below.                                              */
+  listings: {
+    provider: "google-sheets",
+    sheetId: "1A3aUwjhhhj5oHFRhDoOqAj9eFA_m-Hz-8DssDaQSEpM",
+    gid: "0",
+    headers: {
+      name: "Doc Name",
+      description: "Description",
+      type: "Type",
+      doxstox: "DoxStox",
+      sharePrice: "Share Price",
+      askingPrice: "Asking Price",
+      verified: "Verified",
+      published: "Published"
+    }
+  },
+
+  /* ---- 5. Options --------------------------------------------
      Note: doc values are assigned by DTO staff during review.
      There is no public formula and nothing is auto-calculated.   */
   options: {
