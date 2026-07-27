@@ -219,14 +219,14 @@
     };
   }
 
-  function payload() {
+  function payloadPairs() {
     var e = CFG.entries || {};
-    var fd = new FormData();
     var values = payloadValues();
+    var pairs = [];
     Object.keys(values).forEach(function (key) {
-      if (e[key]) fd.append(e[key], String(values[key]));
+      if (e[key]) pairs.push([e[key], String(values[key])]);
     });
-    return fd;
+    return pairs;
   }
 
   function requestSummary() {
@@ -269,9 +269,10 @@
     return lines.join('\n');
   }
 
-  function postViaHiddenForm(url) {
+  function postToGoogleForm() {
     return new Promise(function (resolve, reject) {
       try {
+        var url = 'https://docs.google.com/forms/d/e/' + CFG.formId + '/formResponse';
         var targetName = 'dtoFormTarget_' + Date.now();
         var iframe = document.createElement('iframe');
         iframe.name = targetName;
@@ -282,59 +283,44 @@
         tempForm.method = 'POST';
         tempForm.action = url;
         tempForm.target = targetName;
+        tempForm.enctype = 'application/x-www-form-urlencoded';
+        tempForm.acceptCharset = 'UTF-8';
         tempForm.style.display = 'none';
 
-        var fd = payload();
-        fd.append('fvv', '1');
-        fd.append('pageHistory', '0');
-        fd.append('draftResponse', '[]');
-        fd.append('fbzx', String(Date.now()));
-
-        fd.forEach(function (value, key) {
+        payloadPairs().forEach(function (pair) {
           var input = document.createElement('input');
           input.type = 'hidden';
-          input.name = key;
-          input.value = value;
+          input.name = pair[0];
+          input.value = pair[1];
+          tempForm.appendChild(input);
+        });
+
+        [
+          ['fvv', '1'],
+          ['pageHistory', '0'],
+          ['draftResponse', '[]'],
+          ['fbzx', String(Date.now())]
+        ].forEach(function (pair) {
+          var input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = pair[0];
+          input.value = pair[1];
           tempForm.appendChild(input);
         });
 
         document.body.appendChild(iframe);
         document.body.appendChild(tempForm);
+
         tempForm.submit();
 
         setTimeout(function () {
           tempForm.remove();
           iframe.remove();
           resolve();
-        }, 250);
+        }, 400);
       } catch (err) {
         reject(err);
       }
-    });
-  }
-
-  function postToGoogleForm() {
-    var url = 'https://docs.google.com/forms/d/e/' + CFG.formId + '/formResponse';
-
-    if (navigator.sendBeacon) {
-      try {
-        if (navigator.sendBeacon(url, payload())) {
-          return Promise.resolve();
-        }
-      } catch (e) {
-        // fall through to fetch / form post
-      }
-    }
-
-    return fetch(url, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: payload(),
-      credentials: 'omit',
-      cache: 'no-store',
-      keepalive: true
-    }).catch(function () {
-      return postViaHiddenForm(url);
     });
   }
 
