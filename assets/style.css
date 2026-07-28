@@ -660,6 +660,27 @@ details.faq summary:hover { background: var(--panel-2); }
 details.faq .faq-body { padding: 0 20px 18px; color: var(--muted); font-size: .92rem; }
 details.faq .faq-body p:first-child { margin-top: 0; }
 
+/* Account / portfolio / admin */
+.stack-form { display: grid; gap: 14px; }
+.compact-form { max-width: 420px; }
+.auth-panel h2, .metric-card .metric-value { color: var(--text); }
+.dash-sep { border: 0; border-top: 1px solid var(--line); margin: 22px 0; }
+.portfolio-metrics { align-items: stretch; }
+.metric-card { display: flex; flex-direction: column; gap: 8px; }
+.metric-label { color: var(--muted); text-transform: uppercase; letter-spacing: 1.2px; font-size: .75rem; font-weight: 700; }
+.metric-value { font-size: 1.8rem; font-weight: 900; color: var(--gold); }
+.metric-hint { color: var(--muted); font-size: .84rem; }
+.badge-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.summary-list { display: grid; gap: 0; }
+.trade-inline { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.trade-inline .trade-qty { width: 96px; }
+.trade-btn { white-space: nowrap; }
+.stack-on-mobile { flex-wrap: wrap; }
+@media (max-width: 720px) {
+  .trade-inline .trade-qty { width: 100%; }
+  .stack-on-mobile .trade-btn, .stack-on-mobile a.btn { width: 100%; text-align: center; }
+}
+
 /* Listing detail tabs / tooltips */
 .tab-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
 .tab-btn {

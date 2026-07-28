@@ -129,7 +129,7 @@ window.DTO.loadListings = (function () {
 
   function parseNumber(v) {
     if (v == null || v === '') return null;
-    var cleaned = String(v).replace(/[$,%]/g, '').trim();
+    var cleaned = String(v).replace(/[$,%]/g, '').replace(/,/g, '').trim();
     if (!cleaned) return null;
     var n = Number(cleaned);
     return isFinite(n) ? n : null;

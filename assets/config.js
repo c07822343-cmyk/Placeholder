@@ -8,14 +8,34 @@
 
 window.DTO_CONFIG = {
 
-  /* ---- 1. Request submission provider ----------------------- */
+  /* ---- 1. Firebase / serverless app config ------------------
+     Fill this with your Firebase web app credentials.
+     The account + trading system remains static because Firebase
+     provides Auth + Firestore as serverless services.          */
+  firebase: {
+    apiKey: '',
+    authDomain: '',
+    projectId: '',
+    appId: '',
+    storageBucket: '',
+    messagingSenderId: ''
+  },
+
+  /* ---- 1b. App-level trading settings ----------------------- */
+  app: {
+    highValueThreshold: 5000,
+    dtoFeeRate: 0.07,
+    bootstrapAdminEmails: []
+  },
+
+  /* ---- 2. Request submission provider ----------------------- */
   submissions: {
     provider: 'netlify',
     formName: 'dto-request',
     botField: 'bot-field'
   },
 
-  /* ---- 2. Staff contact ------------------------------------- */
+  /* ---- 3. Staff contact ------------------------------------- */
   emails: [
     { address: 'the.crypt1c.core@gmail.com', note: 'Primary — fastest response' },
     { address: '494325@bsd48.org',           note: 'Secondary inbox' },

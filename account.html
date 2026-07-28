@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Account — DTO</title>
+<meta name="description" content="Register, verify your email, login, reset your password and manage your DTO account.">
+<meta property="og:title" content="Account — DTO">
+<meta property="og:description" content="Register, verify your email, login, reset your password and manage your DTO account.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#070b12">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23f5c542'/><text x='50' y='68' font-size='46' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='%2314100a'>DTO</text></svg>">
+<link rel="stylesheet" href="assets/style.css?v=1785245710520172661">
+
+</head>
+<body>
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="index.html">
+      <span class="mark">DTO</span>
+      <span>Docs Trade Organization<small>By BananaNetworkz</small></span>
+    </a>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">&#9776;</button>
+    <nav class="nav-links"><a href="index.html">Home</a><a href="how-it-works.html">How It Works</a><a href="doxstox.html">DoxStox</a><a href="buyouts.html">Buyouts</a><a href="listings.html">Listings</a><a href="apply.html" class="cta">Apply</a></nav>
+  </div>
+</header>
+<main>
+
+<section class="hero" style="padding-bottom:30px">
+  <div class="wrap">
+    <span class="eyebrow">Account</span>
+    <h1>Secure your <span class="accent">DTO account</span></h1>
+    <p class="lede">Register with email and password, verify your inbox, then manage your portfolio,
+    DTC balance visibility and trading access from one place.</p>
+    <div class="hero-cta">
+      <a class="btn btn-gold" href="#authPanels">Open account tools</a>
+      <a class="btn btn-ghost" href="portfolio.html">Go to portfolio</a>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="authPanels">
+  <div class="wrap">
+    <div id="firebaseNotice" class="setup-banner" hidden></div>
+    <div class="grid g2">
+      <div class="card auth-panel">
+        <h2>Create account</h2>
+        <p class="section-sub">Use a real email address — DTO requires email verification before trading.</p>
+        <form id="registerForm" class="stack-form">
+          <div class="field-wrap">
+            <label class="form-label" for="regEmail">Email</label>
+            <input id="regEmail" name="email" type="email" required placeholder="you@example.com">
+          </div>
+          <div class="field-wrap">
+            <label class="form-label" for="regPassword">Password</label>
+            <input id="regPassword" name="password" type="password" minlength="8" required placeholder="Minimum 8 characters">
+          </div>
+          <div class="field-wrap">
+            <label class="form-label" for="regConfirm">Confirm password</label>
+            <input id="regConfirm" name="confirm" type="password" minlength="8" required placeholder="Repeat password">
+          </div>
+          <button class="btn btn-gold" type="submit">Create account</button>
+        </form>
+      </div>
+      <div class="card auth-panel">
+        <h2>Login</h2>
+        <p class="section-sub">Your session persists securely through Firebase Auth.</p>
+        <form id="loginForm" class="stack-form">
+          <div class="field-wrap">
+            <label class="form-label" for="loginEmail">Email</label>
+            <input id="loginEmail" name="email" type="email" required placeholder="you@example.com">
+          </div>
+          <div class="field-wrap">
+            <label class="form-label" for="loginPassword">Password</label>
+            <input id="loginPassword" name="password" type="password" required placeholder="Your password">
+          </div>
+          <button class="btn btn-gold" type="submit">Login</button>
+        </form>
+        <hr class="dash-sep">
+        <h3>Reset password</h3>
+        <form id="resetForm" class="stack-form compact-form">
+          <div class="field-wrap">
+            <label class="form-label" for="resetEmail">Email</label>
+            <input id="resetEmail" name="email" type="email" required placeholder="you@example.com">
+          </div>
+          <button class="btn btn-ghost" type="submit">Send reset email</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="card mt-24">
+      <h2>Account status</h2>
+      <div id="accountState">
+        <p class="section-sub mb-0">Loading account status…</p>
+      </div>
+      <div class="hero-cta mt-24">
+        <button class="btn btn-ghost" id="resendVerifyBtn" type="button" hidden>Resend verification email</button>
+        <button class="btn btn-ghost" id="refreshVerifyBtn" type="button" hidden>Refresh verification status</button>
+        <button class="btn btn-ghost" id="logoutBtn" type="button" hidden>Logout</button>
+        <a class="btn btn-gold" href="portfolio.html">Open portfolio</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="brand" style="margin-bottom:12px">
+          <span class="mark">DTO</span>
+          <span>Docs Trade Organization<small>By BananaNetworkz</small></span>
+        </div>
+        <p>A marketplace and exchange for the Google Docs community — buy, sell, trade
+        and invest in docs with staff-verified valuations.</p>
+        <p><strong style="color:var(--text)">7% fee</strong> on every completed transaction supports
+        platform maintenance, verification and staff operations.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="how-it-works.html">How It Works</a>
+        <a href="doxstox.html">How Docs Are Valued</a>
+        <a href="buyouts.html">Full Doc Buyouts</a>
+        <a href="listings.html">Live Listings</a>
+        <a href="apply.html">Apply / List Your Doc</a>
+        <a href="apply.html#faq">FAQ</a>
+      </div>
+      <div>
+        <h4>Contact DTO Staff</h4>
+        <a href="mailto:the.crypt1c.core@gmail.com">the.crypt1c.core@gmail.com</a>
+        <a href="mailto:494325@bsd48.org">494325@bsd48.org</a>
+        <a href="mailto:Calderman@icloud.com">Calderman@icloud.com</a>
+      </div>
+    </div>
+    <div class="copyright">
+      &copy; <span data-year></span> DTO — Docs Trade Organization · Created by BananaNetworkz.
+      All listings and valuations are reviewed manually by DTO staff.
+    </div>
+  </div>
+</footer>
+<script src="assets/config.js?v=1785245710520172661"></script>
+<script src="assets/app.js?v=1785245710520172661"></script>
+<script src="assets/requests.js?v=1785245710520172661"></script>
+<script type="module" src="assets/auth.js?v=1785245710520172661"></script>
+</body>
+</html>

@@ -87,7 +87,7 @@ FOOTER = """<footer class="site">
 </footer>"""
 
 
-def page(filename, title, description, body, active=None):
+def page(filename, title, description, body, active=None, extra_head="", extra_scripts=""):
     active = active or filename
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -102,6 +102,7 @@ def page(filename, title, description, body, active=None):
 <meta name="theme-color" content="#070b12">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23f5c542'/><text x='50' y='68' font-size='46' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='%2314100a'>DTO</text></svg>">
 <link rel="stylesheet" href="assets/style.css?v={ASSET_VERSION}">
+{extra_head}
 </head>
 <body>
 {header(active)}
@@ -112,6 +113,7 @@ def page(filename, title, description, body, active=None):
 <script src="assets/config.js?v={ASSET_VERSION}"></script>
 <script src="assets/app.js?v={ASSET_VERSION}"></script>
 <script src="assets/requests.js?v={ASSET_VERSION}"></script>
+{extra_scripts}
 </body>
 </html>
 """
@@ -738,7 +740,7 @@ listings = """
       </table>
     </div>
     <div class="notice mt-24">DoxStox scores and share prices are set by DTO staff using the quality-first rubric and
-    updated weekly. Buyout prices are asking prices in USD; the final figure is agreed between buyer and
+    updated weekly. Buyout prices are asking prices in USD; the fi; the final figure is agreed between buyer and
     seller with DTO as verifier. The 7% DTO fee applies to completed buyouts and marketplace transactions,
     not to share investments themselves.</div>
   </div>
@@ -775,6 +777,271 @@ listing_detail = """
     <div id="listingDetailPage">
       <div class="card" style="padding:24px">Loading listing details…</div>
     </div>
+  </div>
+</section>
+"""
+
+# --------------------------------------------------------------------------
+# Account
+# --------------------------------------------------------------------------
+account_page = """
+<section class="hero" style="padding-bottom:30px">
+  <div class="wrap">
+    <span class="eyebrow">Account</span>
+    <h1>Secure your <span class="accent">DTO account</span></h1>
+    <p class="lede">Register with email and password, verify your inbox, then manage your portfolio,
+    DTC balance visibility and trading access from one place.</p>
+    <div class="hero-cta">
+      <a class="btn btn-gold" href="#authPanels">Open account tools</a>
+      <a class="btn btn-ghost" href="portfolio.html">Go to portfolio</a>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="authPanels">
+  <div class="wrap">
+    <div id="firebaseNotice" class="setup-banner" hidden></div>
+    <div class="grid g2">
+      <div class="card auth-panel">
+        <h2>Create account</h2>
+        <p class="section-sub">Use a real email address — DTO requires email verification before trading.</p>
+        <form id="registerForm" class="stack-form">
+          <div class="field-wrap">
+            <label class="form-label" for="regEmail">Email</label>
+            <input id="regEmail" name="email" type="email" required placeholder="you@example.com">
+          </div>
+          <div class="field-wrap">
+            <label class="form-label" for="regPassword">Password</label>
+            <input id="regPassword" name="password" type="password" minlength="8" required placeholder="Minimum 8 characters">
+          </div>
+          <div class="field-wrap">
+            <label class="form-label" for="regConfirm">Confirm password</label>
+            <input id="regConfirm" name="confirm" type="password" minlength="8" required placeholder="Repeat password">
+          </div>
+          <button class="btn btn-gold" type="submit">Create account</button>
+        </form>
+      </div>
+      <div class="card auth-panel">
+        <h2>Login</h2>
+        <p class="section-sub">Your session persists securely through Firebase Auth.</p>
+        <form id="loginForm" class="stack-form">
+          <div class="field-wrap">
+            <label class="form-label" for="loginEmail">Email</label>
+            <input id="loginEmail" name="email" type="email" required placeholder="you@example.com">
+          </div>
+          <div class="field-wrap">
+            <label class="form-label" for="loginPassword">Password</label>
+            <input id="loginPassword" name="password" type="password" required placeholder="Your password">
+          </div>
+          <button class="btn btn-gold" type="submit">Login</button>
+        </form>
+        <hr class="dash-sep">
+        <h3>Reset password</h3>
+        <form id="resetForm" class="stack-form compact-form">
+          <div class="field-wrap">
+            <label class="form-label" for="resetEmail">Email</label>
+            <input id="resetEmail" name="email" type="email" required placeholder="you@example.com">
+          </div>
+          <button class="btn btn-ghost" type="submit">Send reset email</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="card mt-24">
+      <h2>Account status</h2>
+      <div id="accountState">
+        <p class="section-sub mb-0">Loading account status…</p>
+      </div>
+      <div class="hero-cta mt-24">
+        <button class="btn btn-ghost" id="resendVerifyBtn" type="button" hidden>Resend verification email</button>
+        <button class="btn btn-ghost" id="refreshVerifyBtn" type="button" hidden>Refresh verification status</button>
+        <button class="btn btn-ghost" id="logoutBtn" type="button" hidden>Logout</button>
+        <a class="btn btn-gold" href="portfolio.html">Open portfolio</a>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+
+# --------------------------------------------------------------------------
+# Portfolio
+# --------------------------------------------------------------------------
+portfolio_page = """
+<section class="hero" style="padding-bottom:28px">
+  <div class="wrap">
+    <span class="eyebrow">Portfolio</span>
+    <h1>Your <span class="accent">DTC portfolio</span></h1>
+    <p class="lede">Track DTC balance, live shareholdings, structural valuation tiers and buy or sell
+    using real-time DoxStox pricing from the cloud database.</p>
+    <div class="hero-cta">
+      <a class="btn btn-gold" href="#portfolioDashboard">Open dashboard</a>
+      <a class="btn btn-ghost" href="account.html">Manage account</a>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="portfolioDashboard">
+  <div class="wrap">
+    <div id="portfolioNotice" class="setup-banner" hidden></div>
+    <div id="portfolioAuthGate" class="notice warn" hidden></div>
+
+    <div class="grid g4 portfolio-metrics">
+      <div class="card metric-card">
+        <span class="metric-label">Net portfolio value</span>
+        <strong class="metric-value" id="netValueOut">0 DTC</strong>
+        <span class="metric-hint" id="netValueDelta">Waiting for account data…</span>
+      </div>
+      <div class="card metric-card">
+        <span class="metric-label">DTC balance</span>
+        <strong class="metric-value" id="balanceOut">0 DTC</strong>
+        <span class="metric-hint">Spendable internal trading balance</span>
+      </div>
+      <div class="card metric-card">
+        <span class="metric-label">Shareholdings</span>
+        <strong class="metric-value" id="holdingsCountOut">0</strong>
+        <span class="metric-hint">Open stock positions</span>
+      </div>
+      <div class="card metric-card">
+        <span class="metric-label">Account badges</span>
+        <div class="badge-row" id="accountBadges"></div>
+        <span class="metric-hint" id="accountBadgeHint">Login required</span>
+      </div>
+    </div>
+
+    <div class="grid g2 mt-24">
+      <div class="card">
+        <h2>Asset performance</h2>
+        <p class="section-sub">Weekly performance chart based on each doc's stored history.</p>
+        <div class="field-wrap">
+          <label class="form-label" for="performanceTicker">Chart ticker</label>
+          <select id="performanceTicker"></select>
+        </div>
+        <canvas id="performanceChart" height="220"></canvas>
+      </div>
+      <div class="card">
+        <h2>Account summary</h2>
+        <div id="portfolioProfileSummary" class="summary-list"></div>
+      </div>
+    </div>
+
+    <section class="mt-24">
+      <h2>Full ownership docs</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Ticker</th><th>Name</th><th>Status</th><th>DoxStox</th><th>Share Price</th></tr>
+          </thead>
+          <tbody id="ownedDocsRows">
+            <tr><td colspan="5" style="text-align:center;padding:26px">Login to load ownership records.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mt-24">
+      <h2>Partial shareholdings</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Ticker</th><th>Quantity</th><th>Avg. Entry</th><th>Current SP</th><th>Market Value</th><th>Sell</th></tr>
+          </thead>
+          <tbody id="holdingsRows">
+            <tr><td colspan="6" style="text-align:center;padding:26px">Login to load shareholdings.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mt-24">
+      <h2>Marketplace</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Ticker</th><th>Name</th><th>DoxStox</th><th>Current SP</th><th>Available Shares</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="marketRows">
+            <tr><td colspan="7" style="text-align:center;padding:26px">Loading market data…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mt-24">
+      <h2>Transaction history</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Type</th><th>Ticker</th><th>Quantity</th><th>Total</th><th>Status</th><th>Time</th></tr>
+          </thead>
+          <tbody id="transactionRows">
+            <tr><td colspan="6" style="text-align:center;padding:26px">Login to load transactions.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</section>
+"""
+
+# --------------------------------------------------------------------------
+# Admin
+# --------------------------------------------------------------------------
+admin_page = """
+<section class="hero" style="padding-bottom:28px">
+  <div class="wrap">
+    <span class="eyebrow">Admin</span>
+    <h1>DTO <span class="accent">control panel</span></h1>
+    <p class="lede">Admin-only tools for verified buyer approval, balance adjustments, trade restrictions,
+    doc valuation management and transaction approvals.</p>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div id="adminNotice" class="setup-banner" hidden></div>
+    <div id="adminAuthGate" class="notice warn" hidden></div>
+
+    <section>
+      <h2>User controls</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Email</th><th>Verified Buyer</th><th>Blacklisted</th><th>DTC Balance</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="adminUserRows">
+            <tr><td colspan="5" style="text-align:center;padding:26px">Admin access required.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mt-24">
+      <h2>Pending approvals</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Type</th><th>Ticker</th><th>User</th><th>Amount</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="adminTransactionRows">
+            <tr><td colspan="6" style="text-align:center;padding:26px">No pending approvals loaded.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="mt-24">
+      <h2>Doc valuation editor</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Ticker</th><th>Utility</th><th>Aesthetics</th><th>Integration</th><th>Verification</th><th>Status</th><th>Weekly Change</th><th>Shares</th><th>Save</th></tr>
+          </thead>
+          <tbody id="adminDocsRows">
+            <tr><td colspan="9" style="text-align:center;padding:26px">Admin access required.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
   </div>
 </section>
 """
@@ -1102,6 +1369,19 @@ if __name__ == "__main__":
     page("listing-details.html", "Listing Details — DTO",
          "View contact details and public information for a specific DTO listing.", listing_detail,
          active="listings.html")
+    page("account.html", "Account — DTO",
+         "Register, verify your email, login, reset your password and manage your DTO account.",
+         account_page,
+         extra_scripts=f'<script type="module" src="assets/auth.js?v={ASSET_VERSION}"></script>')
+    page("portfolio.html", "Portfolio Dashboard — DTO",
+         "Track your DTC balance, shareholdings, live DoxStox prices and trading activity.",
+         portfolio_page,
+         extra_head='<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>',
+         extra_scripts=f'<script type="module" src="assets/portfolio.js?v={ASSET_VERSION}"></script>')
+    page("admin.html", "Admin Panel — DTO",
+         "Admin controls for verified buyers, DTC balances, doc valuations and approval workflows.",
+         admin_page,
+         extra_scripts=f'<script type="module" src="assets/admin.js?v={ASSET_VERSION}"></script>')
     page("apply.html", "Apply to DTO — List Your Doc or Get a Valuation",
          "Submit a request to DTO: list your Google Doc for stock investment, sell it in a full buyout, "
          "or get a valuation. Reviewed manually by DTO staff.", apply_page)
