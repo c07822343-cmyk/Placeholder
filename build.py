@@ -201,12 +201,12 @@ home = """
     <p class="section-sub">DTO now uses a public quality-first DoxStox rubric. Staff still review every
     doc manually, but the score is anchored to four weighted factors instead of raw hype or link counts.</p>
     <div class="grid g2">
-      <div class="card"><h3>Utility × 200</h3><p>The evolved version of influence: how essential the doc's function is to the BananaNetworkz ecosystem.</p></div>
-      <div class="card"><h3>Aesthetics × 100</h3><p>Visual professionalism, structure, navigation and overall readability.</p></div>
-      <div class="card"><h3>Integration × 150</h3><p>Depth of real cross-doc workflows and embedded community connections, not surface-level link lists.</p></div>
-      <div class="card"><h3>Verification × 75</h3><p>Trust, reputation, trade history and reliability of the owner or project.</p></div>
+      <div class="card"><h3>Utility × 250</h3><p>The evolved version of influence: how essential the doc's function is to the BananaNetworkz ecosystem.</p></div>
+      <div class="card"><h3>Aesthetics × 150</h3><p>Visual professionalism, structure, navigation and overall readability.</p></div>
+      <div class="card"><h3>Integration × 100</h3><p>Depth of real cross-doc workflows and embedded community connections, not surface-level link lists.</p></div>
+      <div class="card"><h3>Verification × 100</h3><p>Staff-vetted trust level and reputation, scored on a 1–5 grade scale.</p></div>
     </div>
-    <div class="notice mt-24"><strong>DS = (Utility × 200) + (Aesthetics × 100) + (Integration × 150) + (Verification × 75)</strong></div>
+    <div class="notice mt-24"><strong>DS = (Utility × 250) + (Aesthetics × 150) + (Integration × 100) + (Verification × 100)</strong></div>
     <p class="mt-24"><a class="btn btn-gold" href="doxstox.html">See the full scoring rubric</a></p>
   </div>
 </section>
@@ -291,26 +291,26 @@ how = """
 <section class="block">
   <div class="wrap">
     <h2>DoxStox</h2>
-    <p class="section-sub">DoxStox is DTO's valuation and investment system. Every registered doc receives
-    a DoxStox score representing its estimated value within the community.</p>
+    <p class="section-sub">DoxStox is DTO's valuation and investment system. The legacy popularity-first
+    model has been replaced by a qualitative structural model focused on what the doc does, how polished
+    it is, how deeply it is embedded and how trustworthy it is.</p>
     <div class="grid g2">
       <div class="card">
-        <h3>Why not use view counts?</h3>
-        <p>Unlike traditional websites, many Google Docs do not have publicly available viewer statistics.
-        Because of this, DTO staff evaluate docs using factors that can actually be verified.</p>
-      </div>
-      <div class="card">
-        <h3>Verifiable factors</h3>
+        <h3>The quality-first variables</h3>
         <ul class="clean">
-          <li><strong>Partnerships</strong> — who it works with and how active those relationships are</li>
-          <li><strong>Doc quality</strong> — content, organisation and usefulness</li>
-          <li><strong>Community standing</strong> — how the doc fits into the wider ecosystem</li>
+          <li><strong>Utility</strong> — what users can actually do with the doc</li>
+          <li><strong>Aesthetics &amp; organization</strong> — design work, structure and navigation</li>
+          <li><strong>Integration depth</strong> — structural ecosystem dependency, not raw link count</li>
+          <li><strong>Verification grade</strong> — trust, trade history and staff-vetted reliability</li>
         </ul>
       </div>
+      <div class="card">
+        <h3>Why this replaced the old model</h3>
+        <p>DTO is deliberately moving away from inflated popularity signals and shallow partnership padding.
+        Practical usefulness and craftsmanship now matter more than raw attention.</p>
+      </div>
     </div>
-    <div class="notice mt-24">These factors are combined into a DoxStox score. Higher scores indicate a
-    stronger and more valuable doc. <strong>DoxStox scores are reviewed and updated weekly by DTO
-    staff.</strong></div>
+    <div class="notice mt-24"><strong>DS = (Utility × 250) + (Aesthetics × 150) + (Integration × 100) + (Verification × 100)</strong> and staff review scores weekly.</div>
   </div>
 </section>
 
@@ -379,13 +379,13 @@ doxstox = """
     <h2>The official formula</h2>
     <p class="section-sub">These weights are the DTO standard and are non-negotiable for baseline scoring.</p>
     <div class="callout" style="font-family:var(--font);font-size:1.15rem;line-height:1.6">
-      <strong>DS = (Utility × 200) + (Aesthetics × 100) + (Integration × 150) + (Verification × 75)</strong>
+      <strong>DS = (Utility × 250) + (Aesthetics × 150) + (Integration × 100) + (Verification × 100)</strong>
     </div>
     <div class="grid g2 mt-24">
-      <div class="card"><h3>Utility × 200</h3><p>The evolved version of influence: practical, indispensable value inside the BananaNetworkz ecosystem.</p></div>
-      <div class="card"><h3>Aesthetics × 100</h3><p>Visual professionalism, structural layout, navigational clarity and overall polish.</p></div>
-      <div class="card"><h3>Integration × 150</h3><p>Depth of real cross-doc workflows and embedded ecosystem value, not raw link counts.</p></div>
-      <div class="card"><h3>Verification × 75</h3><p>Trust, trade history, reliability and reputation of the owner or project.</p></div>
+      <div class="card"><h3>Utility × 250</h3><p>The evolved version of influence: practical, indispensable value inside the BananaNetworkz ecosystem.</p></div>
+      <div class="card"><h3>Aesthetics × 150</h3><p>Visual professionalism, structural layout, navigational clarity and overall polish.</p></div>
+      <div class="card"><h3>Integration × 100</h3><p>Depth of real cross-doc workflows and embedded ecosystem value, not raw link counts.</p></div>
+      <div class="card"><h3>Verification × 100</h3><p>Staff-vetted trust level and reputation, graded from 1 to 5.</p></div>
     </div>
   </div>
 </section>
@@ -430,10 +430,10 @@ doxstox = """
         <h3>Verification status</h3>
         <p>Reputation is part of the score. Reliability, successful trade history and trust are all counted.</p>
         <ul class="clean">
-          <li><strong>10</strong> — fully DTO verified</li>
-          <li><strong>7–9</strong> — trusted and documented</li>
-          <li><strong>5–6</strong> — pending or neutral history</li>
-          <li><strong>1–4</strong> — flagged or risky</li>
+          <li><strong>5</strong> — verified (staff-vetted)</li>
+          <li><strong>4</strong> — trusted and documented</li>
+          <li><strong>3</strong> — active / neutral standing</li>
+          <li><strong>1–2</strong> — flagged or risky</li>
         </ul>
       </div>
     </div>
@@ -452,8 +452,8 @@ doxstox = """
       </div>
       <div class="card">
         <h3>Worked example</h3>
-        <p>Utility 7, Aesthetics 8, Integration 6, Verification 10 gives:
-        <strong>1400 + 800 + 900 + 750 = 3850 DS</strong>, which becomes <strong>38.50 DTC/share</strong>.</p>
+        <p>Utility 7, Aesthetics 8, Integration 6, Verification 5 gives:
+        <strong>1750 + 1200 + 600 + 1000 = 4550 DS</strong>, which becomes <strong>45.50 DTC/share</strong>.</p>
       </div>
     </div>
   </div>
@@ -737,9 +737,10 @@ listings = """
         </tbody>
       </table>
     </div>
-    <div class="notice mt-24">DoxStox scores and share prices are set by DTO staff during review and
+    <div class="notice mt-24">DoxStox scores and share prices are set by DTO staff using the quality-first rubric and
     updated weekly. Buyout prices are asking prices in USD; the final figure is agreed between buyer and
-    seller with DTO as verifier, and the 7% DTO fee applies to every completed deal.</div>
+    seller with DTO as verifier. The 7% DTO fee applies to completed buyouts and marketplace transactions,
+    not to share investments themselves.</div>
   </div>
 </section>
 
@@ -1009,7 +1010,8 @@ apply_page = """
     <details class="faq" open>
       <summary>Does it cost anything to apply?</summary>
       <div class="faq-body"><p>No. Submitting a request, getting reviewed and receiving a DoxStox score
-      are all free. DTO only earns from the <strong>7% fee</strong> applied to completed transactions.</p></div>
+      are all free. DTO only earns from the <strong>7% fee</strong> applied to completed buyouts and marketplace
+      transactions — not from share investments themselves.</p></div>
     </details>
     <details class="faq">
       <summary>What's the difference between a stock listing and a full buyout?</summary>

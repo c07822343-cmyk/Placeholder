@@ -660,6 +660,38 @@ details.faq summary:hover { background: var(--panel-2); }
 details.faq .faq-body { padding: 0 20px 18px; color: var(--muted); font-size: .92rem; }
 details.faq .faq-body p:first-child { margin-top: 0; }
 
+/* Listing detail tabs / tooltips */
+.tab-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+.tab-btn {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--muted);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.tab-btn.active { border-color: rgba(245, 197, 66, .55); color: var(--gold); background: rgba(245, 197, 66, .08); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.tier-card .tier-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.tier-card .tier-score { color: var(--gold); font-size: 1.35rem; font-weight: 800; margin: 6px 0 10px; }
+.tip {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(245, 197, 66, .4);
+  background: rgba(245, 197, 66, .08);
+  color: var(--gold);
+  font-size: .8rem;
+  font-weight: 800;
+  cursor: help;
+}
+
 /* Status / setup banner */
 .setup-banner {
   background: rgba(245, 197, 66, .07);

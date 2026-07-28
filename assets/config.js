@@ -48,9 +48,9 @@ window.DTO_CONFIG = {
   },
 
   /* ---- 4. Options -------------------------------------------
-     Note: doc values are assigned by DTO staff during review.
-     The quality-first rubric is public, but scoring is still done
-     manually by staff rather than auto-calculated on the site.  */
+     The site can calculate DoxStox and share price from the new
+     quality-first rubric when staff provide the four tier values.
+     Staff still assign and review everything manually.           */
   options: {
     feeRate: 0.07,
     ticketPrefix: 'DTO',

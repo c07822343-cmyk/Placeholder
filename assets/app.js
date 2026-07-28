@@ -91,11 +91,35 @@ window.DTO.statusBadge = function (status) {
   return '<span class="badge ' + cls + '">' + window.DTO.escapeHtml(normalized) + '</span>';
 };
 
+window.DTO.qualityFormula = {
+  utility: 250,
+  aesthetics: 150,
+  integration: 100,
+  verification: 100
+};
+
+window.DTO.tooltipText = {
+  utility: 'Measures what a user can do. Higher utility means the doc is structurally essential to the ecosystem.',
+  aesthetics: 'Measures design work, organization, branding, navigation and overall craftsmanship.',
+  integration: 'Measures the quality and depth of ecosystem connections rather than raw partnership counts.',
+  verification: 'Measures trust, staff-vetted reliability and reputation. Verification Grade runs from 1 to 5.'
+};
+
+window.DTO.formatWeeklyChange = function (n) {
+  if (n == null) return 'No change recorded';
+  var sign = n > 0 ? '+' : '';
+  return sign + Number(n).toLocaleString(undefined, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2
+  }) + '%';
+};
+
 window.DTO.listingHref = function (row) {
   return 'listing-details.html?name=' + encodeURIComponent(row.name || '') +
     '&type=' + encodeURIComponent(row.type || '');
 };
 
+/* ---------- Listings loader ---------- */
 window.DTO.loadListings = (function () {
   var cachedPromise = null;
 
@@ -105,7 +129,7 @@ window.DTO.loadListings = (function () {
 
   function parseNumber(v) {
     if (v == null || v === '') return null;
-    var cleaned = String(v).replace(/[$,]/g, '').trim();
+    var cleaned = String(v).replace(/[$,%]/g, '').trim();
     if (!cleaned) return null;
     var n = Number(cleaned);
     return isFinite(n) ? n : null;
@@ -118,20 +142,54 @@ window.DTO.loadListings = (function () {
     return s === 'true' || s === 'yes' || s === 'y' || s === '1' || s === 'published' || s === 'verified';
   }
 
+  function normalizeTier(v, min, max) {
+    var n = parseNumber(v);
+    if (n == null) return null;
+    n = Math.round(n);
+    if (n < min || n > max) return null;
+    return n;
+  }
+
+  function calculateDoxstox(utility, aesthetics, integration, verificationGrade) {
+    if ([utility, aesthetics, integration, verificationGrade].some(function (n) { return n == null; })) return null;
+    return (window.DTO.qualityFormula.utility * utility) +
+      (window.DTO.qualityFormula.aesthetics * aesthetics) +
+      (window.DTO.qualityFormula.integration * integration) +
+      (window.DTO.qualityFormula.verification * verificationGrade);
+  }
+
+  function normalizeWeeklyChange(v) {
+    var n = parseNumber(v);
+    return n == null ? null : n;
+  }
+
   function normalizeItem(item) {
     var published = item && Object.prototype.hasOwnProperty.call(item, 'published')
       ? parseBool(item.published)
       : true;
+    var verified = item && typeof item.verified === 'boolean' ? item.verified : parseBool(item && item.verified);
+    var utility = normalizeTier(item && item.utility, 1, 10);
+    var aesthetics = normalizeTier(item && item.aesthetics, 1, 10);
+    var integration = normalizeTier(item && item.integration, 1, 10);
+    var verificationGrade = normalizeTier(item && item.verificationGrade, 1, 5);
+    var computedDoxstox = calculateDoxstox(utility, aesthetics, integration, verificationGrade);
+    var doxstox = computedDoxstox != null ? computedDoxstox : parseNumber(item && item.doxstox);
+    var sharePrice = computedDoxstox != null ? (computedDoxstox / 100) : parseNumber(item && item.sharePrice);
 
     return {
       name: String(item && item.name || '').trim(),
       description: String(item && item.description || '').trim(),
       type: window.DTO.normalizeType(item && item.type),
-      doxstox: parseNumber(item && item.doxstox),
-      sharePrice: parseNumber(item && item.sharePrice),
+      doxstox: doxstox,
+      sharePrice: sharePrice,
       askingPrice: parseNumber(item && item.askingPrice),
-      verified: item && typeof item.verified === 'boolean' ? item.verified : parseBool(item && item.verified),
-      status: window.DTO.normalizeStatus(item && item.status, item && (typeof item.verified === 'boolean' ? item.verified : parseBool(item.verified))),
+      verified: verified,
+      status: window.DTO.normalizeStatus(item && item.status, verified),
+      utility: utility,
+      aesthetics: aesthetics,
+      integration: integration,
+      verificationGrade: verificationGrade,
+      weeklyChange: normalizeWeeklyChange(item && item.weeklyChange),
       published: published,
       email: String(item && item.email || '').trim(),
       discord: String(item && item.discord || '').trim(),
@@ -165,6 +223,11 @@ window.DTO.loadListings = (function () {
       askingPrice: normalizeHeader(headers.askingPrice || 'Asking Price'),
       verified: normalizeHeader(headers.verified || 'Verified'),
       status: normalizeHeader(headers.status || 'Status'),
+      utility: normalizeHeader(headers.utility || 'Utility'),
+      aesthetics: normalizeHeader(headers.aesthetics || 'Aesthetics'),
+      integration: normalizeHeader(headers.integration || 'Integration'),
+      verificationGrade: normalizeHeader(headers.verificationGrade || 'Verification Grade'),
+      weeklyChange: normalizeHeader(headers.weeklyChange || 'Weekly Change'),
       published: normalizeHeader(headers.published || 'Published'),
       email: normalizeHeader(headers.email || 'Email'),
       discord: normalizeHeader(headers.discord || 'Discord'),
@@ -207,7 +270,7 @@ window.DTO.loadListings = (function () {
         return idx >= 0 ? String(row[idx] || '').trim() : '';
       }
 
-      var item = normalizeItem({
+      return normalizeItem({
         name: at('name'),
         description: at('description'),
         type: at('type'),
@@ -216,13 +279,16 @@ window.DTO.loadListings = (function () {
         askingPrice: at('askingPrice'),
         verified: at('verified'),
         status: at('status'),
+        utility: at('utility'),
+        aesthetics: at('aesthetics'),
+        integration: at('integration'),
+        verificationGrade: at('verificationGrade'),
+        weeklyChange: at('weeklyChange'),
         published: at('published') || true,
         email: at('email'),
         discord: at('discord'),
         docLink: at('docLink')
       });
-
-      return item;
     }).filter(function (row) {
       return row.published && isMeaningfulRow(row);
     });
@@ -348,7 +414,7 @@ window.DTO.loadListings = (function () {
             : '<span style="color:var(--muted)">Open to offers</span>';
         } else {
           price = (r.sharePrice != null)
-            ? Number(r.sharePrice).toLocaleString() + ' DTC / share'
+            ? Number(r.sharePrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' DTC / share'
             : '<span style="color:var(--muted)">Not yet set</span>';
         }
         var score = (r.doxstox != null)
@@ -432,9 +498,10 @@ window.DTO.loadListings = (function () {
     var priceLabel = row.type === 'buyout' ? 'Asking price' : 'Share price';
     var priceValue = row.type === 'buyout'
       ? (row.askingPrice != null ? '$' + Number(row.askingPrice).toLocaleString() + ' USD' : 'Open to offers')
-      : (row.sharePrice != null ? Number(row.sharePrice).toLocaleString() + ' DTC / share' : 'Not yet set');
+      : (row.sharePrice != null ? Number(row.sharePrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' DTC / share' : 'Not yet set');
     var scoreValue = row.doxstox != null ? Number(row.doxstox).toLocaleString() : 'Pending';
     var statusValue = window.DTO.normalizeStatus(row.status, row.verified);
+    var weeklyChangeValue = window.DTO.formatWeeklyChange(row.weeklyChange);
 
     document.title = row.name + ' — DTO Listing';
     if (titleEl) titleEl.textContent = row.name;
@@ -446,7 +513,7 @@ window.DTO.loadListings = (function () {
     var discordHref = window.DTO.bestExternalHref(row.discord);
     var docHref = window.DTO.bestExternalHref(row.docLink);
 
-    mount.innerHTML =
+    var overviewHtml =
       '<div class="grid g2">' +
         '<div class="card">' +
           '<h3>Description</h3>' +
@@ -459,15 +526,50 @@ window.DTO.loadListings = (function () {
           '<div class="rev-row"><span>DoxStox</span><b>' + window.DTO.escapeHtml(scoreValue) + '</b></div>' +
           '<div class="rev-row"><span>' + priceLabel + '</span><b>' + window.DTO.escapeHtml(priceValue) + '</b></div>' +
           '<div class="rev-row"><span>Status</span><b>' + window.DTO.statusBadge(statusValue) + '</b></div>' +
+          '<div class="rev-row"><span>Weekly change</span><b>' + window.DTO.escapeHtml(weeklyChangeValue) + '</b></div>' +
         '</div>' +
       '</div>' +
       '<div class="grid g3 mt-24">' +
         contactCard('Email', row.email, emailHref) +
         contactCard('Discord', row.discord, discordHref) +
         contactCard('Doc link', row.docLink, docHref) +
+      '</div>';
+
+    var valueSnapshotHtml =
+      '<div class="grid g2">' +
+        '<div class="card tier-card"><div class="tier-head"><h3>Utility</h3><span class="tip" title="' + window.DTO.escapeAttr(window.DTO.tooltipText.utility) + '">?</span></div><p class="tier-score">' + (row.utility != null ? row.utility + ' / 10' : 'Pending') + '</p><p>Measures what users can actually do with the doc.</p></div>' +
+        '<div class="card tier-card"><div class="tier-head"><h3>Aesthetics</h3><span class="tip" title="' + window.DTO.escapeAttr(window.DTO.tooltipText.aesthetics) + '">?</span></div><p class="tier-score">' + (row.aesthetics != null ? row.aesthetics + ' / 10' : 'Pending') + '</p><p>Measures doc craftsmanship, organization and visual polish.</p></div>' +
+        '<div class="card tier-card"><div class="tier-head"><h3>Integration</h3><span class="tip" title="' + window.DTO.escapeAttr(window.DTO.tooltipText.integration) + '">?</span></div><p class="tier-score">' + (row.integration != null ? row.integration + ' / 10' : 'Pending') + '</p><p>Measures depth of structural ecosystem connections.</p></div>' +
+        '<div class="card tier-card"><div class="tier-head"><h3>Verification</h3><span class="tip" title="' + window.DTO.escapeAttr(window.DTO.tooltipText.verification) + '">?</span></div><p class="tier-score">' + (row.verificationGrade != null ? row.verificationGrade + ' / 5' : 'Pending') + '</p><p>Measures staff-vetted trust, reliability and reputation.</p></div>' +
       '</div>' +
+      '<div class="card mt-24">' +
+        '<h3>Value Snapshot</h3>' +
+        '<div class="rev-row"><span>Formula</span><b>DS = (250×U) + (150×A) + (100×I) + (100×V)</b></div>' +
+        '<div class="rev-row"><span>Market cap</span><b>' + window.DTO.escapeHtml(scoreValue) + ' DTC</b></div>' +
+        '<div class="rev-row"><span>Share price engine</span><b>' + (row.type === 'stock' && row.doxstox != null ? Number(row.doxstox / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' DTC/share' : window.DTO.escapeHtml(priceValue)) + '</b></div>' +
+        '<div class="rev-row"><span>Weekly change</span><b>' + window.DTO.escapeHtml(weeklyChangeValue) + '</b></div>' +
+      '</div>';
+
+    mount.innerHTML =
+      '<div class="tab-row" role="tablist" aria-label="Listing details tabs">' +
+        '<button type="button" class="tab-btn active" data-tab-target="overviewTab">Overview</button>' +
+        '<button type="button" class="tab-btn" data-tab-target="snapshotTab">Value Snapshot</button>' +
+      '</div>' +
+      '<div id="overviewTab" class="tab-panel active">' + overviewHtml + '</div>' +
+      '<div id="snapshotTab" class="tab-panel">' + valueSnapshotHtml + '</div>' +
       '<p class="mt-24"><a class="btn btn-gold" href="apply.html#request">Ask DTO about this listing</a> ' +
       '<a class="btn btn-ghost" href="listings.html">Back to listings</a></p>';
+
+    mount.querySelectorAll('.tab-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var target = btn.getAttribute('data-tab-target');
+        mount.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+        mount.querySelectorAll('.tab-panel').forEach(function (p) { p.classList.remove('active'); });
+        btn.classList.add('active');
+        var panel = mount.querySelector('#' + target);
+        if (panel) panel.classList.add('active');
+      });
+    });
   }
 
   if (!wantedName) {
