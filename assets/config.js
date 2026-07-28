@@ -13,19 +13,20 @@ window.DTO_CONFIG = {
      The account + trading system remains static because Firebase
      provides Auth + Firestore as serverless services.          */
   firebase: {
-    apiKey: '',
-    authDomain: '',
-    projectId: '',
-    appId: '',
-    storageBucket: '',
-    messagingSenderId: ''
+    apiKey: 'AIzaSyBbbjPtQhmh5rQf7pn7Wjtl8I3r9eZLx_g',
+    authDomain: 'dto-official.firebaseapp.com',
+    projectId: 'dto-official',
+    appId: '1:819752098156:web:29f8aa244db48391aa3b49',
+    storageBucket: 'dto-official.firebasestorage.app',
+    messagingSenderId: '819752098156',
+    measurementId: 'G-B9H9MWQZ20'
   },
 
   /* ---- 1b. App-level trading settings ----------------------- */
   app: {
     highValueThreshold: 5000,
     dtoFeeRate: 0.07,
-    bootstrapAdminEmails: []
+    bootstrapAdminEmails: ['c07822343@gmail.com']
   },
 
   /* ---- 2. Request submission provider ----------------------- */
