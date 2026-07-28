@@ -740,7 +740,7 @@ listings = """
       </table>
     </div>
     <div class="notice mt-24">DoxStox scores and share prices are set by DTO staff using the quality-first rubric and
-    updated weekly. Buyout prices are asking prices in USD; the fi; the final figure is agreed between buyer and
+    updated weekly. Buyout prices are asking prices in USD; the final figure is agreed between buyer and
     seller with DTO as verifier. The 7% DTO fee applies to completed buyouts and marketplace transactions,
     not to share investments themselves.</div>
   </div>
@@ -1069,6 +1069,22 @@ admin_page = """
             <button class="btn btn-ghost" id="createDocReset" type="reset">Clear</button>
           </div>
         </form>
+      </div>
+    </section>
+
+    <section class="mt-24">
+      <h2>Sync from Google Sheet</h2>
+      <div class="card">
+        <p class="section-sub">Use the shared market sheet as your source of truth. Sync matches docs by <strong>Ticker</strong>,
+        so existing tickers are updated and new tickers are created without making duplicates.</p>
+        <div class="summary-list">
+          <div class="rev-row"><span>Unique key</span><b>Ticker</b></div>
+          <div class="rev-row"><span>Required sheet columns</span><b>Ticker, Doc Name, Description, Type, Utility, Aesthetics, Integration, Verification Grade, Status, Total Shares, Owner Email, Published, Email, Discord, Doc Link</b></div>
+          <div class="rev-row"><span>Available shares</span><b>Preserved for existing docs; new docs start at total shares</b></div>
+        </div>
+        <div class="hero-cta mt-24">
+          <button class="btn btn-gold" id="syncSheetBtn" type="button">Sync published sheet rows</button>
+        </div>
       </div>
     </section>
 

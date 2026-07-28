@@ -10,7 +10,7 @@
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#070b12">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23f5c542'/><text x='50' y='68' font-size='46' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='%2314100a'>DTO</text></svg>">
-<link rel="stylesheet" href="assets/style.css?v=1785250874323511418">
+<link rel="stylesheet" href="assets/style.css?v=1785251640875418464">
 
 </head>
 <body>
@@ -111,6 +111,22 @@
     </section>
 
     <section class="mt-24">
+      <h2>Sync from Google Sheet</h2>
+      <div class="card">
+        <p class="section-sub">Use the shared market sheet as your source of truth. Sync matches docs by <strong>Ticker</strong>,
+        so existing tickers are updated and new tickers are created without making duplicates.</p>
+        <div class="summary-list">
+          <div class="rev-row"><span>Unique key</span><b>Ticker</b></div>
+          <div class="rev-row"><span>Required sheet columns</span><b>Ticker, Doc Name, Description, Type, Utility, Aesthetics, Integration, Verification Grade, Status, Total Shares, Owner Email, Published, Email, Discord, Doc Link</b></div>
+          <div class="rev-row"><span>Available shares</span><b>Preserved for existing docs; new docs start at total shares</b></div>
+        </div>
+        <div class="hero-cta mt-24">
+          <button class="btn btn-gold" id="syncSheetBtn" type="button">Sync published sheet rows</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-24">
       <h2>User controls</h2>
       <div class="table-wrap">
         <table>
@@ -190,9 +206,9 @@
     </div>
   </div>
 </footer>
-<script src="assets/config.js?v=1785250874323511418"></script>
-<script src="assets/app.js?v=1785250874323511418"></script>
-<script src="assets/requests.js?v=1785250874323511418"></script>
-<script type="module" src="assets/admin.js?v=1785250874323511418"></script>
+<script src="assets/config.js?v=1785251640875418464"></script>
+<script src="assets/app.js?v=1785251640875418464"></script>
+<script src="assets/requests.js?v=1785251640875418464"></script>
+<script type="module" src="assets/admin.js?v=1785251640875418464"></script>
 </body>
 </html>

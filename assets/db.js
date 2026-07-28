@@ -132,9 +132,6 @@ export function hydrateDocData(data, id) {
   const currentSP = computedDoxstox != null ? calculateSharePrice(computedDoxstox) : (Number.isFinite(Number(data.currentSP)) ? Number(data.currentSP) : calculateSharePrice(currentDS));
   const totalShares = Number.isFinite(Number(data.totalShares)) ? Number(data.totalShares) : APP_LIMITS.totalSharesPerDoc;
   const availableShares = Number.isFinite(Number(data.availableShares)) ? Number(data.availableShares) : totalShares;
-  const weeklyHistory = Array.isArray(data.weeklyHistory)
-    ? data.weeklyHistory.map(function (v) { return Number(v); }).filter(function (v) { return Number.isFinite(v); })
-    : [];
 
   return {
     id: id || data.ticker,
@@ -153,8 +150,6 @@ export function hydrateDocData(data, id) {
     status: normalizeStatus(data.status, data.verified === true),
     ownerId: data.ownerId || '',
     ownerEmail: data.ownerEmail || '',
-    weeklyHistory: weeklyHistory,
-    weeklyChange: Number.isFinite(Number(data.weeklyChange)) ? Number(data.weeklyChange) : null,
     isMarketOpen: data.isMarketOpen !== false,
     type: data.type || 'stock'
   };

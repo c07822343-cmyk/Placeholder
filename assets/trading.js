@@ -341,8 +341,23 @@ export async function adjustUserBalance(uid, delta) {
   });
 }
 
-export async function saveDocProfile(ticker, patch) {
-  await requireAdminAction();
+function normalizeTotalShares(totalShares) {
+  const total = Number(totalShares || APP_LIMITS.totalSharesPerDoc);
+  if (!Number.isFinite(total) || total <= 0) {
+    throw new Error('Total shares must be a positive number.');
+  }
+  return Math.round(total);
+}
+
+function normalizeAvailableShares(availableShares, totalShares) {
+  const available = Number(availableShares != null ? availableShares : totalShares);
+  if (!Number.isFinite(available) || available < 0 || available > totalShares) {
+    throw new Error('Share counts are invalid.');
+  }
+  return Math.round(available);
+}
+
+async function buildDocPayload(ticker, patch) {
   const utility = normalizeTier(patch.utility, 1, 10);
   const aesthetics = normalizeTier(patch.aesthetics, 1, 10);
   const integration = normalizeTier(patch.integration, 1, 10);
@@ -353,13 +368,10 @@ export async function saveDocProfile(ticker, patch) {
 
   const currentDS = calculateDoxstox(utility, aesthetics, integration, verificationGrade);
   const currentSP = calculateSharePrice(currentDS);
-  const totalShares = Number(patch.totalShares || APP_LIMITS.totalSharesPerDoc);
-  const availableShares = Number(patch.availableShares != null ? patch.availableShares : totalShares);
-  if (!Number.isFinite(totalShares) || !Number.isFinite(availableShares) || totalShares <= 0 || availableShares < 0 || availableShares > totalShares) {
-    throw new Error('Share counts are invalid.');
-  }
+  const totalShares = normalizeTotalShares(patch.totalShares);
+  const availableShares = normalizeAvailableShares(patch.availableShares, totalShares);
 
-  await upsertDocRecord(ticker, {
+  return {
     ticker: ticker,
     title: patch.title || ticker,
     description: patch.description || '',
@@ -373,14 +385,62 @@ export async function saveDocProfile(ticker, patch) {
     status: normalizeStatus(patch.status, patch.verified === true),
     verifiedStatus: patch.verifiedStatus || normalizeStatus(patch.status, patch.verified === true),
     verified: patch.verified === true,
-    weeklyChange: Number(patch.weeklyChange || 0),
     totalShares: totalShares,
     availableShares: availableShares,
     ownerId: patch.ownerId || '',
     ownerEmail: patch.ownerEmail || '',
-    isMarketOpen: patch.isMarketOpen !== false,
-    weeklyHistory: Array.isArray(patch.weeklyHistory) ? patch.weeklyHistory : []
+    isMarketOpen: patch.isMarketOpen !== false
+  };
+}
+
+export async function saveDocProfile(ticker, patch) {
+  await requireAdminAction();
+  const payload = await buildDocPayload(ticker, patch);
+  await upsertDocRecord(ticker, payload);
+}
+
+export async function syncDocProfileFromSheet(row) {
+  await requireAdminAction();
+  const ticker = String(row.ticker || '').trim().toUpperCase();
+  if (!ticker) throw new Error('Sheet row is missing a Ticker.');
+
+  const existingSnap = await getDoc(doc(db, 'docs', ticker));
+  const existing = existingSnap.exists() ? hydrateDocData(existingSnap.data(), existingSnap.id) : null;
+
+  const totalShares = normalizeTotalShares(row.totalShares);
+  let ownerEmail = String(row.ownerEmail || '').trim();
+  let ownerId = existing && existing.ownerId ? existing.ownerId : '';
+
+  if (ownerEmail) {
+    const ownerProfile = await getUserByEmail(ownerEmail);
+    if (ownerProfile) ownerId = ownerProfile.userId || ownerId;
+  } else if (existing) {
+    ownerEmail = existing.ownerEmail || '';
+  }
+
+  const availableShares = existing
+    ? Math.min(Number(existing.availableShares || totalShares), totalShares)
+    : totalShares;
+
+  const payload = await buildDocPayload(ticker, {
+    title: row.title,
+    description: row.description,
+    type: row.type,
+    utility: row.utility,
+    aesthetics: row.aesthetics,
+    integration: row.integration,
+    verificationGrade: row.verificationGrade,
+    status: row.status,
+    verified: true,
+    totalShares: totalShares,
+    availableShares: availableShares,
+    ownerId: ownerId,
+    ownerEmail: ownerEmail,
+    isMarketOpen: true
   });
+
+  await upsertDocRecord(ticker, payload);
+  return { ticker: ticker, existed: !!existing };
 }
 
 export async function approvePendingTransaction(transactionId) {

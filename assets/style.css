@@ -672,6 +672,7 @@ details.faq .faq-body p:first-child { margin-top: 0; }
 .metric-hint { color: var(--muted); font-size: .84rem; }
 .badge-row { display: flex; flex-wrap: wrap; gap: 8px; }
 .summary-list { display: grid; gap: 0; }
+.summary-list .rev-row b { line-height: 1.45; }
 .trade-inline { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .trade-inline .trade-qty { width: 96px; }
 .trade-btn { white-space: nowrap; }

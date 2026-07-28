@@ -22,15 +22,12 @@ const ownedDocsRows = document.getElementById('ownedDocsRows');
 const holdingsRows = document.getElementById('holdingsRows');
 const marketRows = document.getElementById('marketRows');
 const transactionRows = document.getElementById('transactionRows');
-const tickerSelect = document.getElementById('performanceTicker');
-const chartCanvas = document.getElementById('performanceChart');
 
 let currentUser = null;
 let currentProfile = null;
 let docsCache = [];
 let txCache = [];
 let lastNetValue = null;
-let chart = null;
 let unsubProfile = null;
 let unsubDocs = null;
 let unsubTransactions = null;
@@ -227,59 +224,6 @@ function renderTransactions() {
     : '<tr><td colspan="6" style="text-align:center;padding:26px">No transactions recorded yet.</td></tr>';
 }
 
-function buildChartOptions() {
-  const options = [];
-  docsCache.forEach(function (row) {
-    if (row.weeklyHistory && row.weeklyHistory.length) {
-      options.push(row.ticker);
-    }
-  });
-  if (!tickerSelect) return;
-  tickerSelect.innerHTML = options.length
-    ? options.map(function (ticker) { return '<option value="' + escapeHtml(ticker) + '">' + escapeHtml(ticker) + '</option>'; }).join('')
-    : '<option value="">No chart data available</option>';
-}
-
-function renderChart() {
-  if (!chartCanvas || !tickerSelect || !window.Chart) return;
-  const ticker = tickerSelect.value;
-  const docData = docByTicker(ticker);
-  const labels = docData && docData.weeklyHistory ? docData.weeklyHistory.map(function (_, idx) { return 'Week ' + (idx + 1); }) : [];
-  const data = docData && docData.weeklyHistory ? docData.weeklyHistory : [];
-
-  if (!chart) {
-    chart = new window.Chart(chartCanvas.getContext('2d'), {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Weekly structural price history',
-          data: data,
-          borderColor: '#f5c542',
-          backgroundColor: 'rgba(245, 197, 66, 0.12)',
-          fill: true,
-          tension: 0.25,
-          pointRadius: 3
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { labels: { color: '#e9eefb' } } },
-        scales: {
-          x: { ticks: { color: '#93a3c2' }, grid: { color: 'rgba(35,50,79,.4)' } },
-          y: { ticks: { color: '#93a3c2' }, grid: { color: 'rgba(35,50,79,.4)' } }
-        }
-      }
-    });
-    return;
-  }
-
-  chart.data.labels = labels;
-  chart.data.datasets[0].data = data;
-  chart.update();
-}
-
 function refreshUi() {
   renderBadges(currentProfile, currentUser);
   renderSummary(currentProfile, currentUser);
@@ -288,8 +232,6 @@ function refreshUi() {
   renderHoldings(currentProfile);
   renderMarketplace(currentProfile);
   renderTransactions();
-  buildChartOptions();
-  renderChart();
 }
 
 function clearSubscriptions() {
@@ -335,7 +277,6 @@ function init() {
 
   if (holdingsRows) holdingsRows.addEventListener('click', handleTradeAction);
   if (marketRows) marketRows.addEventListener('click', handleTradeAction);
-  if (tickerSelect) tickerSelect.addEventListener('change', renderChart);
 
   onSessionChange(async function (user) {
     clearSubscriptions();
