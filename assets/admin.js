@@ -304,8 +304,7 @@ async function handleCreateDoc(ev) {
       verificationGrade: data.get('verificationGrade'),
       status: data.get('status'),
       totalShares: totalShares,
-      availableShares: totalShares,
-      weeklyHistory: []
+      availableShares: totalShares
     });
 
     createDocForm.reset();
