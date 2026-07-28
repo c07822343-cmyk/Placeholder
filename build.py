@@ -1002,6 +1002,87 @@ admin_page = """
     <div id="adminAuthGate" class="notice warn" hidden></div>
 
     <section>
+      <h2>Create a market doc</h2>
+      <p class="section-sub">This lets DTO staff add a new ticker to Firestore without opening Firebase Console.
+      Once saved, it appears in the live portfolio marketplace immediately.</p>
+      <div class="card">
+        <form id="createDocForm" class="stack-form">
+          <div class="grid g3">
+            <div class="field-wrap">
+              <label class="form-label" for="newTicker">Ticker</label>
+              <input id="newTicker" name="ticker" type="text" required placeholder="DOC2">
+            </div>
+            <div class="field-wrap">
+              <label class="form-label" for="newTitle">Title</label>
+              <input id="newTitle" name="title" type="text" required placeholder="Doc title">
+            </div>
+            <div class="field-wrap">
+              <label class="form-label" for="newType">Type</label>
+              <select id="newType" name="type">
+                <option value="stock">Stock listing</option>
+                <option value="buyout">Full buyout</option>
+              </select>
+            </div>
+            <div class="field-wrap">
+              <label class="form-label" for="newUtility">Utility</label>
+              <input id="newUtility" name="utility" type="number" min="1" max="10" step="1" required value="5">
+            </div>
+            <div class="field-wrap">
+              <label class="form-label" for="newAesthetics">Aesthetics</label>
+              <input id="newAesthetics" name="aesthetics" type="number" min="1" max="10" step="1" required value="5">
+            </div>
+            <div class="field-wrap">
+              <label class="form-label" for="newIntegration">Integration</label>
+              <input id="newIntegration" name="integration" type="number" min="1" max="10" step="1" required value="5">
+            </div>
+            <div class="field-wrap">
+              <label class="form-label" for="newVerificationGrade">Verification Grade</label>
+              <input id="newVerificationGrade" name="verificationGrade" type="number" min="1" max="5" step="1" required value="3">
+            </div>
+            <div class="field-wrap">
+              <label class="form-label" for="newStatus">Status</label>
+              <select id="newStatus" name="status">
+                <option value="For Sale">For Sale</option>
+                <option value="Active">Active</option>
+                <option value="Under Review">Under Review</option>
+                <option value="Sold">Sold</option>
+                <option value="Frozen">Frozen</option>
+              </select>
+            </div>
+            <div class="field-wrap">
+              <label class="form-label" for="newWeeklyChange">Weekly Change (%)</label>
+              <input id="newWeeklyChange" name="weeklyChange" type="number" step="0.01" value="0">
+            </div>
+            <div class="field-wrap">
+              <label class="form-label" for="newTotalShares">Total Shares</label>
+              <input id="newTotalShares" name="totalShares" type="number" min="1" step="1" required value="100">
+            </div>
+            <div class="field-wrap">
+              <label class="form-label" for="newAvailableShares">Available Shares</label>
+              <input id="newAvailableShares" name="availableShares" type="number" min="0" step="1" required value="100">
+            </div>
+            <div class="field-wrap">
+              <label class="form-label" for="newOwnerEmail">Owner Email <span style="color:var(--muted);font-weight:500">(optional)</span></label>
+              <input id="newOwnerEmail" name="ownerEmail" type="email" placeholder="owner@example.com">
+            </div>
+          </div>
+          <div class="field-wrap">
+            <label class="form-label" for="newDescription">Description</label>
+            <textarea id="newDescription" name="description" required placeholder="What the doc does and why it matters."></textarea>
+          </div>
+          <div class="field-wrap">
+            <label class="form-label" for="newWeeklyHistory">Weekly History <span style="color:var(--muted);font-weight:500">(comma-separated)</span></label>
+            <input id="newWeeklyHistory" name="weeklyHistory" type="text" placeholder="42, 44.5, 46, 49.5">
+          </div>
+          <div class="hero-cta">
+            <button class="btn btn-gold" type="submit">Create market doc</button>
+            <button class="btn btn-ghost" id="createDocReset" type="reset">Clear</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="mt-24">
       <h2>User controls</h2>
       <div class="table-wrap">
         <table>

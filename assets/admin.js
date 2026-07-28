@@ -6,7 +6,8 @@ import {
   subscribePendingTransactions,
   subscribeDocs,
   isAdmin,
-  getUserProfile
+  getUserProfile,
+  getUserByEmail
 } from './db.js';
 import {
   setVerifiedBuyer,
@@ -19,6 +20,7 @@ import {
 
 const noticeEl = document.getElementById('adminNotice');
 const gateEl = document.getElementById('adminAuthGate');
+const createDocForm = document.getElementById('createDocForm');
 const userRows = document.getElementById('adminUserRows');
 const txRows = document.getElementById('adminTransactionRows');
 const docRows = document.getElementById('adminDocsRows');
@@ -251,6 +253,7 @@ function init() {
     return;
   }
 
+  if (createDocForm) createDocForm.addEventListener('submit', handleCreateDoc);
   if (userRows) userRows.addEventListener('click', handleAdminClick);
   if (txRows) txRows.addEventListener('click', handleAdminClick);
   if (docRows) docRows.addEventListener('click', handleAdminClick);
