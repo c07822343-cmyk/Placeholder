@@ -910,17 +910,18 @@ portfolio_page = """
 
     <div class="grid g2 mt-24">
       <div class="card">
-        <h2>Asset performance</h2>
-        <p class="section-sub">Weekly performance chart based on each doc's stored history.</p>
-        <div class="field-wrap">
-          <label class="form-label" for="performanceTicker">Chart ticker</label>
-          <select id="performanceTicker"></select>
-        </div>
-        <canvas id="performanceChart" height="220"></canvas>
+        <h2>Account summary</h2>
+        <p class="section-sub">Live account state, restrictions and verified-buyer access all update from Firestore.</p>
+        <div id="portfolioProfileSummary" class="summary-list"></div>
       </div>
       <div class="card">
-        <h2>Account summary</h2>
-        <div id="portfolioProfileSummary" class="summary-list"></div>
+        <h2>Trading rules snapshot</h2>
+        <div class="summary-list">
+          <div class="rev-row"><span>DoxStox formula</span><b>DS = (250×U) + (150×A) + (100×I) + (100×V)</b></div>
+          <div class="rev-row"><span>Share price</span><b>SP = DS / 100</b></div>
+          <div class="rev-row"><span>Buyout fee</span><b>7% on full buyouts</b></div>
+          <div class="rev-row"><span>Share limits</span><b>100 total shares per doc</b></div>
+        </div>
       </div>
     </div>
 
@@ -1050,16 +1051,9 @@ admin_page = """
               </select>
             </div>
             <div class="field-wrap">
-              <label class="form-label" for="newWeeklyChange">Weekly Change (%)</label>
-              <input id="newWeeklyChange" name="weeklyChange" type="number" step="0.01" value="0">
-            </div>
-            <div class="field-wrap">
               <label class="form-label" for="newTotalShares">Total Shares</label>
               <input id="newTotalShares" name="totalShares" type="number" min="1" step="1" required value="100">
-            </div>
-            <div class="field-wrap">
-              <label class="form-label" for="newAvailableShares">Available Shares</label>
-              <input id="newAvailableShares" name="availableShares" type="number" min="0" step="1" required value="100">
+              <span class="hint" style="color:var(--muted);font-size:.8rem">Available shares start equal to total shares and then update automatically as people buy or sell.</span>
             </div>
             <div class="field-wrap">
               <label class="form-label" for="newOwnerEmail">Owner Email <span style="color:var(--muted);font-weight:500">(optional)</span></label>
@@ -1069,10 +1063,6 @@ admin_page = """
           <div class="field-wrap">
             <label class="form-label" for="newDescription">Description</label>
             <textarea id="newDescription" name="description" required placeholder="What the doc does and why it matters."></textarea>
-          </div>
-          <div class="field-wrap">
-            <label class="form-label" for="newWeeklyHistory">Weekly History <span style="color:var(--muted);font-weight:500">(comma-separated)</span></label>
-            <input id="newWeeklyHistory" name="weeklyHistory" type="text" placeholder="42, 44.5, 46, 49.5">
           </div>
           <div class="hero-cta">
             <button class="btn btn-gold" type="submit">Create market doc</button>
@@ -1115,10 +1105,10 @@ admin_page = """
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>Ticker</th><th>Utility</th><th>Aesthetics</th><th>Integration</th><th>Verification</th><th>Status</th><th>Weekly Change</th><th>Shares</th><th>Save</th></tr>
+            <tr><th>Ticker</th><th>Utility</th><th>Aesthetics</th><th>Integration</th><th>Verification</th><th>Status</th><th>Shares</th><th>Save</th></tr>
           </thead>
           <tbody id="adminDocsRows">
-            <tr><td colspan="9" style="text-align:center;padding:26px">Admin access required.</td></tr>
+            <tr><td colspan="8" style="text-align:center;padding:26px">Admin access required.</td></tr>
           </tbody>
         </table>
       </div>
@@ -1457,7 +1447,6 @@ if __name__ == "__main__":
     page("portfolio.html", "Portfolio Dashboard — DTO",
          "Track your DTC balance, shareholdings, live DoxStox prices and trading activity.",
          portfolio_page,
-         extra_head='<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>',
          extra_scripts=f'<script type="module" src="assets/portfolio.js?v={ASSET_VERSION}"></script>')
     page("admin.html", "Admin Panel — DTO",
          "Admin controls for verified buyers, DTC balances, doc valuations and approval workflows.",

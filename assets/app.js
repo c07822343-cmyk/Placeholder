@@ -105,15 +105,6 @@ window.DTO.tooltipText = {
   verification: 'Measures trust, staff-vetted reliability and reputation. Verification Grade runs from 1 to 5.'
 };
 
-window.DTO.formatWeeklyChange = function (n) {
-  if (n == null) return 'No change recorded';
-  var sign = n > 0 ? '+' : '';
-  return sign + Number(n).toLocaleString(undefined, {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2
-  }) + '%';
-};
-
 window.DTO.listingHref = function (row) {
   return 'listing-details.html?name=' + encodeURIComponent(row.name || '') +
     '&type=' + encodeURIComponent(row.type || '');
@@ -189,7 +180,6 @@ window.DTO.loadListings = (function () {
       aesthetics: aesthetics,
       integration: integration,
       verificationGrade: verificationGrade,
-      weeklyChange: normalizeWeeklyChange(item && item.weeklyChange),
       published: published,
       email: String(item && item.email || '').trim(),
       discord: String(item && item.discord || '').trim(),
@@ -227,7 +217,6 @@ window.DTO.loadListings = (function () {
       aesthetics: normalizeHeader(headers.aesthetics || 'Aesthetics'),
       integration: normalizeHeader(headers.integration || 'Integration'),
       verificationGrade: normalizeHeader(headers.verificationGrade || 'Verification Grade'),
-      weeklyChange: normalizeHeader(headers.weeklyChange || 'Weekly Change'),
       published: normalizeHeader(headers.published || 'Published'),
       email: normalizeHeader(headers.email || 'Email'),
       discord: normalizeHeader(headers.discord || 'Discord'),
@@ -283,7 +272,6 @@ window.DTO.loadListings = (function () {
         aesthetics: at('aesthetics'),
         integration: at('integration'),
         verificationGrade: at('verificationGrade'),
-        weeklyChange: at('weeklyChange'),
         published: at('published') || true,
         email: at('email'),
         discord: at('discord'),
@@ -501,7 +489,6 @@ window.DTO.loadListings = (function () {
       : (row.sharePrice != null ? Number(row.sharePrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' DTC / share' : 'Not yet set');
     var scoreValue = row.doxstox != null ? Number(row.doxstox).toLocaleString() : 'Pending';
     var statusValue = window.DTO.normalizeStatus(row.status, row.verified);
-    var weeklyChangeValue = window.DTO.formatWeeklyChange(row.weeklyChange);
 
     document.title = row.name + ' — DTO Listing';
     if (titleEl) titleEl.textContent = row.name;
@@ -526,7 +513,6 @@ window.DTO.loadListings = (function () {
           '<div class="rev-row"><span>DoxStox</span><b>' + window.DTO.escapeHtml(scoreValue) + '</b></div>' +
           '<div class="rev-row"><span>' + priceLabel + '</span><b>' + window.DTO.escapeHtml(priceValue) + '</b></div>' +
           '<div class="rev-row"><span>Status</span><b>' + window.DTO.statusBadge(statusValue) + '</b></div>' +
-          '<div class="rev-row"><span>Weekly change</span><b>' + window.DTO.escapeHtml(weeklyChangeValue) + '</b></div>' +
         '</div>' +
       '</div>' +
       '<div class="grid g3 mt-24">' +
@@ -547,7 +533,6 @@ window.DTO.loadListings = (function () {
         '<div class="rev-row"><span>Formula</span><b>DS = (250×U) + (150×A) + (100×I) + (100×V)</b></div>' +
         '<div class="rev-row"><span>Market cap</span><b>' + window.DTO.escapeHtml(scoreValue) + ' DTC</b></div>' +
         '<div class="rev-row"><span>Share price engine</span><b>' + (row.type === 'stock' && row.doxstox != null ? Number(row.doxstox / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' DTC/share' : window.DTO.escapeHtml(priceValue)) + '</b></div>' +
-        '<div class="rev-row"><span>Weekly change</span><b>' + window.DTO.escapeHtml(weeklyChangeValue) + '</b></div>' +
       '</div>';
 
     mount.innerHTML =

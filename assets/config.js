@@ -26,7 +26,7 @@ window.DTO_CONFIG = {
   app: {
     highValueThreshold: 5000,
     dtoFeeRate: 0.07,
-    bootstrapAdminEmails: ['c07822343@gmail.com']
+    bootstrapAdminEmails: ['c07822343@gmail.com', 'the.crypt1c.core@gmail.com']
   },
 
   /* ---- 2. Request submission provider ----------------------- */

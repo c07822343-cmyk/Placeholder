@@ -10,8 +10,8 @@
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#070b12">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23f5c542'/><text x='50' y='68' font-size='46' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='%2314100a'>DTO</text></svg>">
-<link rel="stylesheet" href="assets/style.css?v=1785249910658227399">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="assets/style.css?v=1785250874323511418">
+
 </head>
 <body>
 <header class="site">
@@ -69,17 +69,18 @@
 
     <div class="grid g2 mt-24">
       <div class="card">
-        <h2>Asset performance</h2>
-        <p class="section-sub">Weekly performance chart based on each doc's stored history.</p>
-        <div class="field-wrap">
-          <label class="form-label" for="performanceTicker">Chart ticker</label>
-          <select id="performanceTicker"></select>
-        </div>
-        <canvas id="performanceChart" height="220"></canvas>
+        <h2>Account summary</h2>
+        <p class="section-sub">Live account state, restrictions and verified-buyer access all update from Firestore.</p>
+        <div id="portfolioProfileSummary" class="summary-list"></div>
       </div>
       <div class="card">
-        <h2>Account summary</h2>
-        <div id="portfolioProfileSummary" class="summary-list"></div>
+        <h2>Trading rules snapshot</h2>
+        <div class="summary-list">
+          <div class="rev-row"><span>DoxStox formula</span><b>DS = (250×U) + (150×A) + (100×I) + (100×V)</b></div>
+          <div class="rev-row"><span>Share price</span><b>SP = DS / 100</b></div>
+          <div class="rev-row"><span>Buyout fee</span><b>7% on full buyouts</b></div>
+          <div class="rev-row"><span>Share limits</span><b>100 total shares per doc</b></div>
+        </div>
       </div>
     </div>
 
@@ -177,9 +178,9 @@
     </div>
   </div>
 </footer>
-<script src="assets/config.js?v=1785249910658227399"></script>
-<script src="assets/app.js?v=1785249910658227399"></script>
-<script src="assets/requests.js?v=1785249910658227399"></script>
-<script type="module" src="assets/portfolio.js?v=1785249910658227399"></script>
+<script src="assets/config.js?v=1785250874323511418"></script>
+<script src="assets/app.js?v=1785250874323511418"></script>
+<script src="assets/requests.js?v=1785250874323511418"></script>
+<script type="module" src="assets/portfolio.js?v=1785250874323511418"></script>
 </body>
 </html>

@@ -133,13 +133,79 @@ function renderDocs() {
           '<td><button class="btn btn-gold trade-btn" data-admin-action="save-doc" data-doc-ticker="' + escapeHtml(row.ticker) + '">Save</button></td>' +
           '</tr>';
       }).join('')
-    : '<tr><td colspan="9" style="text-align:center;padding:26px">No docs loaded.</td></tr>';
+    : '<tr><td colspan="8" style="text-align:center;padding:26px">No docs loaded.</td></tr>';
 }
 
 function docFieldValue(ticker, field) {
   const selector = '[data-doc-ticker="' + CSS.escape(ticker) + '"][data-doc-field="' + CSS.escape(field) + '"]';
   const el = document.querySelector(selector);
   return el ? el.value : '';
+}
+
+async function handleCreateDoc(ev) {
+  ev.preventDefault();
+  if (!createDocForm) return;
+  const btn = createDocForm.querySelector('button[type="submit"]');
+  const original = btn ? btn.textContent : 'Create market doc';
+  const data = new FormData(createDocForm);
+  const ticker = String(data.get('ticker') || '').trim().toUpperCase();
+  if (!ticker) {
+    showNotice('<strong>Create failed.</strong> A ticker is required.', 'warn');
+    return;
+  }
+
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Creating…';
+  }
+
+  try {
+    const ownerEmail = String(data.get('ownerEmail') || '').trim();
+    let ownerId = '';
+    if (ownerEmail) {
+      const ownerProfile = await getUserByEmail(ownerEmail);
+      if (ownerProfile) ownerId = ownerProfile.userId || '';
+      if (String(data.get('type') || 'stock').trim() === 'buyout' && !ownerId) {
+        throw new Error('For buyout docs, owner email must belong to an existing DTO account.');
+      }
+    }
+
+    const totalShares = String(data.get('totalShares') || '100');
+    await saveDocProfile(ticker, {
+      title: String(data.get('title') || '').trim(),
+      description: String(data.get('description') || '').trim(),
+      type: String(data.get('type') || 'stock').trim(),
+      ownerEmail: ownerEmail,
+      ownerId: ownerId,
+      verified: true,
+      utility: data.get('utility'),
+      aesthetics: data.get('aesthetics'),
+      integration: data.get('integration'),
+      verificationGrade: data.get('verificationGrade'),
+      status: data.get('status'),
+      totalShares: totalShares,
+      availableShares: totalShares,
+      weeklyHistory: []
+    });
+
+    createDocForm.reset();
+    ['newUtility', 'newAesthetics', 'newIntegration'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.value = '5';
+    });
+    var vg = document.getElementById('newVerificationGrade');
+    if (vg) vg.value = '3';
+    var ts = document.getElementById('newTotalShares');
+    if (ts) ts.value = '100';
+    showNotice('<strong>Market doc created.</strong> ' + escapeHtml(ticker) + ' was added to Firestore and should appear live immediately.', '');
+  } catch (err) {
+    showNotice('<strong>Create failed.</strong> ' + escapeHtml(err.message), 'warn');
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = original;
+    }
+  }
 }
 
 async function handleAdminClick(ev) {
@@ -190,7 +256,6 @@ async function handleAdminClick(ev) {
         integration: docFieldValue(ticker, 'integration'),
         verificationGrade: docFieldValue(ticker, 'verificationGrade'),
         status: docFieldValue(ticker, 'status'),
-        weeklyChange: docFieldValue(ticker, 'weeklyChange'),
         totalShares: docFieldValue(ticker, 'totalShares'),
         availableShares: docFieldValue(ticker, 'availableShares')
       });
