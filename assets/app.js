@@ -69,6 +69,28 @@ window.DTO.normalizeType = function (v) {
   return 'stock';
 };
 
+window.DTO.normalizeStatus = function (status, verified) {
+  var s = String(status || '').trim().toLowerCase();
+  if (s === 'active') return 'Active';
+  if (s === 'for sale' || s === 'forsale') return 'For Sale';
+  if (s === 'under review' || s === 'underreview' || s === 'in review' || s === 'inreview') return 'Under Review';
+  if (s === 'sold') return 'Sold';
+  if (s === 'frozen') return 'Frozen';
+  if (verified === true) return 'Active';
+  if (verified === false) return 'Under Review';
+  return 'Under Review';
+};
+
+window.DTO.statusBadge = function (status) {
+  var normalized = window.DTO.normalizeStatus(status);
+  var cls = 'status-under-review';
+  if (normalized === 'Active') cls = 'status-active';
+  else if (normalized === 'For Sale') cls = 'status-for-sale';
+  else if (normalized === 'Sold') cls = 'status-sold';
+  else if (normalized === 'Frozen') cls = 'status-frozen';
+  return '<span class="badge ' + cls + '">' + window.DTO.escapeHtml(normalized) + '</span>';
+};
+
 window.DTO.listingHref = function (row) {
   return 'listing-details.html?name=' + encodeURIComponent(row.name || '') +
     '&type=' + encodeURIComponent(row.type || '');
@@ -109,6 +131,7 @@ window.DTO.loadListings = (function () {
       sharePrice: parseNumber(item && item.sharePrice),
       askingPrice: parseNumber(item && item.askingPrice),
       verified: item && typeof item.verified === 'boolean' ? item.verified : parseBool(item && item.verified),
+      status: window.DTO.normalizeStatus(item && item.status, item && (typeof item.verified === 'boolean' ? item.verified : parseBool(item.verified))),
       published: published,
       email: String(item && item.email || '').trim(),
       discord: String(item && item.discord || '').trim(),
@@ -141,6 +164,7 @@ window.DTO.loadListings = (function () {
       sharePrice: normalizeHeader(headers.sharePrice || 'Share Price'),
       askingPrice: normalizeHeader(headers.askingPrice || 'Asking Price'),
       verified: normalizeHeader(headers.verified || 'Verified'),
+      status: normalizeHeader(headers.status || 'Status'),
       published: normalizeHeader(headers.published || 'Published'),
       email: normalizeHeader(headers.email || 'Email'),
       discord: normalizeHeader(headers.discord || 'Discord'),
@@ -191,6 +215,7 @@ window.DTO.loadListings = (function () {
         sharePrice: at('sharePrice'),
         askingPrice: at('askingPrice'),
         verified: at('verified'),
+        status: at('status'),
         published: at('published') || true,
         email: at('email'),
         discord: at('discord'),
@@ -334,9 +359,7 @@ window.DTO.loadListings = (function () {
           '<td>' + badge(r.type) + '</td>' +
           '<td class="score">' + score + '</td>' +
           '<td>' + price + '</td>' +
-          '<td>' + (r.verified
-            ? '<span class="badge verified">Verified</span>'
-            : '<span class="badge pending">In Review</span>') + '</td>' +
+          '<td>' + window.DTO.statusBadge(r.status) + '</td>' +
           '<td><a class="btn btn-ghost" style="padding:7px 14px;font-size:.83rem" href="' + window.DTO.listingHref(r) + '">Inquire</a></td>' +
           '</tr>';
       }).join('');
@@ -411,7 +434,7 @@ window.DTO.loadListings = (function () {
       ? (row.askingPrice != null ? '$' + Number(row.askingPrice).toLocaleString() + ' USD' : 'Open to offers')
       : (row.sharePrice != null ? Number(row.sharePrice).toLocaleString() + ' DTC / share' : 'Not yet set');
     var scoreValue = row.doxstox != null ? Number(row.doxstox).toLocaleString() : 'Pending';
-    var statusValue = row.verified ? 'Verified' : 'In Review';
+    var statusValue = window.DTO.normalizeStatus(row.status, row.verified);
 
     document.title = row.name + ' — DTO Listing';
     if (titleEl) titleEl.textContent = row.name;
@@ -419,26 +442,27 @@ window.DTO.loadListings = (function () {
       leadEl.textContent = row.description || 'View the latest public details for this DTO listing.';
     }
 
-    var discordHref = window.DTO.isUrl(row.discord) ? row.discord : '';
-    var docHref = window.DTO.isUrl(row.docLink) ? row.docLink : '';
+    var emailHref = window.DTO.isEmail(row.email) ? 'mailto:' + row.email : '';
+    var discordHref = window.DTO.bestExternalHref(row.discord);
+    var docHref = window.DTO.bestExternalHref(row.docLink);
 
     mount.innerHTML =
       '<div class="grid g2">' +
         '<div class="card">' +
           '<h3>Description</h3>' +
           '<p>' + window.DTO.escapeHtml(row.description || 'No description provided yet.') + '</p>' +
-          (row.docLink ? '<p class="mt-24"><a class="btn btn-ghost" href="' + window.DTO.escapeAttr(row.docLink) + '" target="_blank" rel="noopener">Open doc link</a></p>' : '') +
+          (docHref ? '<p class="mt-24"><a class="btn btn-ghost" href="' + window.DTO.escapeAttr(docHref) + '" target="_blank" rel="noopener">Open doc link</a></p>' : '') +
         '</div>' +
         '<div class="card">' +
           '<h3>Listing details</h3>' +
           '<div class="rev-row"><span>Type</span><b>' + badge(row.type) + '</b></div>' +
           '<div class="rev-row"><span>DoxStox</span><b>' + window.DTO.escapeHtml(scoreValue) + '</b></div>' +
           '<div class="rev-row"><span>' + priceLabel + '</span><b>' + window.DTO.escapeHtml(priceValue) + '</b></div>' +
-          '<div class="rev-row"><span>Status</span><b>' + window.DTO.escapeHtml(statusValue) + '</b></div>' +
+          '<div class="rev-row"><span>Status</span><b>' + window.DTO.statusBadge(statusValue) + '</b></div>' +
         '</div>' +
       '</div>' +
       '<div class="grid g3 mt-24">' +
-        contactCard('Email', row.email, row.email ? 'mailto:' + row.email : '') +
+        contactCard('Email', row.email, emailHref) +
         contactCard('Discord', row.discord, discordHref) +
         contactCard('Doc link', row.docLink, docHref) +
       '</div>' +

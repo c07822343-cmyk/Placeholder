@@ -266,6 +266,11 @@ td.score { color: var(--gold); font-weight: 800; font-variant-numeric: tabular-n
 .badge.buyout { color: var(--gold); border-color: rgba(245, 197, 66, .45); background: rgba(245, 197, 66, .10); }
 .badge.verified { color: var(--green); border-color: rgba(53, 208, 127, .45); background: rgba(53, 208, 127, .10); }
 .badge.pending { color: var(--muted); border-color: var(--line); background: var(--panel); }
+.badge.status-active { color: var(--green); border-color: rgba(53, 208, 127, .45); background: rgba(53, 208, 127, .10); }
+.badge.status-for-sale { color: var(--gold); border-color: rgba(245, 197, 66, .45); background: rgba(245, 197, 66, .10); }
+.badge.status-under-review { color: var(--muted); border-color: var(--line); background: var(--panel); }
+.badge.status-sold { color: var(--blue); border-color: rgba(90, 169, 255, .45); background: rgba(90, 169, 255, .10); }
+.badge.status-frozen { color: var(--red); border-color: rgba(255, 107, 107, .45); background: rgba(255, 107, 107, .10); }
 
 /* ---------- Formula ---------- */
 .callout {

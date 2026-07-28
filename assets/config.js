@@ -39,6 +39,7 @@ window.DTO_CONFIG = {
       sharePrice: 'Share Price',
       askingPrice: 'Asking Price',
       verified: 'Verified',
+      status: 'Status',
       published: 'Published',
       email: 'Email',
       discord: 'Discord',
@@ -48,7 +49,8 @@ window.DTO_CONFIG = {
 
   /* ---- 4. Options -------------------------------------------
      Note: doc values are assigned by DTO staff during review.
-     There is no public formula and nothing is auto-calculated. */
+     The quality-first rubric is public, but scoring is still done
+     manually by staff rather than auto-calculated on the site.  */
   options: {
     feeRate: 0.07,
     ticketPrefix: 'DTO',
