@@ -21,6 +21,8 @@ NAV = [
     ("doxstox.html", "DoxStox"),
     ("buyouts.html", "Buyouts"),
     ("listings.html", "Listings"),
+    ("portfolio.html", "Portfolio"),
+    ("account.html", "Account"),
     ("apply.html", "Apply"),
 ]
 
@@ -69,6 +71,8 @@ FOOTER = """<footer class="site">
         <a href="doxstox.html">How Docs Are Valued</a>
         <a href="buyouts.html">Full Doc Buyouts</a>
         <a href="listings.html">Live Listings</a>
+        <a href="portfolio.html">Portfolio Dashboard</a>
+        <a href="account.html">Account Login / Signup</a>
         <a href="apply.html">Apply / List Your Doc</a>
         <a href="apply.html#faq">FAQ</a>
       </div>
@@ -133,9 +137,10 @@ home = """
     Google Docs community. Buy, sell, trade and invest in docs, with every value assigned through
     the DoxStox review process by DTO staff.</p>
     <div class="hero-cta">
-      <a class="btn btn-gold" href="apply.html">List your doc</a>
+      <a class="btn btn-gold" href="account.html">Create account</a>
+      <a class="btn btn-ghost" href="portfolio.html">Open portfolio</a>
+      <a class="btn btn-ghost" href="apply.html">List your doc</a>
       <a class="btn btn-ghost" href="listings.html">Browse listings</a>
-      <a class="btn btn-ghost" href="doxstox.html">How docs are valued</a>
     </div>
   </div>
 </section>
@@ -210,6 +215,21 @@ home = """
     </div>
     <div class="notice mt-24"><strong>DS = (Utility × 250) + (Aesthetics × 150) + (Integration × 100) + (Verification × 100)</strong></div>
     <p class="mt-24"><a class="btn btn-gold" href="doxstox.html">See the full scoring rubric</a></p>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <h2>Accounts, portfolios and trading</h2>
+    <p class="section-sub">Create a DTO account, verify your email, then track DTC balances, holdings and
+    trading permissions from your portfolio dashboard.</p>
+    <div class="grid g3">
+      <div class="card"><h3>1 · Sign up</h3><p>Create your account with email and password, then verify your inbox.</p></div>
+      <div class="card"><h3>2 · Open portfolio</h3><p>See your DTC balance, holdings, live share pricing and market activity.</p></div>
+      <div class="card"><h3>3 · Trade safely</h3><p>Verified buyers, blacklist protection and admin approvals are enforced through the cloud database.</p></div>
+    </div>
+    <p class="mt-24"><a class="btn btn-gold" href="account.html">Create account</a>
+    <a class="btn btn-ghost" href="portfolio.html">Open portfolio</a></p>
   </div>
 </section>
 
