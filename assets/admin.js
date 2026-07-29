@@ -243,7 +243,6 @@ function renderDocs() {
               }).join('') +
             '</select>' +
           '</td>' +
-          '<td><input class="trade-qty" type="number" step="0.01" value="' + escapeHtml(row.weeklyChange != null ? String(row.weeklyChange) : '0') + '" data-doc-field="weeklyChange" data-doc-ticker="' + escapeHtml(row.ticker) + '"></td>' +
           '<td>' +
             '<div class="trade-inline stack-on-mobile">' +
               '<input class="trade-qty" type="number" min="1" step="1" value="' + escapeHtml(String(row.totalShares || 100)) + '" data-doc-field="totalShares" data-doc-ticker="' + escapeHtml(row.ticker) + '">' +

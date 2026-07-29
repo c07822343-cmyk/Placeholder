@@ -149,11 +149,6 @@ window.DTO.loadListings = (function () {
       (window.DTO.qualityFormula.verification * verificationGrade);
   }
 
-  function normalizeWeeklyChange(v) {
-    var n = parseNumber(v);
-    return n == null ? null : n;
-  }
-
   function normalizeItem(item) {
     var published = item && Object.prototype.hasOwnProperty.call(item, 'published')
       ? parseBool(item.published)

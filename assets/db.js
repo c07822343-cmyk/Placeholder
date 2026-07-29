@@ -266,16 +266,25 @@ export function subscribeDocs(callback) {
   });
 }
 
+function sortTimestampLike(a, b) {
+  function ts(value) {
+    if (!value) return 0;
+    if (typeof value === 'string') {
+      var n = Date.parse(value);
+      return Number.isFinite(n) ? n : 0;
+    }
+    if (value.seconds) return value.seconds * 1000;
+    return 0;
+  }
+  return ts(b.createdAt || b.approvedAt || b.rejectedAt) - ts(a.createdAt || a.approvedAt || a.rejectedAt);
+}
+
 export function subscribeUserTransactions(uid, callback) {
   const q = query(collection(db, 'transactions'), where('participants', 'array-contains', uid));
   return onSnapshot(q, function (snap) {
     const rows = snap.docs.map(function (row) {
       return { id: row.id, ...row.data() };
-    }).sort(function (a, b) {
-      const aTime = a.createdAt && a.createdAt.seconds ? a.createdAt.seconds : 0;
-      const bTime = b.createdAt && b.createdAt.seconds ? b.createdAt.seconds : 0;
-      return bTime - aTime;
-    });
+    }).sort(sortTimestampLike);
     callback(rows);
   });
 }
