@@ -114,10 +114,6 @@ window.DTO.listingHref = function (row) {
 window.DTO.loadListings = (function () {
   var cachedPromise = null;
 
-  function normalizeHeader(s) {
-    return String(s || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '');
-  }
-
   function parseNumber(v) {
     if (v == null || v === '') return null;
     var cleaned = String(v).replace(/[$,%]/g, '').replace(/,/g, '').trim();
@@ -159,11 +155,13 @@ window.DTO.loadListings = (function () {
     var integration = normalizeTier(item && item.integration, 1, 10);
     var verificationGrade = normalizeTier(item && item.verificationGrade, 1, 5);
     var computedDoxstox = calculateDoxstox(utility, aesthetics, integration, verificationGrade);
-    var doxstox = computedDoxstox != null ? computedDoxstox : parseNumber(item && item.doxstox);
-    var sharePrice = computedDoxstox != null ? (computedDoxstox / 100) : parseNumber(item && item.sharePrice);
+    var doxstox = computedDoxstox != null ? computedDoxstox : parseNumber(item && item.currentDS != null ? item.currentDS : item.doxstox);
+    var sharePrice = computedDoxstox != null ? (computedDoxstox / 100) : parseNumber(item && item.currentSP != null ? item.currentSP : item.sharePrice);
 
     return {
-      name: String(item && item.name || '').trim(),
+      ticker: String(item && item.ticker || '').trim(),
+      name: String(item && (item.title || item.name || item.ticker) || '').trim(),
+      title: String(item && (item.title || item.name || item.ticker) || '').trim(),
       description: String(item && item.description || '').trim(),
       type: window.DTO.normalizeType(item && item.type),
       doxstox: doxstox,
@@ -176,15 +174,77 @@ window.DTO.loadListings = (function () {
       integration: integration,
       verificationGrade: verificationGrade,
       published: published,
-      email: String(item && item.email || '').trim(),
+      email: String(item && item.email || item.ownerEmail || '').trim(),
+      ownerEmail: String(item && item.ownerEmail || '').trim(),
+      ownerId: String(item && item.ownerId || '').trim(),
       discord: String(item && item.discord || '').trim(),
-      docLink: String(item && item.docLink || '').trim()
+      docLink: String(item && item.docLink || '').trim(),
+      totalShares: parseNumber(item && item.totalShares),
+      availableShares: parseNumber(item && item.availableShares),
+      isMarketOpen: item && Object.prototype.hasOwnProperty.call(item, 'isMarketOpen') ? item.isMarketOpen !== false : true
     };
   }
 
   function isMeaningfulRow(row) {
-    return !!(row && (row.name || row.description || row.email || row.discord || row.docLink ||
-      row.doxstox != null || row.askingPrice != null || row.sharePrice != null));
+    return !!(row && row.ticker && (row.name || row.description || row.doxstox != null || row.askingPrice != null || row.sharePrice != null));
+  }
+
+  function decodeFirestoreValue(value) {
+    if (!value || typeof value !== 'object') return null;
+    if (Object.prototype.hasOwnProperty.call(value, 'stringValue')) return value.stringValue;
+    if (Object.prototype.hasOwnProperty.call(value, 'integerValue')) return Number(value.integerValue);
+    if (Object.prototype.hasOwnProperty.call(value, 'doubleValue')) return Number(value.doubleValue);
+    if (Object.prototype.hasOwnProperty.call(value, 'booleanValue')) return !!value.booleanValue;
+    if (Object.prototype.hasOwnProperty.call(value, 'nullValue')) return null;
+    if (Object.prototype.hasOwnProperty.call(value, 'arrayValue')) {
+      var arr = value.arrayValue && value.arrayValue.values ? value.arrayValue.values : [];
+      return arr.map(decodeFirestoreValue);
+    }
+    if (Object.prototype.hasOwnProperty.call(value, 'mapValue')) {
+      return decodeFirestoreMap(value.mapValue.fields || {});
+    }
+    if (Object.prototype.hasOwnProperty.call(value, 'timestampValue')) return value.timestampValue;
+    return null;
+  }
+
+  function decodeFirestoreMap(fields) {
+    var out = {};
+    Object.keys(fields || {}).forEach(function (key) {
+      out[key] = decodeFirestoreValue(fields[key]);
+    });
+    return out;
+  }
+
+  function loadFirestoreListings() {
+    var cfg = window.DTO_CONFIG || {};
+    var firebase = cfg.firebase || {};
+    var listingsCfg = cfg.listings || {};
+    if (listingsCfg.provider !== 'firestore' || !firebase.projectId || !firebase.apiKey) {
+      return Promise.reject(new Error('No Firestore listings config found.'));
+    }
+
+    var collectionName = listingsCfg.collection || 'docs';
+    var url = 'https://firestore.googleapis.com/v1/projects/' + encodeURIComponent(firebase.projectId) +
+      '/databases/(default)/documents/' + encodeURIComponent(collectionName) + '?key=' + encodeURIComponent(firebase.apiKey);
+
+    return fetch(url, { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw new Error('Could not load Firestore market docs');
+        return res.json();
+      })
+      .then(function (payload) {
+        var docs = Array.isArray(payload.documents) ? payload.documents : [];
+        return docs.map(function (entry) {
+          var item = decodeFirestoreMap(entry.fields || {});
+          if (!item.ticker) {
+            var name = String(entry.name || '');
+            item.ticker = name.slice(name.lastIndexOf('/') + 1);
+          }
+          return normalizeItem(item);
+        }).filter(function (row) {
+          return row.published !== false && isMeaningfulRow(row);
+        });
+      });
   }
 
   function loadLocalListings() {
@@ -197,133 +257,11 @@ window.DTO.loadListings = (function () {
       });
   }
 
-  function rowsFromSheetTable(table) {
-    var headers = ((window.DTO_CONFIG || {}).listings || {}).headers || {};
-    var expected = {
-      name: normalizeHeader(headers.name || 'Doc Name'),
-      description: normalizeHeader(headers.description || 'Description'),
-      type: normalizeHeader(headers.type || 'Type'),
-      doxstox: normalizeHeader(headers.doxstox || 'DoxStox'),
-      sharePrice: normalizeHeader(headers.sharePrice || 'Share Price'),
-      askingPrice: normalizeHeader(headers.askingPrice || 'Asking Price'),
-      verified: normalizeHeader(headers.verified || 'Verified'),
-      status: normalizeHeader(headers.status || 'Status'),
-      utility: normalizeHeader(headers.utility || 'Utility'),
-      aesthetics: normalizeHeader(headers.aesthetics || 'Aesthetics'),
-      integration: normalizeHeader(headers.integration || 'Integration'),
-      verificationGrade: normalizeHeader(headers.verificationGrade || 'Verification Grade'),
-      published: normalizeHeader(headers.published || 'Published'),
-      email: normalizeHeader(headers.email || 'Email'),
-      discord: normalizeHeader(headers.discord || 'Discord'),
-      docLink: normalizeHeader(headers.docLink || 'Doc Link')
-    };
-
-    var rawRows = (table.rows || []).map(function (row) {
-      return (row.c || []).map(function (cell) {
-        return cell && cell.v != null ? String(cell.v) : '';
-      });
-    });
-
-    var headerRow = [];
-    var startIndex = 0;
-    var colLabels = (table.cols || []).map(function (col) {
-      return normalizeHeader((col && (col.label || col.id)) || '');
-    });
-
-    if (colLabels.indexOf(expected.name) !== -1 && colLabels.indexOf(expected.type) !== -1) {
-      headerRow = colLabels;
-      startIndex = 0;
-    } else {
-      var headerIndex = rawRows.findIndex(function (row) {
-        var normalized = row.map(normalizeHeader);
-        return normalized.indexOf(expected.name) !== -1 && normalized.indexOf(expected.type) !== -1;
-      });
-      if (headerIndex === -1) return [];
-      headerRow = rawRows[headerIndex].map(normalizeHeader);
-      startIndex = headerIndex + 1;
-    }
-
-    var col = {};
-    Object.keys(expected).forEach(function (key) {
-      col[key] = headerRow.indexOf(expected[key]);
-    });
-
-    return rawRows.slice(startIndex).map(function (row) {
-      function at(key) {
-        var idx = col[key];
-        return idx >= 0 ? String(row[idx] || '').trim() : '';
-      }
-
-      return normalizeItem({
-        name: at('name'),
-        description: at('description'),
-        type: at('type'),
-        doxstox: at('doxstox'),
-        sharePrice: at('sharePrice'),
-        askingPrice: at('askingPrice'),
-        verified: at('verified'),
-        status: at('status'),
-        utility: at('utility'),
-        aesthetics: at('aesthetics'),
-        integration: at('integration'),
-        verificationGrade: at('verificationGrade'),
-        published: at('published') || true,
-        email: at('email'),
-        discord: at('discord'),
-        docLink: at('docLink')
-      });
-    }).filter(function (row) {
-      return row.published && isMeaningfulRow(row);
-    });
-  }
-
-  function loadSheetListings() {
-    return new Promise(function (resolve, reject) {
-      var sheetCfg = ((window.DTO_CONFIG || {}).listings || {});
-      if (sheetCfg.provider !== 'google-sheets' || !sheetCfg.sheetId) {
-        reject(new Error('No Google Sheet configured'));
-        return;
-      }
-
-      var cbName = '__dtoSheetCallback_' + Date.now();
-      var script = document.createElement('script');
-      var timeout = setTimeout(function () {
-        cleanup();
-        reject(new Error('Timed out loading Google Sheet'));
-      }, 10000);
-
-      function cleanup() {
-        clearTimeout(timeout);
-        try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
-        if (script.parentNode) script.parentNode.removeChild(script);
-      }
-
-      window[cbName] = function (response) {
-        cleanup();
-        try {
-          resolve(rowsFromSheetTable(response.table || {}));
-        } catch (err) {
-          reject(err);
-        }
-      };
-
-      script.onerror = function () {
-        cleanup();
-        reject(new Error('Could not load Google Sheet script'));
-      };
-
-      var gid = encodeURIComponent(sheetCfg.gid || '0');
-      script.src = 'https://docs.google.com/spreadsheets/d/' + encodeURIComponent(sheetCfg.sheetId) +
-        '/gviz/tq?gid=' + gid + '&headers=0&tqx=out:json;responseHandler:' + cbName;
-      document.body.appendChild(script);
-    });
-  }
-
   return function () {
     if (!cachedPromise) {
-      cachedPromise = loadSheetListings()
+      cachedPromise = loadFirestoreListings()
         .then(function (rows) {
-          window.DTO.listingsSource = 'google-sheets';
+          window.DTO.listingsSource = 'firestore';
           return rows;
         })
         .catch(function () {
@@ -416,8 +354,8 @@ window.DTO.loadListings = (function () {
 
     var c = document.getElementById('listingCount');
     if (c) {
-      var source = window.DTO.listingsSource === 'google-sheets'
-        ? ' · live Google Sheet'
+      var source = window.DTO.listingsSource === 'firestore'
+        ? ' · live Firestore'
         : (window.DTO.listingsSource === 'local-fallback' ? ' · fallback data' : '');
       c.textContent = rows.length + ' listing' + (rows.length === 1 ? '' : 's') + source;
     }

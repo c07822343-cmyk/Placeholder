@@ -44,35 +44,12 @@ window.DTO_CONFIG = {
   ],
 
   /* ---- 3. Public listings source ----------------------------
-     The Listings page pulls approved listings directly from a
-     public Google Sheet, so staff can publish rows without a site
-     redeploy. Keep the header names in that sheet aligned with the
-     values below.                                              */
+     Public listings, listing details and the trading dashboard
+     all read directly from Firestore `docs` records now.
+     No Google Sheet is required.                               */
   listings: {
-    provider: 'google-sheets',
-    sheetId: '1A3aUwjhhhj5oHFRhDoOqAj9eFA_m-Hz-8DssDaQSEpM',
-    gid: '0',
-    headers: {
-      ticker: 'Ticker',
-      name: 'Doc Name',
-      description: 'Description',
-      type: 'Type',
-      utility: 'Utility',
-      aesthetics: 'Aesthetics',
-      integration: 'Integration',
-      verificationGrade: 'Verification Grade',
-      totalShares: 'Total Shares',
-      ownerEmail: 'Owner Email',
-      doxstox: 'DoxStox',
-      sharePrice: 'Share Price',
-      askingPrice: 'Asking Price',
-      verified: 'Verified',
-      status: 'Status',
-      published: 'Published',
-      email: 'Email',
-      discord: 'Discord',
-      docLink: 'Doc Link'
-    }
+    provider: 'firestore',
+    collection: 'docs'
   },
 
   /* ---- 4. Options -------------------------------------------

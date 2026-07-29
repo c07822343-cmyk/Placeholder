@@ -784,7 +784,7 @@ listing_detail = """
   <div class="wrap">
     <span class="eyebrow">Listing</span>
     <h1 id="listingDetailTitle">Loading listing…</h1>
-    <p class="lede" id="listingDetailLead">Pulling the latest public details for this listing from DTO's live listings sheet.</p>
+    <p class="lede" id="listingDetailLead">Pulling the latest public details for this listing from DTO's live market database.</p>
     <div class="hero-cta">
       <a class="btn btn-ghost" href="listings.html">&#8592; Back to listings</a>
       <a class="btn btn-gold" href="apply.html#request">Ask DTO about this listing</a>
@@ -1093,17 +1093,14 @@ admin_page = """
     </section>
 
     <section class="mt-24">
-      <h2>Sync from Google Sheet</h2>
+      <h2>Market records live in Firestore</h2>
       <div class="card">
-        <p class="section-sub">Use the shared market sheet as your source of truth. Sync matches docs by <strong>Ticker</strong>,
-        so existing tickers are updated and new tickers are created without making duplicates.</p>
+        <p class="section-sub">DTO market docs now use Firestore as the single source of truth. Create them here,
+        edit them here, and the public listings plus portfolio market update automatically.</p>
         <div class="summary-list">
           <div class="rev-row"><span>Unique key</span><b>Ticker</b></div>
-          <div class="rev-row"><span>Required sheet columns</span><b>Ticker, Doc Name, Description, Type, Utility, Aesthetics, Integration, Verification Grade, Status, Total Shares, Owner Email, Published, Email, Discord, Doc Link</b></div>
-          <div class="rev-row"><span>Available shares</span><b>Preserved for existing docs; new docs start at total shares</b></div>
-        </div>
-        <div class="hero-cta mt-24">
-          <button class="btn btn-gold" id="syncSheetBtn" type="button">Sync published sheet rows</button>
+          <div class="rev-row"><span>Market source</span><b>Firestore <code>/docs/{ticker}</code></b></div>
+          <div class="rev-row"><span>Available shares</span><b>Auto-managed by trades after creation</b></div>
         </div>
       </div>
     </section>

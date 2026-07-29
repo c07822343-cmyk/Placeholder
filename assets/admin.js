@@ -15,8 +15,7 @@ import {
   adjustUserBalance,
   approvePendingTransaction,
   rejectPendingTransaction,
-  saveDocProfile,
-  syncDocProfileFromSheet
+  saveDocProfile
 } from './trading.js';
 
 const noticeEl = document.getElementById('adminNotice');
@@ -60,125 +59,6 @@ function clearSubscriptions() {
   unsubUsers = null;
   unsubTx = null;
   unsubDocs = null;
-}
-
-function normalizeHeader(s) {
-  return String(s || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '');
-}
-
-function loadSheetRows() {
-  return new Promise(function (resolve, reject) {
-    const cfg = (window.DTO_CONFIG || {}).listings || {};
-    const headers = cfg.headers || {};
-    if (!cfg.sheetId) {
-      reject(new Error('Google Sheet ID is missing from assets/config.js.'));
-      return;
-    }
-
-    const expected = {
-      ticker: normalizeHeader(headers.ticker || 'Ticker'),
-      name: normalizeHeader(headers.name || 'Doc Name'),
-      description: normalizeHeader(headers.description || 'Description'),
-      type: normalizeHeader(headers.type || 'Type'),
-      utility: normalizeHeader(headers.utility || 'Utility'),
-      aesthetics: normalizeHeader(headers.aesthetics || 'Aesthetics'),
-      integration: normalizeHeader(headers.integration || 'Integration'),
-      verificationGrade: normalizeHeader(headers.verificationGrade || 'Verification Grade'),
-      totalShares: normalizeHeader(headers.totalShares || 'Total Shares'),
-      ownerEmail: normalizeHeader(headers.ownerEmail || 'Owner Email'),
-      published: normalizeHeader(headers.published || 'Published'),
-      email: normalizeHeader(headers.email || 'Email'),
-      discord: normalizeHeader(headers.discord || 'Discord'),
-      docLink: normalizeHeader(headers.docLink || 'Doc Link'),
-      status: normalizeHeader(headers.status || 'Status')
-    };
-
-    const cbName = '__dtoAdminSheetSync_' + Date.now();
-    const script = document.createElement('script');
-    const timeout = setTimeout(function () {
-      cleanup();
-      reject(new Error('Timed out loading the Google Sheet.'));
-    }, 10000);
-
-    function cleanup() {
-      clearTimeout(timeout);
-      try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
-      if (script.parentNode) script.parentNode.removeChild(script);
-    }
-
-    function parseRows(table) {
-      const rows = (table.rows || []).map(function (row) {
-        return (row.c || []).map(function (cell) {
-          return cell && cell.v != null ? String(cell.v) : '';
-        });
-      });
-      const labels = (table.cols || []).map(function (col) {
-        return normalizeHeader((col && (col.label || col.id)) || '');
-      });
-      let headerRow = labels;
-      let startIndex = 0;
-      if (headerRow.indexOf(expected.ticker) === -1) {
-        const headerIndex = rows.findIndex(function (row) {
-          return row.map(normalizeHeader).indexOf(expected.ticker) !== -1;
-        });
-        if (headerIndex === -1) return [];
-        headerRow = rows[headerIndex].map(normalizeHeader);
-        startIndex = headerIndex + 1;
-      }
-
-      const col = {};
-      Object.keys(expected).forEach(function (key) {
-        col[key] = headerRow.indexOf(expected[key]);
-      });
-
-      const seen = new Map();
-      rows.slice(startIndex).forEach(function (row) {
-        function at(key) {
-          const idx = col[key];
-          return idx >= 0 ? String(row[idx] || '').trim() : '';
-        }
-        const ticker = at('ticker').toUpperCase();
-        const published = String(at('published')).trim().toLowerCase();
-        if (!ticker) return;
-        if (!(published === 'true' || published === 'yes' || published === 'y' || published === '1')) return;
-        seen.set(ticker, {
-          ticker: ticker,
-          title: at('name'),
-          description: at('description'),
-          type: at('type') || 'stock',
-          utility: at('utility'),
-          aesthetics: at('aesthetics'),
-          integration: at('integration'),
-          verificationGrade: at('verificationGrade'),
-          totalShares: at('totalShares') || '100',
-          ownerEmail: at('ownerEmail'),
-          status: at('status') || 'For Sale',
-          email: at('email'),
-          discord: at('discord'),
-          docLink: at('docLink')
-        });
-      });
-      return Array.from(seen.values());
-    }
-
-    window[cbName] = function (response) {
-      cleanup();
-      try {
-        resolve(parseRows(response.table || {}));
-      } catch (err) {
-        reject(err);
-      }
-    };
-
-    script.onerror = function () {
-      cleanup();
-      reject(new Error('Could not load the Google Sheet. Check sharing permissions.'));
-    };
-
-    script.src = 'https://docs.google.com/spreadsheets/d/' + encodeURIComponent(cfg.sheetId) +
-      '/gviz/tq?gid=' + encodeURIComponent(cfg.gid || '0') + '&headers=0&tqx=out:json;responseHandler:' + cbName;
-    document.body.appendChild(script);
-  });
 }
 
 function renderUsers() {
@@ -412,7 +292,7 @@ async function initAdminSession(user) {
   }
 
   showGate('');
-  showNotice('<strong>Admin mode active.</strong> All actions here sync directly with Firestore in real time.');
+  showNotice('<strong>Admin mode active.</strong> All actions here sync directly with Firestore in real time. No separate Google Sheet is needed.');
 
   unsubUsers = subscribeAllUsers(function (rows) {
     userCache = rows;
@@ -436,7 +316,6 @@ function init() {
   }
 
   if (createDocForm) createDocForm.addEventListener('submit', handleCreateDoc);
-  if (syncSheetBtn) syncSheetBtn.addEventListener('click', handleSyncSheet);
   if (userRows) userRows.addEventListener('click', handleAdminClick);
   if (txRows) txRows.addEventListener('click', handleAdminClick);
   if (docRows) docRows.addEventListener('click', handleAdminClick);
