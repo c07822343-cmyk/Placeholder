@@ -4,7 +4,7 @@ This project stays **static HTML/CSS/JS**, but the account + portfolio trading s
 
 - **Firebase Auth** — email/password, verification, reset, sessions
 - **Cloud Firestore** — users, docs, transactions, admin access
-- **Netlify Forms** — DTO request wizard on `apply.html`
+- **alwaysdata Flask API + Airtable** — DTO request wizard on `apply.html`
 
 ## Folder structure
 
@@ -16,14 +16,14 @@ assets/
   trading.js      # buy / sell / buyout / admin trading actions
   portfolio.js    # portfolio dashboard UI
   admin.js        # admin panel UI
-  requests.js     # Netlify Forms request wizard
-  config.js       # Firebase + app config + listings sheet config
+  requests.js     # request wizard (alwaysdata/Airtable or fallback provider)
+  config.js       # Firebase + app config + request routing config
   style.css       # shared styling
 
 account.html      # register / login / verify / reset UI
 portfolio.html    # live portfolio + trading dashboard
 admin.html        # admin-only controls
-apply.html        # DTO request wizard (Netlify Forms)
+apply.html        # DTO request wizard (alwaysdata/Airtable intake)
 listing-details.html
 firebase/
   firestore.rules # example Firestore rules
@@ -176,24 +176,22 @@ highValueThreshold: 5000
 
 If `currentDS >= highValueThreshold`, only `isVerifiedBuyer === true` may request the buyout.
 
-## 7. Netlify Forms setup for `apply.html`
+## 7. Request intake setup for `apply.html`
 
 The application wizard is separate from Firebase.
+In the alwaysdata version, it posts to the Flask backend and then into Airtable.
 
-After deploying on Netlify:
-- go to **Site → Forms**
-- confirm that the hidden form named `dto-request` appears
-- submit one live test request
+See:
+- `alwaysdata/ALWAYSDATA-SETUP.md`
+- `AIRTABLE-REVIEW-SETUP.md`
 
 ## 8. Deployment options
 
 ### Netlify
-Recommended if you want both:
-- static hosting
-- Netlify Forms for `apply.html`
+Works for the static front-end pages, but the Airtable-backed request API assumes an alwaysdata-style Python backend.
 
-### Vercel / Firebase Hosting
-The account + portfolio system works there too, but `apply.html`'s Netlify form workflow will only work on Netlify.
+### alwaysdata / other Python hosting
+Recommended if you want the Flask backend, Airtable request intake, and Firebase-powered account/portfolio system together.
 
 ## 9. Smoke test checklist
 

@@ -32,10 +32,13 @@ which is what makes it free to host forever.
 - **Review screen** before submitting
 - **Ticket ID** (e.g. `DTO-7F3K2A`) generated for every request
 
-Submissions go into **Netlify Forms**, so requests are captured by the same host that runs the site.
-Applicants never see a separate form page — they only see the site.
+Submissions can post into an **Airtable review workspace** through the alwaysdata Flask backend.
+Applicants never see Airtable — they only see the site, while staff get a structured queue where they
+can score, accept, or deny requests.
 
-No external form setup is needed once the site is deployed on Netlify.
+Setup docs:
+- [`alwaysdata/ALWAYSDATA-SETUP.md`](alwaysdata/ALWAYSDATA-SETUP.md)
+- [`AIRTABLE-REVIEW-SETUP.md`](AIRTABLE-REVIEW-SETUP.md)
 
 ## Hosting
 
@@ -71,8 +74,8 @@ Edit **`data/listings.json`** and push. Editable straight from the GitHub web UI
 - `doxstox` / `sharePrice` — the values **you assign during review**. Use `null` for either while
   review is pending and the listing shows "Pending" / "Not yet set". Nothing is auto-calculated.
 
-### Change the Google Form connection
-Edit **`assets/config.js`** only. Staff emails, fee rate and ticket prefix live there too.
+### Change request routing
+Edit **`assets/config.js`** only. Staff emails, request endpoint settings, fee rate and ticket prefix live there too.
 
 ### Change page content
 The `.html` files are **generated** — don't edit them directly, your changes get overwritten.
@@ -96,16 +99,19 @@ python3 -m http.server 8000
 ├── build.py                  # generates the .html files
 ├── make-zip.py               # packages dto-website.zip for drag-and-drop hosting
 ├── assets/
-│   ├── config.js             # ← Google Form + staff settings (edit this)
+│   ├── config.js             # ← request routing + staff settings (edit this)
 │   ├── style.css             # all styling
 │   ├── app.js                # nav, calculators, listings table
 │   └── requests.js           # the request wizard
 ├── data/listings.json        # ← listings (edit this)
-├── tools/get-entry-ids.py    # pulls entry IDs out of your Google Form
+├── backend/
+│   ├── app.py                # Flask app for alwaysdata + Airtable request intake
+│   ├── wsgi.py               # alwaysdata WSGI entrypoint
+│   └── requirements.txt      # Python dependencies
+├── alwaysdata/ALWAYSDATA-SETUP.md
+├── AIRTABLE-REVIEW-SETUP.md
 ├── START-HERE.md             # ← easiest way to get online
 ├── UPDATING.md               # how to update without losing your URL
-├── FORM-QUESTIONS.md         # the 16 Google Form questions to create
-├── SETUP-GOOGLE-FORM.md      # request system setup
 └── DEPLOY.md                 # hosting setup (Git-connected)
 ```
 

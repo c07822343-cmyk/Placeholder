@@ -1,9 +1,9 @@
 /* ============================================================
    DTO — SITE CONFIGURATION
    ============================================================
-   Netlify Forms handles request submissions on the deployed site.
-   The settings below cover staff contact, the public listings
-   source, and general site options.
+   The live site can run behind a small Flask backend on alwaysdata.
+   Request submissions post to a backend endpoint, which forwards
+   them into an Airtable review workspace for staff processing.
    ============================================================ */
 
 window.DTO_CONFIG = {

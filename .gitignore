@@ -4,3 +4,6 @@ __pycache__/
 .vscode/
 .idea/
 node_modules/
+.env
+.env.*
+backend/venv/

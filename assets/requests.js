@@ -1,6 +1,7 @@
 /* ============================================================
    DTO — On-site request system
-   Multi-step application wizard that submits into Netlify Forms.
+   Multi-step application wizard that submits to the configured
+   backend/provider (alwaysdata Airtable API or Netlify Forms).
    ============================================================ */
 (function () {
   'use strict';
@@ -275,7 +276,24 @@
     return params.toString();
   }
 
-  function submitToNetlify() {
+  function buildApiBody() {
+    var values = payloadValues();
+    values.requestSummary = requestSummary();
+    return JSON.stringify(values);
+  }
+
+  function submitToProvider() {
+    if (SUBMIT.provider === 'alwaysdata-airtable') {
+      return fetch(SUBMIT.endpoint || '/api/requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: buildApiBody()
+      }).then(function (res) {
+        if (!res.ok) throw new Error('Request API failed');
+        return res.json();
+      });
+    }
+
     return fetch('/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -419,7 +437,13 @@
     }
   });
 
-  if (onLocalPreview()) {
+  if (SUBMIT.provider === 'alwaysdata-airtable') {
+    if (onLocalPreview()) {
+      showBanner('<strong>Preview mode:</strong> submissions are configured for the alwaysdata API. Run the Flask app to test live request intake.');
+    } else {
+      showBanner('<strong>Connected:</strong> this request form is configured to send requests into the Airtable review workspace via the alwaysdata backend.');
+    }
+  } else if (onLocalPreview()) {
     showBanner('<strong>Preview mode:</strong> submissions are configured for Netlify Forms and will work once this site is deployed on Netlify.');
   } else {
     showBanner('<strong>Connected:</strong> this request form is configured for Netlify Forms.');

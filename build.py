@@ -1151,7 +1151,7 @@ admin_page = """
 """
 
 # --------------------------------------------------------------------------
-# Apply — on-site request system (submits into Netlify Forms)
+# Apply — on-site request system (submits to configured provider)
 # --------------------------------------------------------------------------
 apply_page = """
 <section class="hero" style="padding-bottom:26px">
