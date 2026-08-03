@@ -31,7 +31,8 @@ window.DTO_CONFIG = {
 
   /* ---- 2. Request submission provider ----------------------- */
   submissions: {
-    provider: 'netlify',
+    provider: 'alwaysdata-airtable',
+    endpoint: '/api/requests',
     formName: 'dto-request',
     botField: 'bot-field'
   },

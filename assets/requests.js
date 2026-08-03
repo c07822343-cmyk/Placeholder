@@ -343,7 +343,7 @@
     if (tk) tk.textContent = ticket;
     var msg = document.getElementById('doneMsg');
     if (msg) {
-      msg.innerHTML = 'Your request was submitted to DTO\'s Netlify request queue. Staff will get back to you within <strong>' +
+      msg.innerHTML = 'Your request was submitted to DTO\'s review queue. Staff will get back to you within <strong>' +
         (OPT.responseTime || '24–48 hours') + '</strong>.';
     }
     done.scrollIntoView({ behavior: 'smooth', block: 'center' });
