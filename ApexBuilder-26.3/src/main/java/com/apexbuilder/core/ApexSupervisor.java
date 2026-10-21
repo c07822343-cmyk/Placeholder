@@ -717,7 +717,26 @@ public final class ApexSupervisor {
         );
     }
 
-    private static BuilderState readBuilderState(BuilderProcess builder) {\n        try {\n            Field schematicField = BuilderProcess.class.getDeclaredField("schematic");\n            Field originField = BuilderProcess.class.getDeclaredField("origin");\n            schematicField.setAccessible(true);\n            originField.setAccessible(true);\n            Object schematic = schematicField.get(builder);\n            Object origin = originField.get(builder);\n            if (!(schematic instanceof ISchematic) || !(origin instanceof Vec3i)) {\n                return null;\n            }\n            return new BuilderState((ISchematic) schematic, (Vec3i) origin);\n        } catch (ReflectiveOperationException | SecurityException ignored) {\n            return null;\n        }\n    }\n\n    private record BuilderState(ISchematic schematic, Vec3i origin) {}\n\n    private record LiquidTask(BlockPos target, BlockPos support, Direction face, Vec3 hit) {}
+    private static BuilderState readBuilderState(BuilderProcess builder) {
+        try {
+            Field schematicField = BuilderProcess.class.getDeclaredField("schematic");
+            Field originField = BuilderProcess.class.getDeclaredField("origin");
+            schematicField.setAccessible(true);
+            originField.setAccessible(true);
+            Object schematic = schematicField.get(builder);
+            Object origin = originField.get(builder);
+            if (!(schematic instanceof ISchematic) || !(origin instanceof Vec3i)) {
+                return null;
+            }
+            return new BuilderState((ISchematic) schematic, (Vec3i) origin);
+        } catch (ReflectiveOperationException | SecurityException ignored) {
+            return null;
+        }
+    }
+
+    private record BuilderState(ISchematic schematic, Vec3i origin) {}
+
+    private record LiquidTask(BlockPos target, BlockPos support, Direction face, Vec3 hit) {}
 
     private static void feedback(MarketRequest request, String text) {
         Component message = Component.literal("[ApexBuilder] " + text);
