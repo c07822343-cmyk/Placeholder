@@ -444,16 +444,16 @@ public final class ApexSupervisor {
         marketRequest = new MarketRequest(
                 lookup,
                 need.deficit,
-                getCommandSource(client)
+                null,
+                client.player
         );
         marketNoMatchStreak = 0;
         lastMarketOpen = ticks;
 
         client.player.connection.sendCommand("ah");
-        marketRequest.source.sendFeedback(Component.literal(
-                "[ApexBuilder] Market watch: " + need.deficit + " x " + need.displayName
-                        + " | searching visible Auction House listings."
-        ));
+        feedback(marketRequest,
+                "Market watch: " + need.deficit + " x " + need.displayName
+                        + " | searching visible Auction House listings.");
         return true;
     }
 
@@ -461,7 +461,8 @@ public final class ApexSupervisor {
         marketRequest = new MarketRequest(
                 item.toLowerCase(Locale.ROOT),
                 amount,
-                source
+                source,
+                source.getPlayer()
         );
         marketNoMatchStreak = 0;
         lastMarketOpen = ticks;
@@ -481,11 +482,7 @@ public final class ApexSupervisor {
         marketNoMatchStreak = 0;
     }
 
-    private static FabricClientCommandSource getCommandSource(Minecraft client) {
-        return new FabricClientCommandSource(client, client.player);
-    }
-
-    private static void scanAuctionScreen(AbstractContainerScreen<?> screen) {
+        private static void scanAuctionScreen(AbstractContainerScreen<?> screen) {
         if (marketRequest == null) {
             return;
         }
@@ -536,11 +533,10 @@ public final class ApexSupervisor {
 
             if (ticks - lastMarketMessage >= MARKET_MESSAGE_COOLDOWN) {
                 lastMarketMessage = ticks;
-                marketRequest.source.sendFeedback(Component.literal(
-                        "[ApexBuilder] Cheapest visible: " + bestCount + "x "
+                feedback(marketRequest,
+                        "Cheapest visible: " + bestCount + "x "
                                 + marketRequest.itemKey + " for " + money(bestTotal)
-                                + " (" + money(bestUnit) + "/item), slot " + bestSlot
-                ));
+                                + " (" + money(bestUnit) + "/item), slot " + bestSlot);
             }
 
             if (autoMarketAssist) {
@@ -555,10 +551,9 @@ public final class ApexSupervisor {
         if (++marketNoMatchStreak >= 20 && ticks - lastMarketMessage >= MARKET_MESSAGE_COOLDOWN) {
             marketNoMatchStreak = 0;
             lastMarketMessage = ticks;
-            marketRequest.source.sendFeedback(Component.literal(
-                    "[ApexBuilder] No matching visible listing for " + marketRequest.itemKey
-                            + ". Refresh/search the AH screen, or /apex market stop."
-            ));
+            feedback(marketRequest,
+                    "No matching visible listing for " + marketRequest.itemKey
+                            + ". Refresh/search the AH screen, or /apex market stop.");
         }
     }
 
@@ -725,7 +720,21 @@ public final class ApexSupervisor {
 
     private record LiquidTask(BlockPos target, BlockPos support, Direction face, Vec3 hit) {}
 
-    private record MarketRequest(String itemKey, int amount, FabricClientCommandSource source) {}
+    private static void feedback(MarketRequest request, String text) {
+        Component message = Component.literal("[ApexBuilder] " + text);
+        if (request.source != null) {
+            request.source.sendFeedback(message);
+        } else if (request.player != null) {
+            request.player.sendSystemMessage(message);
+        }
+    }
+
+    private record MarketRequest(
+            String itemKey,
+            int amount,
+            FabricClientCommandSource source,
+            LocalPlayer player
+    ) {}
 
     private record MaterialNeed(
             String itemId,
