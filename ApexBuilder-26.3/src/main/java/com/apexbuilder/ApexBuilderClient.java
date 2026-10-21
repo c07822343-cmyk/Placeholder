@@ -48,6 +48,26 @@ public final class ApexBuilderClient implements ClientModInitializer {
                                     );
                                     return 1;
                                 }))))
+                    .then(ClientCommandManager.literal("auto")
+                        .then(ClientCommandManager.literal("on").executes(ctx -> {
+                            ApexSupervisor.setAutoMarketAssist(true);
+                            feedback(ctx.getSource(), "Automatic material market scanning: ON");
+                            return 1;
+                        }))
+                        .then(ClientCommandManager.literal("off").executes(ctx -> {
+                            ApexSupervisor.setAutoMarketAssist(false);
+                            feedback(ctx.getSource(), "Automatic material market scanning: OFF");
+                            return 1;
+                        }))
+                        .then(ClientCommandManager.literal("once").executes(ctx -> {
+                            ApexSupervisor.scanNextMissingMaterial(ctx.getSource());
+                            return 1;
+                        })))
+                    .then(ClientCommandManager.literal("stop").executes(ctx -> {
+                        ApexSupervisor.stopMarketScan();
+                        feedback(ctx.getSource(), "Market scanner stopped.");
+                        return 1;
+                    })))
                 .then(ClientCommandManager.literal("help").executes(ctx -> {
                     ApexSupervisor.printHelp(ctx.getSource());
                     return 1;
@@ -55,7 +75,9 @@ public final class ApexBuilderClient implements ClientModInitializer {
         ));
     }
 
-    private static void feedback(net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource source, String text) {
+    private static void feedback(
+            net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource source,
+            String text) {
         source.sendFeedback(Component.literal("[ApexBuilder] " + text));
     }
 }
