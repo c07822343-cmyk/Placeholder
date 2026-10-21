@@ -1,0 +1,41 @@
+name: Build ApexBuilder 26.3
+
+on:
+  push:
+    branches: ["apexbuilder-26.3"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "25"
+
+      - name: Download Baritone 26.3
+        run: |
+          mkdir -p ApexBuilder-26.3/libs
+          curl -fL --retry 3 -o ApexBuilder-26.3/libs/baritone-fabric-26.3.jar             https://github.com/dysnasia/baritone-26.3/releases/download/26.3/baritone-fabric-26.3.jar
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "9.7.1"
+
+      - name: Build
+        working-directory: ApexBuilder-26.3
+        run: gradle build --no-daemon --stacktrace
+
+      - name: Upload built jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: ApexBuilder-26.3
+          path: ApexBuilder-26.3/build/libs/apexbuilder-*.jar
+          if-no-files-found: error
