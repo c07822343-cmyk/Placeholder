@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "apexbuilder",
-  "version": "\${version}",
+  "version": "${version}",
   "name": "ApexBuilder",
   "description": "Construction supervisor for Baritone 26.3 with liquid placement, material analysis, and auction scanning.",
   "authors": ["Evan / ApexBuilder"],
