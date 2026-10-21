@@ -1,6 +1,5 @@
 package com.apexbuilder.core;
 
-import com.apexbuilder.mixin.BuilderProcessAccessor;
 import baritone.api.BaritoneAPI;
 import baritone.api.IBaritone;
 import baritone.api.pathing.goals.GoalBlock;
@@ -29,6 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -110,12 +110,12 @@ public final class ApexSupervisor {
             return;
         }
 
-        BuilderProcessAccessor accessor = (BuilderProcessAccessor) (Object) builder;
-        ISchematic schematic = accessor.apexbuilder$getSchematic();
-        Vec3i origin = accessor.apexbuilder$getOrigin();
-        if (schematic == null || origin == null) {
+        BuilderState state = readBuilderState(builder);
+        if (state == null || state.schematic() == null || state.origin() == null) {
             return;
         }
+        ISchematic schematic = state.schematic();
+        Vec3i origin = state.origin();
 
         LiquidTask task = findNearestWaterTask(client.player, schematic, origin);
         if (task == null) {
@@ -610,14 +610,14 @@ public final class ApexSupervisor {
             return;
         }
 
-        BuilderProcessAccessor accessor = (BuilderProcessAccessor) (Object) builder;
-        ISchematic schematic = accessor.apexbuilder$getSchematic();
-        Vec3i origin = accessor.apexbuilder$getOrigin();
-
-        if (schematic == null || origin == null) {
+        BuilderState state = readBuilderState(builder);
+        if (state == null || state.schematic() == null || state.origin() == null) {
             materialSnapshot = MaterialSnapshot.empty();
             return;
         }
+
+        ISchematic schematic = state.schematic();
+        Vec3i origin = state.origin();
 
         Map<Item, Integer> schematicCounts = new HashMap<>();
         int scanned = 0;
@@ -717,7 +717,7 @@ public final class ApexSupervisor {
         );
     }
 
-    private record LiquidTask(BlockPos target, BlockPos support, Direction face, Vec3 hit) {}
+    private static BuilderState readBuilderState(BuilderProcess builder) {\n        try {\n            Field schematicField = BuilderProcess.class.getDeclaredField("schematic");\n            Field originField = BuilderProcess.class.getDeclaredField("origin");\n            schematicField.setAccessible(true);\n            originField.setAccessible(true);\n            Object schematic = schematicField.get(builder);\n            Object origin = originField.get(builder);\n            if (!(schematic instanceof ISchematic) || !(origin instanceof Vec3i)) {\n                return null;\n            }\n            return new BuilderState((ISchematic) schematic, (Vec3i) origin);\n        } catch (ReflectiveOperationException | SecurityException ignored) {\n            return null;\n        }\n    }\n\n    private record BuilderState(ISchematic schematic, Vec3i origin) {}\n\n    private record LiquidTask(BlockPos target, BlockPos support, Direction face, Vec3 hit) {}
 
     private static void feedback(MarketRequest request, String text) {
         Component message = Component.literal("[ApexBuilder] " + text);
