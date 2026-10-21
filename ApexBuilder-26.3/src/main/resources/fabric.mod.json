@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "apexbuilder",
+  "version": "\${version}",
+  "name": "ApexBuilder",
+  "description": "Construction supervisor for Baritone 26.3 with liquid placement, material analysis, and auction scanning.",
+  "authors": ["Evan / ApexBuilder"],
+  "contact": {"sources": "https://github.com/c07822343-cmyk/Placeholder/tree/apexbuilder-26.3/ApexBuilder-26.3"},
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {"client": ["com.apexbuilder.ApexBuilderClient"]},
+  "mixins": [{"config": "apexbuilder.mixins.json", "environment": "client"}],
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": ["26.3"],
+    "java": ">=25",
+    "fabric-api": ">=0.164.0+26.3",
+    "baritone-fork": "26.3"
+  }
+}
