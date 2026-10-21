@@ -21,7 +21,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.DataComponents;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -111,7 +111,7 @@ public final class ApexSupervisor {
             return;
         }
 
-        BuilderProcessAccessor accessor = (BuilderProcessAccessor) builder;
+        BuilderProcessAccessor accessor = (BuilderProcessAccessor) (Object) builder;
         ISchematic schematic = accessor.apexbuilder$getSchematic();
         Vec3i origin = accessor.apexbuilder$getOrigin();
         if (schematic == null || origin == null) {
@@ -240,7 +240,7 @@ public final class ApexSupervisor {
                         continue;
                     }
 
-                    double distance = player.position().distanceToSqr(target.getCenter());
+                    double distance = player.position().distanceToSqr(Vec3.atCenterOf(target));
                     if (distance < bestDistance) {
                         bestDistance = distance;
                         best = task;
