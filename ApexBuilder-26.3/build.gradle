@@ -16,11 +16,9 @@ repositories {
 }
 
 loom {
-    splitEnvironmentSourceSets()
     mods {
         "apexbuilder" {
             sourceSet sourceSets.main
-            sourceSet sourceSets.client
         }
     }
 }
