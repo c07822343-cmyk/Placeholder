@@ -33,6 +33,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/** Baritone 26.3-compatible supervisor without a BuilderProcess Mixin. */
 public final class ApexSupervisor {
     private static final long MATERIAL_REFRESH_TICKS = 80;
     private static final long MARKET_OPEN_COOLDOWN = 160;
