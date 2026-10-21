@@ -87,15 +87,14 @@ public final class ApexSupervisor {
         }
 
         if (marketRequest != null) {
-            if (client.screen instanceof AbstractContainerScreen<?> screen) {
+            if (client.gui.screen() instanceof AbstractContainerScreen<?> screen) {
                 if (ticks % 5 == 0) {
                     scanAuctionScreen(screen);
                 }
             } else if (ticks - lastMarketMessage > 10) {
                 lastMarketMessage = ticks;
-                marketRequest.source.sendFeedback(Component.literal(
-                        "[ApexBuilder] Waiting for the Auction House screen for " + marketRequest.itemKey + "."
-                ));
+                feedback(marketRequest,
+                        "Waiting for the Auction House screen for " + marketRequest.itemKey + ".");
             }
         }
 
