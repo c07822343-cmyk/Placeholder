@@ -9,7 +9,6 @@
   "license": "MIT",
   "environment": "client",
   "entrypoints": {"client": ["com.apexbuilder.ApexBuilderClient"]},
-  "mixins": [{"config": "apexbuilder.mixins.json", "environment": "client"}],
   "depends": {
     "fabricloader": ">=0.19.5",
     "minecraft": ["26.3"],
