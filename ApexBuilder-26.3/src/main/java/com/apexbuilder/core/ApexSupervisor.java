@@ -286,8 +286,8 @@ public final class ApexSupervisor {
     private static boolean selectWaterBucket(LocalPlayer player) {
         for (int i = 0; i < 9; i++) {
             if (player.getInventory().getItem(i).is(Items.WATER_BUCKET)) {
-                if (player.getInventory().selected != i) {
-                    player.getInventory().selected = i;
+                if (player.getInventory().getSelectedSlot() != i) {
+                    player.getInventory().setSelectedSlot(i);
                 }
                 return true;
             }
@@ -611,7 +611,7 @@ public final class ApexSupervisor {
             return;
         }
 
-        BuilderProcessAccessor accessor = (BuilderProcessAccessor) builder;
+        BuilderProcessAccessor accessor = (BuilderProcessAccessor) (Object) builder;
         ISchematic schematic = accessor.apexbuilder$getSchematic();
         Vec3i origin = accessor.apexbuilder$getOrigin();
 
